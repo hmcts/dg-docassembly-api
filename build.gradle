@@ -72,9 +72,6 @@ sourceSets {
 
 configurations.all {
     exclude module: 'com.vaadin.external.google'
-
-    //CVE-2021-35515, CVE-2021-35516, CVE-2021-35517, CVE-2021-36090
-    exclude group: 'org.apache.commons', module: 'commons-compress'
 }
 
 dependencies {
@@ -232,6 +229,11 @@ dependencyManagement {
         dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.48') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
+        }
+
+        //CVE-2021-35515, CVE-2021-35516, CVE-2021-35517, CVE-2021-36090
+        dependencySet(group: 'org.apache.commons', version: '1.21') {
+            entry 'commons-compress'
         }
     }
 }
