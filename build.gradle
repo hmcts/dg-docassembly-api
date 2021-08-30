@@ -125,7 +125,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     
-    compile group: 'org.apache.tika', name: 'tika-core', version: '2.0.0'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
