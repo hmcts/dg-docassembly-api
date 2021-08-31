@@ -11,11 +11,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.hmcts.reform.dg.docassembly.dto.DocumentConversionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -42,10 +46,19 @@ public class DocumentConversionResource {
             @ApiResponse(code = 500, message = "Server Error"),
     })
     @PostMapping("/convert/{documentId}")
-    public ResponseEntity<Object> convert(@PathVariable UUID documentId) {
+    public ResponseEntity<Object> convert(HttpServletRequest request, @PathVariable UUID documentId,
+                                          @RequestBody(required = false) DocumentConversionDto documentConversionDto) {
         try {
+            File convertedFile;
             log.debug("REST request to get Document Conversion To PDF : {}", documentId);
-            File convertedFile = fileToPDFConverterService.convertFile(documentId);
+            if (Objects.nonNull(documentConversionDto) && documentConversionDto.isSecureDocStoreEnabled()) {
+                String auth = request.getHeader("Authorization");
+                String serviceAuth = request.getHeader("ServiceAuthorization");
+                log.debug("REST request to get secure Document Conversion To PDF : {}", documentId);
+                convertedFile = fileToPDFConverterService.convertFile(documentId, auth, serviceAuth);
+            } else {
+                convertedFile = fileToPDFConverterService.convertFile(documentId);
+            }
 
             Tika tika = new Tika();
 

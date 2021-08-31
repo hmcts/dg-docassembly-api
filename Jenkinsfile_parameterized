@@ -21,8 +21,12 @@ def product = "dg"
 def component = "docassembly"
 
 def secrets = [
+        's2s-${env}': [
+                secret('microservicekey-em-gw', 'FUNCTIONAL_TEST_CLIENT_S2S_TOKEN'),
+                secret('microservicekey-ccd-gw', 'FUNCTIONAL_TEST_CCD_GW_SERVICE_SECRET'),
+                secret('microservicekey-xui-webapp', 'FUNCTIONAL_TEST_XUI_WEBAPP_SERVICE_SECRET')
+        ],
         'rpa-${env}': [
-                secret('em-s2s-token', 'FUNCTIONAL_TEST_CLIENT_S2S_TOKEN'),
                 secret('show-oauth2-token', 'FUNCTIONAL_TEST_CLIENT_OAUTH_SECRET')
         ]
 ]

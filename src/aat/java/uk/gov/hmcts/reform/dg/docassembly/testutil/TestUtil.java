@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.dg.docassembly.testutil;
 import io.restassured.specification.RequestSpecification;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.document.domain.Document;
@@ -39,9 +40,13 @@ public class TestUtil {
     @Value("${document_management.docker_url}")
     private String dmDocumentApiUrl;
 
+    @Autowired
+    @Qualifier("xuiS2sHelper")
+    private S2sHelper cdamS2sHelper;
+
     @PostConstruct
     public void init() {
-        idamHelper.createUser("a@b.com", Stream.of("caseworker").collect(Collectors.toList()));
+        idamHelper.createUser("a@b.com", Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
         SerenityRest.useRelaxedHTTPSValidation();
         idamAuth = idamHelper.authenticateUser("a@b.com");
         s2sAuth = s2sHelper.getS2sToken();
@@ -54,6 +59,11 @@ public class TestUtil {
                 .header("ServiceAuthorization", s2sAuth);
     }
 
+    public RequestSpecification cdamAuthRequest() {
+        return cdamS2sAuthRequest()
+            .header("Authorization", idamAuth);
+    }
+
     public String getTestUrl() {
         return testUrl;
     }
@@ -64,6 +74,13 @@ public class TestUtil {
 
     private RequestSpecification s2sAuthRequest() {
         return SerenityRest.given().header("ServiceAuthorization", s2sAuth);
+    }
+
+    public RequestSpecification cdamS2sAuthRequest() {
+        return SerenityRest
+            .given()
+            .log().all()
+            .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
     }
 
     public RequestSpecification emptyIdamAuthRequest() {

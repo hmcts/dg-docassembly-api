@@ -11,6 +11,8 @@ public class ToggleProperties {
 
     private boolean enableDocumentConversionEndpoint;
 
+    private boolean enableSecureDocumentConversionEndpoint;
+
     public boolean isEnableFormDefinitionEndpoint() {
         return this.enableFormDefinitionEndpoint;
     }
@@ -23,6 +25,10 @@ public class ToggleProperties {
         return this.enableDocumentConversionEndpoint;
     }
 
+    public boolean isEnableSecureDocumentConversionEndpoint() {
+        return this.enableSecureDocumentConversionEndpoint;
+    }
+
     public void setEnableFormDefinitionEndpoint(boolean enableFormDefinitionEndpoint) {
         this.enableFormDefinitionEndpoint = enableFormDefinitionEndpoint;
     }
@@ -33,6 +39,10 @@ public class ToggleProperties {
 
     public void setEnableDocumentConversionEndpoint(boolean enableDocumentConversionEndpoint) {
         this.enableDocumentConversionEndpoint = enableDocumentConversionEndpoint;
+    }
+
+    public void setEnableSecureDocumentConversionEndpoint(boolean enableSecureDocumentConversionEndpoint) {
+        this.enableSecureDocumentConversionEndpoint = enableSecureDocumentConversionEndpoint;
     }
 
     public String toString() {

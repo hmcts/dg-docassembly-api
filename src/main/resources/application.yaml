@@ -85,11 +85,11 @@ idam:
 
 template-management-api:
   base-url: ${DOCMOSIS_TEMPLATES_ENDPOINT:https://docmosis.aat.platform.hmcts.net}
-  auth: ${DOCMOSIS_TEMPLATES_ENDPOINT_AUTH:SOMETHING}
+  auth: ${DOCMOSIS_TEMPLATES_ENDPOINT_AUTH:ZDYxMTkzZTQtMGY2Mi00NDM1LWIyN2ItNGRkNzdjOTczMjAwOjQ1NTE0ODQ}
   resource: '/templates/'
 
 docmosis:
-  accessKey: ${DOCMOSIS_ACCESS_KEY:SOMETHING}
+  accessKey: ${DOCMOSIS_ACCESS_KEY:ZDYxMTkzZTQtMGY2Mi00NDM1LWIyN2ItNGRkNzdjOTczMjAwOjQ1NTE0ODQ}
   render.endpoint: ${DOCMOSIS_RENDER_ENDPOINT:https://docmosis.aat.platform.hmcts.net/rs/render}
   convert.endpoint: ${DOCMOSIS_CONVERT_ENDPOINT:https://docmosis.aat.platform.hmcts.net/rs/convert}
 
@@ -101,6 +101,7 @@ endpoint-toggles:
   form-definitions: ${ENABLE_FORM_DEFINITION_ENDPOINT:true}
   template-renditions: ${ENABLE_TEMPLATE_RENDITION_ENDPOINT:true}
   document-conversion: ${ENABLE_DOCUMENT_CONVERSION_ENDPOINT:true}
+  secure-document-conversion: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:true}
 
 # Delete when issueOverride variable is no longer used in SecurityConfiguration.class
 oidc:
@@ -112,3 +113,6 @@ docmosis-conversion:
 
 httpclient:
   call-timeout: ${HTTPCLIENT_CALL_TIMEOUT:30}
+
+case_document_am:
+  url: ${CDAM_URL:http://localhost:4455}

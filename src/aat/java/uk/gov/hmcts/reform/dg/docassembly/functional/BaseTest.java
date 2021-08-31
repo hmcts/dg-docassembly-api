@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 import uk.gov.hmcts.reform.em.EmTestConfig;
 
-@SpringBootTest(classes = {TestUtil.class, EmTestConfig.class})
+@SpringBootTest(classes = {TestUtil.class, EmTestConfig.class, ExtendedCcdHelper.class})
 @TestPropertySource(value = "classpath:application.yml")
 @EnableConfigurationProperties(ToggleProperties.class)
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -25,4 +26,6 @@ public abstract class BaseTest {
     @Autowired
     ToggleProperties toggleProperties;
 
+    @Autowired
+    ExtendedCcdHelper extendedCcdHelper;
 }
