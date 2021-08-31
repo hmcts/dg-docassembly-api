@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.conversion.DocmosisConverter;
+import uk.gov.hmcts.reform.dg.docassembly.service.CdamService;
 import uk.gov.hmcts.reform.dg.docassembly.service.DmStoreDownloader;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
@@ -24,13 +25,16 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
 
     private DmStoreDownloader dmStoreDownloader;
     private DocmosisConverter docmosisConverter;
+    private CdamService cdamService;
 
     @Value("#{'${docmosis-conversion.multipart.covered-ext}'.split(',')}")
     public List<String> fileExtensionsList;
 
-    public FileToPDFConverterServiceImpl(DmStoreDownloader dmStoreDownloader, DocmosisConverter docmosisConverter) {
+    public FileToPDFConverterServiceImpl(DmStoreDownloader dmStoreDownloader, DocmosisConverter docmosisConverter,
+                                         CdamService cdamService) {
         this.dmStoreDownloader = dmStoreDownloader;
         this.docmosisConverter = docmosisConverter;
+        this.cdamService = cdamService;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
     @Override
     public File convertFile(UUID documentId, String auth, String serviceAuth) {
         try {
-            File originalFile = dmStoreDownloader.downloadFile(auth, serviceAuth, documentId);
+            File originalFile = cdamService.downloadFile(auth, serviceAuth, documentId);
             String fileType = FilenameUtils.getExtension(originalFile.getName());
 
             File updatedFile;

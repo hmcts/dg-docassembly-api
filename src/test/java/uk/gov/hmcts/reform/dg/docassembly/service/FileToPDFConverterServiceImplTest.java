@@ -29,6 +29,12 @@ public class FileToPDFConverterServiceImplTest {
     @Mock
     DocmosisConverter docmosisConverter;
 
+    @Mock
+    private CdamService cdamService;
+
+    private static final String auth = "abc";
+    private static final String serviceAuth = "xyz";
+
     private static final UUID docStoreUUID = UUID.randomUUID();
 
     @Before
@@ -45,6 +51,27 @@ public class FileToPDFConverterServiceImplTest {
 
         File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
         Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+    }
+
+    @Test
+    public void convertSecureDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+        File mockFile = new File("potential_and_kinetic.ppt");
+        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenReturn(mockFile);
+        Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
+
+        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+
+        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(auth, serviceAuth, docStoreUUID);
+        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+    }
+
+    @Test(expected = DocumentProcessingException.class)
+    public void convertNotProgressAsCdamException() throws DocumentTaskProcessingException, IOException {
+
+        UUID docStoreUUID = UUID.randomUUID();
+        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenThrow(DocumentTaskProcessingException.class);
+
+        fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
     }
 
     @Test(expected = DocumentProcessingException.class)

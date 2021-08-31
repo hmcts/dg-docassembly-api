@@ -1,49 +1,44 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
 import okhttp3.mock.MockInterceptor;
+import okhttp3.mock.Rule;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
-import uk.gov.hmcts.reform.ccd.document.am.model.Document;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.impl.DmStoreDownloaderImpl;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
-@RunWith(MockitoJUnitRunner.class)
 public class DmStoreDownloaderImplTest {
 
-    @InjectMocks
-    DmStoreDownloaderImpl dmStoreDownloader;
+    @Autowired
+    DmStoreDownloader dmStoreDownloader;
 
     AuthTokenGenerator authTokenGenerator;
 
     MockInterceptor interceptor;
 
-    @Mock
-    private CaseDocumentClientApi caseDocumentClientApi;
-
-    @Mock
-    private ByteArrayResource byteArrayResource;
-
-    private static final UUID docStoreUUID = UUID.randomUUID();
-
     @Before
     public void setup() {
-        MockitoAnnotations.openMocks(this);
+
+        interceptor = new MockInterceptor();
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(interceptor)
+                    .build();
+
+        authTokenGenerator = Mockito.mock(AuthTokenGenerator.class);
+
+        dmStoreDownloader = new DmStoreDownloaderImpl(client,
+            authTokenGenerator,
+            "http://localhost:4603",
+            new ObjectMapper());
     }
 
     @Test(expected = DocumentTaskProcessingException.class)
@@ -74,23 +69,27 @@ public class DmStoreDownloaderImplTest {
         dmStoreDownloader.downloadFile("xxx");
     }
 
-    @Test
-    public void downloadFileCdam() throws Exception {
+    @Test(expected = DocumentTaskProcessingException.class)
+    public void testDownloadAFile() throws Exception {
+        UUID dmStoreDocId = UUID.randomUUID();
+        Mockito.when(authTokenGenerator.generate()).thenReturn("x");
 
-        Document document = Document.builder().originalDocumentName("template1.docx").build();
-        File mockFile = new File("src/test/resources/template1.docx");
-        InputStream inputStream = new FileInputStream(mockFile);
+        interceptor.addRule(new Rule.Builder()
+            .get()
+            .respond("{\"_embedded\":{\"documents\":[{\"_links\":{\"self\":{\"href\":\"http://success.com/1\"}}}]}}"));
 
-        Mockito.when(caseDocumentClientApi.getMetadataForDocument("xxx", "serviceAuth", docStoreUUID))
-            .thenReturn(document);
-        ResponseEntity responseEntity = ResponseEntity.accepted().body(byteArrayResource);
-        Mockito.when(byteArrayResource.getInputStream()).thenReturn(inputStream);
-        Mockito.when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID)).thenReturn(responseEntity);
-
-        dmStoreDownloader.downloadFile("xxx", "serviceAuth", docStoreUUID);
-
-        Mockito.verify(caseDocumentClientApi, Mockito.atLeast(1)).getDocumentBinary("xxx", "serviceAuth", docStoreUUID);
-        Mockito.verify(caseDocumentClientApi, Mockito.atLeast(1)).getMetadataForDocument("xxx", "serviceAuth", docStoreUUID);
+        dmStoreDownloader.downloadFile(dmStoreDocId.toString());
     }
 
+    @Test(expected = DocumentTaskProcessingException.class)
+    public void testThrowNewDocumentTaskProcessingException() throws Exception {
+        UUID dmStoreDocId = UUID.randomUUID();
+        Mockito.when(authTokenGenerator.generate()).thenReturn("x");
+
+        interceptor.addRule(new Rule.Builder()
+            .get()
+            .respond("").code(500));
+
+        dmStoreDownloader.downloadFile(dmStoreDocId.toString());
+    }
 }
