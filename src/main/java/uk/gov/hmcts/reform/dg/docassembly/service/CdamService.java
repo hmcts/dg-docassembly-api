@@ -36,10 +36,7 @@ public class CdamService {
             String fileType = FilenameUtils.getExtension(originalDocumentName);
 
             ByteArrayResource resource = (ByteArrayResource) response.getBody();
-
-            if (Objects.nonNull(resource)) {
-                return copyResponseToFile(resource.getInputStream(), fileType);
-            }
+            return copyResponseToFile(resource.getInputStream(), fileType);
         }
 
         throw new DocumentTaskProcessingException("Could not access the binary. HTTP response: " + response.getStatusCode());
@@ -49,6 +46,10 @@ public class CdamService {
         try {
 
             File tempFile = Files.createTempFile("dm-store", "." + fileType).toFile();
+            tempFile.setReadable(true, true);
+            tempFile.setWritable(true, true);
+            tempFile.setExecutable(true, true);
+
             Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             return tempFile;

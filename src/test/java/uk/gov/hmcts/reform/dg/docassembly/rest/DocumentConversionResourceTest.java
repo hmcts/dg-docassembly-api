@@ -65,6 +65,22 @@ public class DocumentConversionResourceTest {
     }
 
     @Test
+    public void shouldConvertDocumentDisabled() {
+
+        DocumentConversionDto documentConversionDto = new DocumentConversionDto();
+        documentConversionDto.setSecureDocStoreEnabled(false);
+
+        when(fileToPDFConverterService.convertFile(docId))
+            .thenReturn(TEST_PDF_FILE);
+
+        ResponseEntity response = documentConversionResource.convert(request, docId, documentConversionDto);
+        assertEquals(200, response.getStatusCodeValue());
+
+        verify(fileToPDFConverterService, Mockito.atMost(1))
+            .convertFile(docId);
+    }
+
+    @Test
     public void shouldConvertSecureDocument() {
 
         DocumentConversionDto documentConversionDto = new DocumentConversionDto();

@@ -1,8 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 public class DocumentConversionDto {
+
+    @Getter
+    @Setter
     private boolean secureDocStoreEnabled;
 }
