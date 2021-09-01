@@ -12,6 +12,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
 import uk.gov.hmcts.reform.ccd.document.am.model.Document;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,4 +57,13 @@ public class CdamServiceTest {
         Mockito.verify(caseDocumentClientApi, Mockito.atLeast(1)).getMetadataForDocument("xxx", "serviceAuth", docStoreUUID);
     }
 
+    @Test(expected = DocumentTaskProcessingException.class)
+    public void downloadFileCdamNullResponseBody() throws Exception {
+
+        ResponseEntity responseEntity = ResponseEntity.accepted().body(null);
+        Mockito.when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID)).thenReturn(responseEntity);
+
+        cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
+
+    }
 }

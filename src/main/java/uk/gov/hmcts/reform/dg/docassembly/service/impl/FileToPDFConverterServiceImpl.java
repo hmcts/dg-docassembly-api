@@ -41,17 +41,9 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
     public File convertFile(UUID documentId) {
         try {
             File originalFile = dmStoreDownloader.downloadFile(documentId.toString());
-            String fileType = FilenameUtils.getExtension(originalFile.getName());
 
-            File updatedFile;
-            if (fileExtensionsList.contains(fileType)) {
-                log.info("Converting Document to PDF");
-                updatedFile = docmosisConverter.convertFileToPDF(originalFile);
-                log.info("File {} successfully converted to PDF", originalFile.getName());
-            } else {
-                throw new FileTypeException("Document Type not eligible for Conversion");
-            }
-            return updatedFile;
+            return tranformFile(originalFile);
+
         } catch (DocumentTaskProcessingException e) {
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
@@ -65,23 +57,27 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
     public File convertFile(UUID documentId, String auth, String serviceAuth) {
         try {
             File originalFile = cdamService.downloadFile(auth, serviceAuth, documentId);
-            String fileType = FilenameUtils.getExtension(originalFile.getName());
-
-            File updatedFile;
-            if (fileExtensionsList.contains(fileType)) {
-                log.info("Converting Document to PDF");
-                updatedFile = docmosisConverter.convertFileToPDF(originalFile);
-                log.info("File {} successfully converted to PDF", originalFile.getName());
-            } else {
-                throw new FileTypeException("Document Type not eligible for Conversion");
-            }
-            return updatedFile;
+            return tranformFile(originalFile);
         } catch (DocumentTaskProcessingException e) {
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new DocumentProcessingException("File processing error encountered");
+            throw new DocumentProcessingException(e.getMessage());
         }
+    }
+
+    private File tranformFile(File originalFile) throws IOException {
+        String fileType = FilenameUtils.getExtension(originalFile.getName());
+
+        File updatedFile;
+        if (fileExtensionsList.contains(fileType)) {
+            log.info("Converting Document to PDF");
+            updatedFile = docmosisConverter.convertFileToPDF(originalFile);
+            log.info("File {} successfully converted to PDF", originalFile.getName());
+        } else {
+            throw new FileTypeException("Document Type not eligible for Conversion");
+        }
+        return updatedFile;
     }
 }

@@ -48,7 +48,7 @@ public class CdamService {
     private File copyResponseToFile(InputStream inputStream, String fileType) throws DocumentTaskProcessingException {
         try {
 
-            File tempFile = File.createTempFile("dm-store", "." + fileType);
+            File tempFile = Files.createTempFile("dm-store", "." + fileType).toFile();
             Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             return tempFile;
