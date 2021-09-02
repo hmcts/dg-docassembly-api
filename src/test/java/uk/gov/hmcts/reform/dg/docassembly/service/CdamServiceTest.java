@@ -88,12 +88,13 @@ public class CdamServiceTest {
                 .hashToken("token")
                 .links(getLinks())
                 .build();
-        File mockFile = new File("src/test/resources/template1.docx");
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         when(caseDocumentClientApi.uploadDocuments(any(), any(), any(DocumentUploadRequest.class))).thenReturn(uploadResponse);
         when(uploadResponse.getDocuments()).thenReturn(documents);
         when(uploadResponse.getDocuments().get(0)).thenReturn(testDoc);
+
+        File mockFile = new File("src/test/resources/template1.docx");
+        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         cdamService.uploadDocuments(mockFile, createTemplateRenditionDto);
     }
@@ -117,12 +118,12 @@ public class CdamServiceTest {
         Document.Link self = new Document.Link();
         Document.Link binary = new Document.Link();
 
-        var DOCUMENT_ID =  UUID.fromString("3a6cfd54-ab2c-49c0-88ec-831f6376a726");
-        var SELF_LINK = "http://localhost:samplefile/" + DOCUMENT_ID;
-        var BINARY_LINK = "http://localhost:samplefile/" + DOCUMENT_ID + "/binary";
+        var documentId =  UUID.fromString("3a6cfd54-ab2c-49c0-88ec-831f6376a726");
+        var selfLink = "http://localhost:samplefile/" + documentId;
+        var binaryLink = "http://localhost:samplefile/" + documentId + "/binary";
 
-        self.href = SELF_LINK;
-        binary.href = BINARY_LINK;
+        self.href = selfLink;
+        binary.href = binaryLink;
 
         links.self = self;
         links.binary = binary;
