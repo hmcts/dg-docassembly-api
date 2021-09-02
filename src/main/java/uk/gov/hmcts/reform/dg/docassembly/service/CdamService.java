@@ -4,10 +4,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
-import uk.gov.hmcts.reform.ccd.document.am.model.Document;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
@@ -28,23 +28,28 @@ public class CdamService {
     private CaseDocumentClientApi caseDocumentClientApi;
 
 
-    public File downloadFile(String auth, String serviceAuth, UUID documentId) throws IOException, DocumentTaskProcessingException {
+    public File downloadFile(String auth, String serviceAuth, UUID documentId) throws
+            IOException, DocumentTaskProcessingException {
 
         ResponseEntity<Resource> response =  caseDocumentClientApi.getDocumentBinary(auth, serviceAuth, documentId);
+        HttpStatus status = null;
 
-        if (Objects.nonNull(response) && Objects.nonNull(response.getBody())) {
-
-            InputStream inputStream = ((ByteArrayResource) response.getBody()).getInputStream();
-
-            Document document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
-            String originalDocumentName = document.originalDocumentName;
-            String fileType = FilenameUtils.getExtension(originalDocumentName);
-
-            String fileName = "document." + fileType;
-            return copyResponseToFile(inputStream, fileName);
+        if (Objects.nonNull(response)) {
+            status = response.getStatusCode();
+            var byteArrayResource = (ByteArrayResource) response.getBody();
+            if( Objects.nonNull(byteArrayResource)) {
+                try (var inputStream = byteArrayResource.getInputStream()) {
+                    var document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
+                    var originalDocumentName = document.originalDocumentName;
+                    var fileType = FilenameUtils.getExtension(originalDocumentName);
+                    var fileName = "document." + fileType;
+                    return copyResponseToFile(inputStream, fileName);
+                }
+            }
         }
 
-        throw new DocumentTaskProcessingException("Could not access the binary. HTTP response: " + response.getStatusCode());
+        throw new DocumentTaskProcessingException(String.format("Could not access the binary. HTTP response: %s",
+                status));
     }
 
     private File copyResponseToFile(InputStream inputStream, String fileName) throws DocumentTaskProcessingException {
