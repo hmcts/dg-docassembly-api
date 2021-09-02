@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -97,6 +98,11 @@ public class CdamServiceTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         cdamService.uploadDocuments(mockFile, createTemplateRenditionDto);
+
+        verify(caseDocumentClientApi, Mockito.atLeast(1)).uploadDocuments(any(), any(), any(DocumentUploadRequest.class));
+
+        assertNotNull(createTemplateRenditionDto.getHashToken());
+        assertNotNull(createTemplateRenditionDto.getRenditionOutputLocation());
     }
 
     private CreateTemplateRenditionDto populateRequestBody() {
