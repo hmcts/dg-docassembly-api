@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.ccd.document.am.model.Document;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -35,14 +34,14 @@ public class CdamService {
 
         if (Objects.nonNull(response.getBody())) {
 
-            ByteArrayResource resource = (ByteArrayResource) response.getBody();
+            InputStream inputStream = ((ByteArrayResource) response.getBody()).getInputStream();
 
             Document document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
             String originalDocumentName = document.originalDocumentName;
             String fileType = FilenameUtils.getExtension(originalDocumentName);
 
             String fileName = "document." + fileType;
-            return copyResponseToFile(resource.getInputStream(), fileName);
+            return copyResponseToFile(inputStream, fileName);
         }
 
         throw new DocumentTaskProcessingException("Could not access the binary. HTTP response: " + response.getStatusCode());
@@ -63,13 +62,4 @@ public class CdamService {
         }
     }
 
-    private static File createTempFile(byte[] inputFile, String fileName) throws IOException {
-        var tempDir = Files.createTempDirectory("pg",
-            PosixFilePermissions.asFileAttribute(EnumSet.allOf(PosixFilePermission.class)));
-        var tempFile = new File(tempDir.toAbsolutePath().toFile(), fileName);
-        try (var fos = new FileOutputStream(tempFile)) {
-            fos.write(inputFile);
-            return tempFile;
-        }
-    }
 }
