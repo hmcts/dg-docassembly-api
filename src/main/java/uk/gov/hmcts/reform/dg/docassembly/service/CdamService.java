@@ -11,10 +11,14 @@ import uk.gov.hmcts.reform.ccd.document.am.model.Document;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,24 +35,25 @@ public class CdamService {
 
         if (Objects.nonNull(response.getBody())) {
 
+            ByteArrayResource resource = (ByteArrayResource) response.getBody();
+
             Document document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
             String originalDocumentName = document.originalDocumentName;
             String fileType = FilenameUtils.getExtension(originalDocumentName);
 
-            ByteArrayResource resource = (ByteArrayResource) response.getBody();
-            return copyResponseToFile(resource.getInputStream(), fileType);
+            String fileName = "document." + fileType;
+            return copyResponseToFile(resource.getInputStream(), fileName);
         }
 
         throw new DocumentTaskProcessingException("Could not access the binary. HTTP response: " + response.getStatusCode());
     }
 
-    private File copyResponseToFile(InputStream inputStream, String fileType) throws DocumentTaskProcessingException {
+    private File copyResponseToFile(InputStream inputStream, String fileName) throws DocumentTaskProcessingException {
         try {
 
-            File tempFile = Files.createTempFile("dm-store", "." + fileType).toFile();
-            tempFile.setReadable(true, true);
-            tempFile.setWritable(true, true);
-            tempFile.setExecutable(true, true);
+            var tempDir = Files.createTempDirectory("pg",
+                PosixFilePermissions.asFileAttribute(EnumSet.allOf(PosixFilePermission.class)));
+            var tempFile = new File(tempDir.toAbsolutePath().toFile(), fileName);
 
             Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
@@ -58,4 +63,13 @@ public class CdamService {
         }
     }
 
+    private static File createTempFile(byte[] inputFile, String fileName) throws IOException {
+        var tempDir = Files.createTempDirectory("pg",
+            PosixFilePermissions.asFileAttribute(EnumSet.allOf(PosixFilePermission.class)));
+        var tempFile = new File(tempDir.toAbsolutePath().toFile(), fileName);
+        try (var fos = new FileOutputStream(tempFile)) {
+            fos.write(inputFile);
+            return tempFile;
+        }
+    }
 }
