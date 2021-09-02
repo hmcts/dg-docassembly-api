@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -25,12 +24,12 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CdamServiceTest {
-
     @InjectMocks
     private CdamService cdamService;
 
@@ -41,14 +40,10 @@ public class CdamServiceTest {
     private ByteArrayResource byteArrayResource;
 
     @Mock
-    private Document document;
-    @Mock
     private List<Document> documents;
-    @Mock
-    private Document.Links links;
 
     @Mock
-    private Document.Link link;
+    private UploadResponse uploadResponse;
 
     private static final UUID docStoreUUID = UUID.randomUUID();
 
@@ -86,19 +81,19 @@ public class CdamServiceTest {
 
     }
 
-    @Ignore
+
     @Test
     public void testUploadDocuments() throws DocumentTaskProcessingException {
-
-        String docUrl = "http://localhost:samplefile";
+        Document testDoc = Document.builder().originalDocumentName("template1.docx")
+                .hashToken("token")
+                .links(getLinks())
+                .build();
         File mockFile = new File("src/test/resources/template1.docx");
-        UploadResponse uploadResponse = Mockito.mock(UploadResponse.class);
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        when(caseDocumentClientApi.uploadDocuments(Mockito.anyString(),
-            Mockito.anyString(), Mockito.any(DocumentUploadRequest.class)))
-            .thenReturn(uploadResponse);
-        when(documents.get(0)).thenReturn(document);
+
+        when(caseDocumentClientApi.uploadDocuments(any(), any(), any(DocumentUploadRequest.class))).thenReturn(uploadResponse);
+        when(uploadResponse.getDocuments()).thenReturn(documents);
+        when(uploadResponse.getDocuments().get(0)).thenReturn(testDoc);
 
         cdamService.uploadDocuments(mockFile, createTemplateRenditionDto);
     }
@@ -111,8 +106,28 @@ public class CdamServiceTest {
         createTemplateRenditionDto.setOutputFilename("SampleTestFile");
         createTemplateRenditionDto.setJurisdictionId("PUBLICLAW");
         createTemplateRenditionDto.setCaseTypeId("XYZ");
+        createTemplateRenditionDto.setTemplateId("XYZ");
 
         return createTemplateRenditionDto;
+    }
+
+    static Document.Links getLinks() {
+        Document.Links links = new Document.Links();
+
+        Document.Link self = new Document.Link();
+        Document.Link binary = new Document.Link();
+
+        var DOCUMENT_ID =  UUID.fromString("3a6cfd54-ab2c-49c0-88ec-831f6376a726");
+        var SELF_LINK = "http://localhost:samplefile/" + DOCUMENT_ID;
+        var BINARY_LINK = "http://localhost:samplefile/" + DOCUMENT_ID + "/binary";
+
+        self.href = SELF_LINK;
+        binary.href = BINARY_LINK;
+
+        links.self = self;
+        links.binary = binary;
+
+        return links;
     }
 }
 
