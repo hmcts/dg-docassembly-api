@@ -37,7 +37,7 @@ public class CdamService {
         if (Objects.nonNull(response)) {
             status = response.getStatusCode();
             var byteArrayResource = (ByteArrayResource) response.getBody();
-            if( Objects.nonNull(byteArrayResource)) {
+            if (Objects.nonNull(byteArrayResource)) {
                 try (var inputStream = byteArrayResource.getInputStream()) {
                     var document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
                     var originalDocumentName = document.originalDocumentName;
