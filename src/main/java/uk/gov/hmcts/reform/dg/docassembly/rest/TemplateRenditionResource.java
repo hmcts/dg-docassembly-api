@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -36,12 +37,16 @@ public class TemplateRenditionResource {
     @PostMapping("/template-renditions")
     public ResponseEntity<CreateTemplateRenditionDto> createTemplateRendition(
             @RequestBody @Valid CreateTemplateRenditionDto createTemplateRenditionDto,
-            @RequestHeader("Authorization") String jwt) throws IOException {
+            @RequestHeader("Authorization") String jwt, @RequestHeader("ServiceAuthorization") String serviceAuth)
+        throws IOException, DocumentTaskProcessingException {
 
         createTemplateRenditionDto.setJwt(jwt);
-
+        createTemplateRenditionDto.setServiceAuth(serviceAuth);
         CreateTemplateRenditionDto templateRenditionOutputDto =
                 templateRenditionService.renderTemplate(createTemplateRenditionDto);
+
+        templateRenditionOutputDto.setJwt(null);
+        templateRenditionOutputDto.setServiceAuth(null);
 
         return ResponseEntity.ok(templateRenditionOutputDto);
 

@@ -42,7 +42,7 @@ public class FileToPDFConverterServiceImplTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         fileToPDFConverterServiceImpl.fileExtensionsList = Arrays.asList("doc", "docx","pptx", "ppt", "rtf", "txt", "xlsx", "xls","jpeg");
     }
 

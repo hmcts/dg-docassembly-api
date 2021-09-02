@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.dg.docassembly.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
@@ -16,6 +18,22 @@ public class CreateTemplateRenditionDto extends TemplateIdDto {
     private String renditionOutputLocation;
 
     private String outputFilename;
+
+    @Getter
+    @Setter
+    private boolean secureDocStoreEnabled;
+
+    @Getter
+    @Setter
+    private String caseTypeId;
+
+    @Getter
+    @Setter
+    private String jurisdictionId;
+
+    @Getter
+    @Setter
+    private String hashToken;
 
     public JsonNode getFormPayload() {
         return formPayload;
