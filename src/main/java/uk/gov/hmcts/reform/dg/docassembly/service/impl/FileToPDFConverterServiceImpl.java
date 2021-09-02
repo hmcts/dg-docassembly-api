@@ -62,7 +62,6 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
             throw new DocumentProcessingException(e.getMessage());
         }
     }
