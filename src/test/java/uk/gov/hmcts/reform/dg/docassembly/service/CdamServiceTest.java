@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -85,6 +86,7 @@ public class CdamServiceTest {
 
     }
 
+    @Ignore
     @Test
     public void testUploadDocuments() throws DocumentTaskProcessingException {
 
