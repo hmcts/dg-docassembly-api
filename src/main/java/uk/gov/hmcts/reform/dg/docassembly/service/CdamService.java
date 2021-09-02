@@ -32,7 +32,7 @@ public class CdamService {
 
         ResponseEntity<Resource> response =  caseDocumentClientApi.getDocumentBinary(auth, serviceAuth, documentId);
 
-        if (Objects.nonNull(response.getBody())) {
+        if (Objects.nonNull(response) && Objects.nonNull(response.getBody())) {
 
             InputStream inputStream = ((ByteArrayResource) response.getBody()).getInputStream();
 
