@@ -13,5 +13,4 @@ public class HttpClientConfiguration {
         MockInterceptor mockInterceptor = new MockInterceptor();
         return new OkHttpClient.Builder().addInterceptor(mockInterceptor).build();
     }
-
 }
