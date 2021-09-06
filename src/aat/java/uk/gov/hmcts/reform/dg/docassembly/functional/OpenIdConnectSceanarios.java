@@ -8,6 +8,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
@@ -70,19 +71,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
     @Test
     public void testWithEmptyS2SAuth() {
         assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
-        exceptionThrown.expect(NullPointerException.class);
-
-        final Response response =
-                testUtil
-                        .validAuthRequestWithEmptyS2SAuth()
-                        .baseUri(testUtil.getTestUrl())
-                        .contentType(APPLICATION_JSON_VALUE)
-                        .body(getBodyForRequest())
-                        .post(API_TEMPLATE_RENDITIONS_URL);
-
-        assertEquals(401, response.getStatusCode());
-
+        assertThrows(NullPointerException.class, this::execute);
     }
 
     @Test
@@ -118,5 +107,16 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     private String getBodyForRequest() {
         return "{\"formPayload\":{\"a\":1}, \"outputType\":\"DOC\", \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}";
+    }
+
+    private void execute() {
+        final Response response =
+                testUtil
+                        .validAuthRequestWithEmptyS2SAuth()
+                        .baseUri(testUtil.getTestUrl())
+                        .contentType(APPLICATION_JSON_VALUE)
+                        .body(getBodyForRequest())
+                        .post(API_TEMPLATE_RENDITIONS_URL);
+        assertEquals(401, response.getStatusCode());
     }
 }
