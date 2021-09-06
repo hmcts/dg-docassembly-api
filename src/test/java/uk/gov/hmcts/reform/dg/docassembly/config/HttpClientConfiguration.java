@@ -11,6 +11,8 @@ public class HttpClientConfiguration {
     @Bean
     public OkHttpClient okHttpClient() {
         MockInterceptor mockInterceptor = new MockInterceptor();
-        return new OkHttpClient.Builder().addInterceptor(mockInterceptor).build();
+        return new OkHttpClient.Builder()
+                .addInterceptor(mockInterceptor)
+                .build();
     }
 }
