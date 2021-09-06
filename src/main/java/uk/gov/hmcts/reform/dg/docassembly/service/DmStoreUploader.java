@@ -18,7 +18,7 @@ import java.io.IOException;
 @Service
 public class DmStoreUploader {
 
-    private static Logger log = LoggerFactory.getLogger(DmStoreUploader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DmStoreUploader.class);
 
     private final OkHttpClient okHttpClient;
 
@@ -59,10 +59,10 @@ public class DmStoreUploader {
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("classification", "PUBLIC")
                     .addFormDataPart("files", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()), file))
+                            RequestBody.Companion.create(file, MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
                     .build();
 
-            Request request = new Request.Builder()
+            var request = new Request.Builder()
                     .addHeader("user-id", getUserId(createTemplateRenditionDto))
                     .addHeader("user-roles", "caseworker")
                     .addHeader("ServiceAuthorization", authTokenGenerator.generate())
@@ -89,7 +89,7 @@ public class DmStoreUploader {
             }
 
         } catch (RuntimeException | IOException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new DocumentUploaderException(String.format("Couldn't upload the file:  %s", e.getMessage()), e);
         }
     }
@@ -101,11 +101,10 @@ public class DmStoreUploader {
                     .Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()),
-                                    file))
+                            RequestBody.Companion.create(file, MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
                     .build();
 
-            Request request = new Request.Builder()
+            var request = new Request.Builder()
                     .addHeader("user-id", getUserId(createTemplateRenditionDto))
                     .addHeader("user-roles", "caseworker")
                     .addHeader("ServiceAuthorization", authTokenGenerator.generate())
@@ -113,21 +112,20 @@ public class DmStoreUploader {
                     .method("POST", requestBody)
                     .build();
 
-            Response response = okHttpClient.newCall(request).execute();
+            var response = okHttpClient.newCall(request).execute();
 
             if (!response.isSuccessful()) {
                 throw new DocumentUploaderException("Couldn't upload the file. HTTP Response code from Document Store: " + response.code(), null);
             }
 
         } catch (RuntimeException | IOException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new DocumentUploaderException("Couldn't upload the file", e);
         }
     }
 
     private String getUserId(CreateTemplateRenditionDto createTemplateRenditionDto) {
-        User user = userResolver.getTokenDetails(createTemplateRenditionDto.getJwt());
-        return user.getPrincipal();
+        return userResolver.getTokenDetails(createTemplateRenditionDto.getJwt()).getPrincipal();
     }
 
 }
