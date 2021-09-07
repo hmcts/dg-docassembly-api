@@ -51,8 +51,7 @@ public class CdamService {
                     var document = caseDocumentClientApi.getMetadataForDocument(auth, serviceAuth, documentId);
                     var originalDocumentName = document.originalDocumentName;
                     var fileType = FilenameUtils.getExtension(originalDocumentName);
-                    String randomFileName = UUID.randomUUID().toString();
-                    var fileName = randomFileName + "document." + fileType;
+                    var fileName = "document." + fileType;
                     return copyResponseToFile(inputStream, fileName);
                 }
             }
@@ -70,7 +69,7 @@ public class CdamService {
             var tempFile = new File(tempDir.toAbsolutePath().toFile(), fileName);
 
             Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            tempFile.deleteOnExit();
+
             return tempFile;
         } catch (IOException e) {
             throw new DocumentTaskProcessingException("Could not copy the file to a temp location", e);
