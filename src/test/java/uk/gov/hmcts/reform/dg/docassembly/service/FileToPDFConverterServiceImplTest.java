@@ -78,6 +78,15 @@ public class FileToPDFConverterServiceImplTest {
     }
 
     @Test(expected = DocumentProcessingException.class)
+    public void convertFileAsCdamException() throws DocumentTaskProcessingException, IOException {
+
+        UUID docStoreUUID = UUID.randomUUID();
+        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenThrow(IOException.class);
+
+        fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+    }
+
+    @Test(expected = DocumentProcessingException.class)
     public void convertNotProgressAsDmStoreDownloaderException() throws DocumentTaskProcessingException {
 
         UUID docStoreUUID = UUID.randomUUID();
