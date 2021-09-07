@@ -239,9 +239,9 @@ dependencyManagement {
 }
 
 bootJar {
-    getArchiveBaseName().set('rpa-dg-docassembly')
-    archiveFileName = "$archiveBaseName"+".jar"
-    destinationDirectory = file("$rootDir/build/libs")
+    baseName 'rpa-dg-docassembly'
+    archiveName = "$baseName"+".jar"
+    destinationDir = file("$rootDir/build/libs")
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
