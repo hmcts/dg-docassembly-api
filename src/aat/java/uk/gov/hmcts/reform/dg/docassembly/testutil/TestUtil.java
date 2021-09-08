@@ -46,9 +46,10 @@ public class TestUtil {
 
     @PostConstruct
     public void init() {
-        idamHelper.createUser("a@b.com", Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
+        idamHelper.createUser("docassemblyTestUser@docassemblyTest.com",
+            Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
         SerenityRest.useRelaxedHTTPSValidation();
-        idamAuth = idamHelper.authenticateUser("a@b.com");
+        idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com");
         s2sAuth = s2sHelper.getS2sToken();
     }
 

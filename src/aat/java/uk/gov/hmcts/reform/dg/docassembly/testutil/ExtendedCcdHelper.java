@@ -75,22 +75,19 @@ public class ExtendedCcdHelper {
                     + "        }\n"
                     + "      }";
 
-    private String redactionTestUser;
+    private String redactionTestUser = "docassemblyTestUser@docassemblyTest.com";
     private List<String> redactionTestUserRoles = Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList());
 
     @PostConstruct
     public void init() throws Exception {
-        initRedactionTestUser();
         importCcdDefinitionFile();
     }
-
 
     public void importCcdDefinitionFile() throws Exception {
 
         ccdDefinitionHelper.importDefinitionFile(redactionTestUser,
                 "caseworker-publiclaw",
                 getEnvSpecificDefinitionFile());
-
     }
 
     public CaseDetails createCase(String documents) throws Exception {
@@ -148,11 +145,6 @@ public class ExtendedCcdHelper {
         }
 
         return new FileInputStream(outputFile);
-    }
-
-    public void initRedactionTestUser() {
-        redactionTestUser = "a@b.com";
-        idamHelper.createUser(redactionTestUser, redactionTestUserRoles);
     }
 
     public String getCcdDocumentJson(String documentName, String dmUrl, String fileName, String dochash) {
