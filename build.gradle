@@ -132,7 +132,7 @@ dependencies {
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
     testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.4.1'
 
-    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.6.1'
+    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.8.0'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.2'
 
@@ -193,7 +193,7 @@ dependencyManagement {
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
+        dependencySet(group: 'org.junit.vintage', version: '5.8.0') {
             entry 'junit-vintage-engine'
         }
 
