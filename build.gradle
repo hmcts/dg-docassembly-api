@@ -87,8 +87,8 @@ dependencies {
         exclude group: 'org.apache.xmlgraphics', module: 'batik-all'
     }
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.11'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.0.11'
     
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '11.6'
     implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
@@ -221,7 +221,7 @@ dependencyManagement {
         }
 
         //CVE-2021-33037
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.48') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.0.11') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
         }
