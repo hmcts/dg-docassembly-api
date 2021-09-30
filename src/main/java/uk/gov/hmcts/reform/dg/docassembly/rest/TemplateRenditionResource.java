@@ -31,7 +31,8 @@ public class TemplateRenditionResource {
     }
 
     @ApiOperation(
-        value = "Renders a templates using provided values and uploads it to Document Store"
+        value = "Renders a templates using provided values and uploads it to Document Store."
+            + " secureDocStoreEnabled attribute is disabled by default."
     )
     @ApiImplicitParam(name = "ServiceAuthorization", paramType = "header", required = true, dataTypeClass = String.class)
     @PostMapping("/template-renditions")

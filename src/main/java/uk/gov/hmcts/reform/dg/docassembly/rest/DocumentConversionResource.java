@@ -37,7 +37,8 @@ public class DocumentConversionResource {
         this.fileToPDFConverterService = fileToPDFConverterService;
     }
 
-    @ApiOperation(value = "Convert Document to PDF", notes = "A POST request to convert document type to PDF and return the converted document")
+    @ApiOperation(value = "Convert Document to PDF", notes = "A POST request to convert document type to PDF and "
+        + "return the converted document. secureDocStoreEnabled attribute is disabled by default.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully redacted"),
             @ApiResponse(code = 400, message = "Invalid request"),
