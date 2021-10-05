@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.dg.docassembly.config.security.SecurityUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,23 +27,27 @@ public class ServiceNameAspect {
     SecurityUtils securityUtils;
 
     @Before(
-        "execution(* uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource.createTemplateRendition(..)) ||"
-            + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.FormDefinitionResource.getFormDefinition(..)) ||"
-            +  " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource.convert(..))")
+            "execution(* uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource.createTemplateRendition(..)) ||"
+                    + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.FormDefinitionResource.getFormDefinition(..)) ||"
+                    + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource.convert(..))")
     public void logServiceName() {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         if (Objects.nonNull(request)) {
             String s2sToken = request.getHeader("serviceauthorization");
             if (StringUtils.isNotBlank(s2sToken)) {
-                String serviceName;
-                if (s2sToken.startsWith(BEARER)) {
-                    serviceName = securityUtils.getServiceName(s2sToken);
-                } else {
-                    serviceName = securityUtils.getServiceName(BEARER + s2sToken);
+                try {
+                    String serviceName;
+                    if (s2sToken.startsWith(BEARER)) {
+                        serviceName = securityUtils.getServiceName(s2sToken);
+                    } else {
+                        serviceName = securityUtils.getServiceName(BEARER + s2sToken);
+                    }
+                    log.info("dg-docassembly : Endpoint : {}  for : {} method is accessed by {} ", request.getRequestURI(),
+                            request.getMethod(), serviceName);
+                } catch (InvalidTokenException invalidTokenException) {
+                    log.warn("invalidTokenException logged is: {} ", invalidTokenException.getMessage());
                 }
-                log.info("dg-docassembly : Endpoint : {}  for : {} method is accessed by {} ", request.getRequestURI(),
-                    request.getMethod(), serviceName);
             }
         }
     }
