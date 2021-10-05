@@ -27,9 +27,9 @@ public class ServiceNameAspect {
     SecurityUtils securityUtils;
 
     @Before(
-            "execution(* uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource.createTemplateRendition(..)) ||"
-                    + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.FormDefinitionResource.getFormDefinition(..)) ||"
-                    + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource.convert(..))")
+        "execution(* uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource.createTemplateRendition(..)) ||"
+            + " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.FormDefinitionResource.getFormDefinition(..)) ||"
+            +  " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource.convert(..))")
     public void logServiceName() {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
