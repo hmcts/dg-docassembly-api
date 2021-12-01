@@ -101,6 +101,7 @@ endpoint-toggles:
   form-definitions: ${ENABLE_FORM_DEFINITION_ENDPOINT:true}
   template-renditions: ${ENABLE_TEMPLATE_RENDITION_ENDPOINT:true}
   document-conversion: ${ENABLE_DOCUMENT_CONVERSION_ENDPOINT:true}
+  enable-secure-document-conversion-endpoint: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:false}
 
 # Delete when issueOverride variable is no longer used in SecurityConfiguration.class
 oidc:

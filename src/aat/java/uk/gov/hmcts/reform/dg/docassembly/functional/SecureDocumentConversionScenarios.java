@@ -2,15 +2,9 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import uk.gov.hmcts.reform.dg.docassembly.dto.DocumentConversionDto;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
@@ -152,21 +146,13 @@ public class SecureDocumentConversionScenarios extends BaseTest {
 
     private Response createAndProcessSecureDocRequest(String newDocId) {
         UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
-        DocumentConversionDto documentConversionDto = new DocumentConversionDto();
-        documentConversionDto.setSecureDocStoreEnabled(true);
-        final JSONObject jsonObject = new JSONObject(documentConversionDto);
         return cdamRequest
-            .body(jsonObject)
             .post("/api/convert/" + docId);
     }
 
     private Response createAndProcessSecureDocRequestFailure(String newDocId) {
         String docId = newDocId.substring(newDocId.lastIndexOf('/') + 1);
-        DocumentConversionDto documentConversionDto = new DocumentConversionDto();
-        documentConversionDto.setSecureDocStoreEnabled(true);
-        final JSONObject jsonObject = new JSONObject(documentConversionDto);
         return request
-            .body(jsonObject)
             .post("/api/convert/" + docId);
     }
 

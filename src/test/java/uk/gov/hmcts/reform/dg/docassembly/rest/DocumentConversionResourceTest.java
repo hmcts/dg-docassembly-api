@@ -12,17 +12,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
-import uk.gov.hmcts.reform.dg.docassembly.dto.DocumentConversionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.FileTypeException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.*;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(SpringRunner.class)
@@ -47,7 +47,7 @@ public class DocumentConversionResourceTest {
     @Before
     public void setUp() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         docId = UUID.randomUUID();
     }
 
@@ -57,34 +57,28 @@ public class DocumentConversionResourceTest {
         when(fileToPDFConverterService.convertFile(docId))
             .thenReturn(TEST_PDF_FILE);
 
-        ResponseEntity response = documentConversionResource.convert(request, docId, null);
+        ResponseEntity response = documentConversionResource.convert(request, docId);
         assertEquals(200, response.getStatusCodeValue());
 
-        verify(fileToPDFConverterService, Mockito.atMost(1))
+        verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
     }
 
     @Test
     public void shouldConvertDocumentDisabled() {
 
-        DocumentConversionDto documentConversionDto = new DocumentConversionDto();
-        documentConversionDto.setSecureDocStoreEnabled(false);
-
         when(fileToPDFConverterService.convertFile(docId))
             .thenReturn(TEST_PDF_FILE);
 
-        ResponseEntity response = documentConversionResource.convert(request, docId, documentConversionDto);
+        ResponseEntity response = documentConversionResource.convert(request, docId);
         assertEquals(200, response.getStatusCodeValue());
 
-        verify(fileToPDFConverterService, Mockito.atMost(1))
+        verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
     }
 
     @Test
     public void shouldConvertSecureDocument() {
-
-        DocumentConversionDto documentConversionDto = new DocumentConversionDto();
-        documentConversionDto.setSecureDocStoreEnabled(true);
 
         String auth = "xyz";
         String serviceAuth = "abc";
@@ -92,12 +86,16 @@ public class DocumentConversionResourceTest {
             .thenReturn(TEST_PDF_FILE);
         when(request.getHeader("Authorization")).thenReturn(auth);
         when(request.getHeader("ServiceAuthorization")).thenReturn(serviceAuth);
+        documentConversionResource.cdamEnabled = true;
 
-        ResponseEntity response = documentConversionResource.convert(request, docId, documentConversionDto);
+        ResponseEntity response = documentConversionResource.convert(request, docId);
         assertEquals(200, response.getStatusCodeValue());
 
-        verify(fileToPDFConverterService, Mockito.atMost(1))
+        verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId, auth, serviceAuth);
+
+        verify(fileToPDFConverterService, Mockito.atLeast(0))
+                .convertFile(docId);
     }
 
     @Test
@@ -106,10 +104,10 @@ public class DocumentConversionResourceTest {
         when(fileToPDFConverterService.convertFile(docId))
                 .thenThrow(DocumentProcessingException.class);
 
-        ResponseEntity response = documentConversionResource.convert(request, docId, null);
+        ResponseEntity response = documentConversionResource.convert(request, docId);
         assertEquals(400, response.getStatusCodeValue());
 
-        verify(fileToPDFConverterService, Mockito.atMost(1))
+        verify(fileToPDFConverterService, Mockito.atLeastOnce())
                 .convertFile(docId);
     }
 
@@ -119,10 +117,10 @@ public class DocumentConversionResourceTest {
         when(fileToPDFConverterService.convertFile(docId))
             .thenThrow(FileTypeException.class);
 
-        ResponseEntity response = documentConversionResource.convert(request, docId, null);
+        ResponseEntity response = documentConversionResource.convert(request, docId);
         assertEquals(400, response.getStatusCodeValue());
 
-        verify(fileToPDFConverterService, Mockito.atMost(1))
+        verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
     }
 }
