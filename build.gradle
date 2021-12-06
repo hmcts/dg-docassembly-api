@@ -97,7 +97,7 @@ dependencies {
         exclude group: 'org.apache.xmlgraphics', module: 'batik-all'
     }
 
-    implementation group: 'org.json', name: 'json', version: '20210307'
+    implementation group: 'org.json', name: 'json', version: '20211205'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.0.13'
     
