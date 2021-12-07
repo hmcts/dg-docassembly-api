@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,17 +21,14 @@ public class TemplateRenditionService {
 
     private final DmStoreUploader dmStoreUploader;
     private final DocmosisApiClient docmosisApiClient;
-    private final CdamService cdamService;
 
-    public TemplateRenditionService(DmStoreUploader dmStoreUploader, DocmosisApiClient docmosisApiClient,
-                                    CdamService cdamService) {
+    public TemplateRenditionService(DmStoreUploader dmStoreUploader, DocmosisApiClient docmosisApiClient) {
         this.dmStoreUploader = dmStoreUploader;
         this.docmosisApiClient = docmosisApiClient;
-        this.cdamService = cdamService;
     }
 
     public CreateTemplateRenditionDto renderTemplate(CreateTemplateRenditionDto createTemplateRenditionDto)
-        throws IOException, DocumentTaskProcessingException {
+            throws IOException {
 
         Response response = this.docmosisApiClient.render(createTemplateRenditionDto);
 
@@ -73,11 +69,7 @@ public class TemplateRenditionService {
         }
         response.close();
 
-        if (createTemplateRenditionDto.isSecureDocStoreEnabled()) {
-            cdamService.uploadDocuments(file, createTemplateRenditionDto);
-        } else {
-            dmStoreUploader.uploadFile(file, createTemplateRenditionDto);
-        }
+        dmStoreUploader.uploadFile(file, createTemplateRenditionDto);
 
         return createTemplateRenditionDto;
     }

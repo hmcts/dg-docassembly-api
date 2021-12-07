@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,16 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
-import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
-import uk.gov.hmcts.reform.ccd.document.am.model.Document;
-import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
-import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
-import uk.gov.hmcts.reform.dg.docassembly.dto.ByteArrayMultipartFile;
-import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.File;
@@ -27,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.UUID;
@@ -79,42 +70,6 @@ public class CdamService {
             return tempFile;
         } catch (IOException e) {
             throw new DocumentTaskProcessingException("Could not copy the file to a temp location", e);
-        }
-    }
-
-    public void uploadDocuments(File file, CreateTemplateRenditionDto createTemplateRenditionDto) throws DocumentTaskProcessingException {
-
-        logger.debug("Uploading document to CDAM with document name : {}  with JurisdictionId : {} and caseTypeId :"
-                + " {} ", createTemplateRenditionDto.getFullOutputFilename(),
-            createTemplateRenditionDto.getJurisdictionId(), createTemplateRenditionDto.getCaseTypeId());
-
-        try {
-            ByteArrayMultipartFile multipartFile =
-                ByteArrayMultipartFile.builder()
-                    .content(FileUtils.readFileToByteArray(file))
-                    .name(createTemplateRenditionDto.getFullOutputFilename())
-                    .contentType(MediaType.valueOf(createTemplateRenditionDto.getOutputType().getMediaType()))
-                .build();
-
-            DocumentUploadRequest documentUploadRequest = new DocumentUploadRequest(Classification.PUBLIC.toString(),
-                createTemplateRenditionDto.getCaseTypeId(), createTemplateRenditionDto.getJurisdictionId(),
-                Arrays.asList(multipartFile));
-
-            UploadResponse uploadResponse = caseDocumentClientApi.uploadDocuments(createTemplateRenditionDto.getJwt(),
-                createTemplateRenditionDto.getServiceAuth(),
-                documentUploadRequest);
-            Document document = uploadResponse.getDocuments().get(0);
-
-            createTemplateRenditionDto.setRenditionOutputLocation(document.links.self.href);
-            createTemplateRenditionDto.setHashToken(document.hashToken);
-
-            logger.debug("Document upload completed to CDAM with document name : {}  with JurisdictionId : {} and "
-                    + "caseTypeId : {} ", createTemplateRenditionDto.getFullOutputFilename(),
-                createTemplateRenditionDto.getJurisdictionId(), createTemplateRenditionDto.getCaseTypeId());
-        } catch (IOException e) {
-            throw new DocumentTaskProcessingException("Could not download the file from CDAM", e);
-        } catch (Exception e) {
-            throw new DocumentTaskProcessingException(e.getMessage(), e);
         }
     }
 }
