@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.conversion.DocmosisConverter;
+import uk.gov.hmcts.reform.dg.docassembly.service.CdamService;
 import uk.gov.hmcts.reform.dg.docassembly.service.DmStoreDownloader;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.FileTypeException;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,30 +25,25 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
 
     private DmStoreDownloader dmStoreDownloader;
     private DocmosisConverter docmosisConverter;
+    private CdamService cdamService;
 
     @Value("#{'${docmosis-conversion.multipart.covered-ext}'.split(',')}")
     public List<String> fileExtensionsList;
 
-    public FileToPDFConverterServiceImpl(DmStoreDownloader dmStoreDownloader, DocmosisConverter docmosisConverter) {
+    public FileToPDFConverterServiceImpl(DmStoreDownloader dmStoreDownloader, DocmosisConverter docmosisConverter,
+                                         CdamService cdamService) {
         this.dmStoreDownloader = dmStoreDownloader;
         this.docmosisConverter = docmosisConverter;
+        this.cdamService = cdamService;
     }
 
     @Override
     public File convertFile(UUID documentId) {
         try {
             File originalFile = dmStoreDownloader.downloadFile(documentId.toString());
-            String fileType = FilenameUtils.getExtension(originalFile.getName());
 
-            File updatedFile;
-            if (fileExtensionsList.contains(fileType)) {
-                log.info("Converting Document to PDF");
-                updatedFile = docmosisConverter.convertFileToPDF(originalFile);
-                log.info("File {} successfully converted to PDF", originalFile.getName());
-            } else {
-                throw new FileTypeException("Document Type not eligible for Conversion");
-            }
-            return updatedFile;
+            return tranformFile(originalFile);
+
         } catch (DocumentTaskProcessingException e) {
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
@@ -55,5 +51,32 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("File processing error encountered");
         }
+    }
+
+    @Override
+    public File convertFile(UUID documentId, String auth, String serviceAuth) {
+        try {
+            File originalFile = cdamService.downloadFile(auth, serviceAuth, documentId);
+            return tranformFile(originalFile);
+        } catch (DocumentTaskProcessingException e) {
+            log.error(e.getMessage(), e);
+            throw new DocumentProcessingException("Error processing PDF Conversion Task");
+        } catch (Exception e) {
+            throw new DocumentProcessingException(e.getMessage());
+        }
+    }
+
+    private File tranformFile(File originalFile) throws IOException {
+        String fileType = FilenameUtils.getExtension(originalFile.getName());
+
+        File updatedFile;
+        if (fileExtensionsList.contains(fileType)) {
+            log.info("Converting Document to PDF");
+            updatedFile = docmosisConverter.convertFileToPDF(originalFile);
+            log.info("File {} successfully converted to PDF", originalFile.getName());
+        } else {
+            throw new FileTypeException("Document Type not eligible for Conversion");
+        }
+        return updatedFile;
     }
 }

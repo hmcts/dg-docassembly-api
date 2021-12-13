@@ -121,6 +121,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: '2.5.5'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.5.5'
     implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '4.0.0'
+    implementation 'com.github.hmcts:ccd-case-document-am-client:1.7.1'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0', withoutCVE202011987
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
@@ -132,7 +133,7 @@ dependencies {
     implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     
@@ -167,7 +168,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.20.0'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.20.2'
 }
 
 processAatResources {
@@ -252,7 +253,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/reform/dg/docassembly/config/*',
     '**uk/gov/hmcts/reform/dg/docassembly/config/logging/*',
     '**uk/gov/hmcts/reform/dg/docassembly/domain/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/service/dto/external/annotation/*',
+    '**uk/gov/hmcts/reform/dg/docassembly/dto/*',
     '**uk/gov/hmcts/reform/dg/docassembly/config/security/*'   
     ]
 

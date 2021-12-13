@@ -1,7 +1,9 @@
 #!/bin/bash
 
-## Usage: ./bin/start-local-environment
+## Usage: ./bin/start-local-environment DOCMOSIS_ACCESS_KEY
 ##
+## Options:
+##    - DOCMOSIS_ACCESS_KEY: Access key for docmosis development environment.
 ##
 ## Start local environment including idam client setup.
 
@@ -11,6 +13,7 @@ COMPOSE_FILE="-f docker-compose-dependencies.yml"
 IDAM_URI="http://localhost:5000"
 IDAM_USERNAME="idamOwner@hmcts.net"
 IDAM_PASSWORD="Ref0rmIsFun"
+export DOCMOSIS_ACCESS_KEY=$1
 
 # Start IDAM setup
 echo "Starting shared-db..."
@@ -36,15 +39,22 @@ done
 # Set up IDAM client with services and roles
 echo "Setting up IDAM client..."
 (./bin/idam-client-setup.sh ${IDAM_URI} services ${token} '{"description": "em", "label": "em", "oauth2ClientId": "webshow", "oauth2ClientSecret": "AAAAAAAAAAAAAAAA", "oauth2RedirectUris": ["http://localhost:8080/oauth2redirect"], "selfRegistrationAllowed": true}')
+(./bin/idam-client-setup-roles.sh ${IDAM_URI} ${token} caseworker)
+(./bin/idam-client-setup-roles.sh ${IDAM_URI} ${token} caseworker-publiclaw)
+(./bin/idam-client-setup-roles.sh ${IDAM_URI} ${token} ccd-import)
 
 # Start all other images
 echo "Starting dependencies..."
 docker-compose ${COMPOSE_FILE} build
-docker-compose ${COMPOSE_FILE} up -d service-auth-provider-app \
+docker-compose ${COMPOSE_FILE} up -d shared-database\
+                                     service-auth-provider-app \
                                      smtp-server \
-                                     dm-store-db \
                                      dm-store \
                                      azure-storage-emulator-azurite \
+                                     ccd-user-profile-api \
+                                     ccd-definition-store-api \
+                                     ccd-data-store-api \
+                                     ccd-case-document-am-api \
                                      make-container-call
 
 echo "LOCAL ENVIRONMENT SUCCESSFULLY STARTED"
