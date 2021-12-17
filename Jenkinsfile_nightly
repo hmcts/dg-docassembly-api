@@ -65,7 +65,7 @@ withNightlyPipeline(type , product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-//    enableFortifyScan('dg-docassembly-aat')
+    enableFortifyScan('dg-docassembly-aat')
     enableMutationTest()
     enableFullFunctionalTest()
     enableSecurityScan()
