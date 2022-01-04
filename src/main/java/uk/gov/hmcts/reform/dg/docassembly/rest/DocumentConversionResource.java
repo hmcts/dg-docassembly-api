@@ -52,7 +52,7 @@ public class DocumentConversionResource {
         try {
             File convertedFile;
             log.info("cdamEnabled is : {} for documentId : {} ", cdamEnabled,
-                    documentId.toString());
+                    documentId);
             if (cdamEnabled) {
                 String auth = request.getHeader("Authorization");
                 String serviceAuth = request.getHeader("ServiceAuthorization");
