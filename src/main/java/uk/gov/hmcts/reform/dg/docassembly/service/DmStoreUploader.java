@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.dg.docassembly.service;
 
 import okhttp3.*;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
@@ -17,8 +15,6 @@ import java.io.IOException;
 
 @Service
 public class DmStoreUploader {
-
-    private static Logger log = LoggerFactory.getLogger(DmStoreUploader.class);
 
     private final OkHttpClient okHttpClient;
 
@@ -59,7 +55,8 @@ public class DmStoreUploader {
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("classification", "PUBLIC")
                     .addFormDataPart("files", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()), file))
+                            RequestBody.create(file,
+                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
                     .build();
 
             Request request = new Request.Builder()
@@ -89,7 +86,6 @@ public class DmStoreUploader {
             }
 
         } catch (RuntimeException | IOException e) {
-            log.error(e.getMessage(), e);
             throw new DocumentUploaderException(String.format("Couldn't upload the file:  %s", e.getMessage()), e);
         }
     }
@@ -101,8 +97,8 @@ public class DmStoreUploader {
                     .Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()),
-                                    file))
+                            RequestBody.create(file,
+                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
                     .build();
 
             Request request = new Request.Builder()
@@ -120,7 +116,6 @@ public class DmStoreUploader {
             }
 
         } catch (RuntimeException | IOException e) {
-            log.error(e.getMessage(), e);
             throw new DocumentUploaderException("Couldn't upload the file", e);
         }
     }
