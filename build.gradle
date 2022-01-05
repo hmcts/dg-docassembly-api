@@ -50,7 +50,7 @@ def versions = [
         gradlePitest       : '1.3.0',
         sonarPitest        : '0.5',
         junit5             : '5.7.2',
-        log4JVersion       : '2.16.0'
+        log4JVersion       : '2.17.0'
 ]
 sourceSets {
     aat {
