@@ -260,7 +260,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/reform/dg/docassembly/config/logging/*',
     '**uk/gov/hmcts/reform/dg/docassembly/domain/*',
     '**uk/gov/hmcts/reform/dg/docassembly/dto/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/config/security/*'   
+    '**uk/gov/hmcts/reform/dg/docassembly/config/security/*'   ,
+    "**uk/gov/hmcts/reform/dg/docassembly/rest/TemplateRenditionResource*"
     ]
 
 jacocoTestReport {
