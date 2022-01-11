@@ -21,8 +21,8 @@ public class FormDefinitionService {
     private final TemplateContentExtractor templateContentExtractor;
     private final ObjectMapper objectMapper;
 
-    private static final String startTag = "<<cs_{displaycode=‘1’}>>";
-    private static final String endTag = "<<es_>>";
+    private static final String START_TAG = "<<cs_{displaycode=‘1’}>>";
+    private static final String END_TAG = "<<es_>>";
 
     public FormDefinitionService(TemplateManagementApiClient templateManagementApiClient,
                                  TemplateContentExtractor templateContentExtractor,
@@ -37,7 +37,7 @@ public class FormDefinitionService {
         try (InputStream inputStream = templateManagementApiClient.getTemplate(templateIdDto)) {
 
             return templateContentExtractor
-                    .extractTextBetweenTags(inputStream, startTag, endTag)
+                    .extractTextBetweenTags(inputStream, START_TAG, END_TAG)
                     .map(ThrowingFunction.unchecked(objectMapper::readTree));
 
 
