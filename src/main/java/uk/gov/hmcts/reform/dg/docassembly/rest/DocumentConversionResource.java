@@ -51,8 +51,7 @@ public class DocumentConversionResource {
     public ResponseEntity<Object> convert(HttpServletRequest request, @PathVariable UUID documentId) {
         try {
             File convertedFile;
-            log.info("cdamEnabled is : {} for documentId : {} ", cdamEnabled,
-                    documentId);
+            log.info("cdamEnabled is : {} for documentId : {} ", cdamEnabled, documentId);
             if (cdamEnabled) {
                 String auth = request.getHeader("Authorization");
                 String serviceAuth = request.getHeader("ServiceAuthorization");

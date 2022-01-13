@@ -24,7 +24,11 @@ public class TemplateRenditionServiceTest {
 
     private DmStoreUploader dmStoreUploader;
 
+    private CdamService cdamService;
+
     private CreateTemplateRenditionDto createTemplateRenditionDto;
+
+    private static final String serviceAuth = "xyz";
 
     @Before
     public void setup() throws IOException {
@@ -37,9 +41,12 @@ public class TemplateRenditionServiceTest {
 
         dmStoreUploader = Mockito.mock(DmStoreUploader.class);
 
+        cdamService = Mockito.mock(CdamService.class);
+
         templateRenditionService = new TemplateRenditionService(
             dmStoreUploader,
-            new DocmosisApiClient(client, "http://tornado.com", "x")
+            new DocmosisApiClient(client, "http://tornado.com", "x"),
+            cdamService
         );
 
         createTemplateRenditionDto = createTemplateRenditionDto();
