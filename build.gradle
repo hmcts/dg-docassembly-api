@@ -51,7 +51,8 @@ def versions = [
         sonarPitest        : '0.5',
         junit5             : '5.7.2',
         log4JVersion       : '2.17.0',
-        springOauth2       : '2.6.3'
+        springOauth2       : '2.6.3',
+        tomcat             : '9.0.58'
 ]
 sourceSets {
     aat {
@@ -100,8 +101,8 @@ dependencies {
     }
 
     implementation group: 'org.json', name: 'json', version: '20210307'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.58'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.0.16'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: versions.tomcat
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: versions.tomcat
     
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '11.8'
     implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
