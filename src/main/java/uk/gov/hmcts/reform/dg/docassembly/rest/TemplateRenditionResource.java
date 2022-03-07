@@ -1,12 +1,16 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -28,11 +32,10 @@ public class TemplateRenditionResource {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
-    @ApiOperation(
-        value = "Renders a templates using provided values and uploads it to Document Store."
+    @Operation(
+        summary = "Renders a templates using provided values and uploads it to Document Store."
             + " secureDocStoreEnabled attribute is disabled by default."
     )
-    @ApiImplicitParam(name = "ServiceAuthorization", paramType = "header", required = true, dataTypeClass = String.class)
     @PostMapping("/template-renditions")
     public ResponseEntity<CreateTemplateRenditionDto> createTemplateRendition(
             @RequestBody @Valid CreateTemplateRenditionDto createTemplateRenditionDto,
