@@ -1,10 +1,14 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
 
@@ -19,13 +23,12 @@ public class FormDefinitionResource {
         this.formDefinitionService = formDefinitionService;
     }
 
-    @ApiOperation(
-        value = "Retrieves Document Assembly Form Definition (Formly JSON see https://github.com/ngx-formly/ngx-formly)."
+    @Operation(
+        summary = "Retrieves Document Assembly Form Definition (Formly JSON see https://github.com/ngx-formly/ngx-formly)."
     )
-    @ApiImplicitParam(name = "ServiceAuthorization", paramType = "header", required = true, dataTypeClass = String.class)
     @GetMapping("/form-definitions/{templateId}")
     public ResponseEntity<JsonNode> getFormDefinition(
-            @ApiParam(required = true) @PathVariable String templateId,
+            @PathVariable String templateId,
             @RequestHeader("Authorization") String jwt) {
         TemplateIdDto templateIdDto = new TemplateIdDto();
         templateIdDto.setTemplateId(templateId);

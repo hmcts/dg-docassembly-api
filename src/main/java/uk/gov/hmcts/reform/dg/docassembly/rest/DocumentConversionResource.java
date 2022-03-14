@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +38,14 @@ public class DocumentConversionResource {
         this.fileToPDFConverterService = fileToPDFConverterService;
     }
 
-    @ApiOperation(value = "Convert Document to PDF", notes = "A POST request to convert document type to PDF and "
+    @Operation(summary = "Convert Document to PDF", description = "A POST request to convert document type to PDF and "
         + "return the converted document. secureDocStoreEnabled attribute is disabled by default.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully redacted"),
-            @ApiResponse(code = 400, message = "Invalid request"),
-            @ApiResponse(code = 401, message = "Unauthorised"),
-            @ApiResponse(code = 403, message = "Forbidden"),
-            @ApiResponse(code = 500, message = "Server Error"),
+            @ApiResponse(responseCode = "200", description = "Successfully redacted"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorised"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "500", description = "Server Error"),
     })
     @PostMapping("/convert/{documentId}")
     public ResponseEntity<Object> convert(HttpServletRequest request, @PathVariable UUID documentId) {
