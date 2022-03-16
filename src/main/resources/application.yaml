@@ -8,7 +8,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: ${OPEN_ID_API_BASE_URI:http://localhost:5000/o}
+            issuer-uri: ${OPEN_ID_API_BASE_URI:http://localhost:5001/o}
         registration:
           oidc:
             client-id: microservicekey-dg-docassembly-api
@@ -58,7 +58,7 @@ info:
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_API_BASE_URI:http://localhost:5000}
+      baseUrl: ${IDAM_API_BASE_URI:http://localhost:5001}
   provider:
     service:
       client:
@@ -116,3 +116,7 @@ httpclient:
 
 case_document_am:
   url: ${CDAM_URL:http://localhost:4455}
+
+springdoc:
+  packagesToScan: uk.gov.hmcts.reform.dg.docassembly.rest
+  pathsToMatch: /**
