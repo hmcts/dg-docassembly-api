@@ -3,17 +3,16 @@ provider "azurerm" {
 }
 
 locals {
-  app_full_name = "${var.product}-${var.component}"
-  ase_name = "core-compute-${var.env}"
-  local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
+  app_full_name     = "${var.product}-${var.component}"
+  ase_name          = "core-compute-${var.env}"
+  local_env         = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   shared_vault_name = "${var.shared_product_name}-${local.local_env}"
+  previewEnv        = "aat"
+  nonPreviewEnv     = "${var.env}"
 
-  previewEnv= "aat"
-  nonPreviewEnv = "${var.env}"
-
-  local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.ase_name}"
-  s2s_base_uri = "http://${var.s2s_name}-${local.local_env}.service.${local.local_ase}.internal"
-  tags = "${merge(var.common_tags, map("Team Contact", "#rpe"))}"
+  local_ase         = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.ase_name}"
+  s2s_base_uri      = "http://${var.s2s_name}-${local.local_env}.service.${local.local_ase}.internal"
+  tags              = var.common_tags
 }
 
 resource "azurerm_resource_group" "rg" {
