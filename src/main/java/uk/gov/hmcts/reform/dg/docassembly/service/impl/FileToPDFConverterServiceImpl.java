@@ -70,7 +70,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
         String fileType = FilenameUtils.getExtension(originalFile.getName());
 
         File updatedFile;
-        if (fileExtensionsList.contains(fileType)) {
+        if (fileExtensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileType))) {
             log.info("Converting Document to PDF");
             updatedFile = docmosisConverter.convertFileToPDF(originalFile);
             log.info("File {} successfully converted to PDF", originalFile.getName());
