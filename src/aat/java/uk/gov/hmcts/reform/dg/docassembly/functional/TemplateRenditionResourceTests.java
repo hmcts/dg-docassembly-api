@@ -121,7 +121,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
-                .statusCode(500)//FIXME should be bad request
+                .statusCode(400)
                 .log()
                 .all();
     }
