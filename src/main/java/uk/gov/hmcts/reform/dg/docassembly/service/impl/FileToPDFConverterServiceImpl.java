@@ -42,7 +42,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
         try {
             File originalFile = dmStoreDownloader.downloadFile(documentId.toString());
 
-            return tranformFile(originalFile);
+            return transformFile(originalFile);
 
         } catch (DocumentTaskProcessingException e) {
             log.error(e.getMessage(), e);
@@ -57,7 +57,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
     public File convertFile(UUID documentId, String auth, String serviceAuth) {
         try {
             File originalFile = cdamService.downloadFile(auth, serviceAuth, documentId);
-            return tranformFile(originalFile);
+            return transformFile(originalFile);
         } catch (DocumentTaskProcessingException e) {
             log.error(e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
@@ -66,7 +66,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
         }
     }
 
-    private File tranformFile(File originalFile) throws IOException {
+    private File transformFile(File originalFile) throws IOException {
         String fileType = FilenameUtils.getExtension(originalFile.getName());
 
         File updatedFile;

@@ -57,8 +57,20 @@ public class FileToPDFConverterServiceImplTest {
     }
 
     @Test
-    public void convertSecureDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+    public void convertSecurePptDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
+        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenReturn(mockFile);
+        Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
+
+        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+
+        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(auth, serviceAuth, docStoreUUID);
+        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+    }
+
+    @Test
+    public void convertSecureDocDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+        File mockFile = new File("template1.DOC");
         Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
 
