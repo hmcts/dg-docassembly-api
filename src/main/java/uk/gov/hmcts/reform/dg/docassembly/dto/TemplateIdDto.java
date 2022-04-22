@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class TemplateIdDto extends JwtDto {
 
-    @NotNull
+    @NotNull(message = "Template Id cannot be null")
     private String templateId;
 
 }
