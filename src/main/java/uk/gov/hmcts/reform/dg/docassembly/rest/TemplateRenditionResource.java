@@ -1,9 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,15 +36,7 @@ public class TemplateRenditionResource {
 
     @Operation(
         summary = "Renders a templates using provided values and uploads it to Document Store."
-            + " secureDocStoreEnabled attribute is disabled by default.",
-            parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string"))}
-    )
+            + " secureDocStoreEnabled attribute is disabled by default.")
     @PostMapping("/template-renditions")
     public ResponseEntity<CreateTemplateRenditionDto> createTemplateRendition(
             @RequestBody @Valid CreateTemplateRenditionDto createTemplateRenditionDto,
