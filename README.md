@@ -59,3 +59,7 @@ and then using it to publish your tests:
 ```
 ./gradlew pactPublish
 ```
+
+### Swagger UI
+To view our REST API go to {HOST}:{PORT}/swagger-ui/index.html
+> http://localhost:8080/swagger-ui/index.html
