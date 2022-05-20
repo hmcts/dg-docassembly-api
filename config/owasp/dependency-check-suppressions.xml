@@ -8,4 +8,10 @@
         </notes>
         <cve>CVE-2022-26336</cve>
     </suppress>
+    <suppress>
+        <notes>
+            Awaiting fix as updating to latest available version hasn't resolved this.
+        </notes>
+        <cve>CVE-2016-1000027</cve>
+    </suppress>
 </suppressions>
