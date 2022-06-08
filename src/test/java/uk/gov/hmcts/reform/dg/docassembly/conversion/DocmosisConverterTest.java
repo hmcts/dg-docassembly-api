@@ -4,6 +4,7 @@ import okhttp3.*;
 import org.apache.pdfbox.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class DocmosisConverterTest {
         assertNotEquals(input.getName(), output.getName());
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = DocumentProcessingException.class)
     public void convertFailureTest() throws IOException {
         failureTestSetup();
         File input = new File(ClassLoader.getSystemResource("potential_and_kinetic.ppt").getPath());
