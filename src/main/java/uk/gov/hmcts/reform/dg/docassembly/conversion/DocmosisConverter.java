@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class DocmosisConverter {
 
         if (!response.isSuccessful()) {
 
-            throw new IOException(String.format("Docmosis can not convert file %s. HTTP response %d",
+            throw new DocumentProcessingException(String.format("Docmosis can not convert file %s. HTTP response %d",
                 file.getName(), response.code()));
         }
         return createConvertedFile(response);
