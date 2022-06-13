@@ -83,6 +83,7 @@ configurations.all {
     exclude group: 'io.netty', module: 'netty-transport-native-kqueue'
     exclude group: 'io.netty', module: 'netty-transport-native-unix-common'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
 }
 
 dependencies {
