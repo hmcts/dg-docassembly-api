@@ -3,38 +3,27 @@
 
 # Setup
 
-This service relies heavily on Docmosis API and access to templates available for Docmosis instance.
-
-Turn on your vpn and use the following system variables to provide correct URLs and access keys:
-
-- DOCMOSIS_TEMPLATES_ENDPOINT
-- DOCMOSIS_TEMPLATES_ENDPOINT_AUTH
-- DOCMOSIS_ACCESS_KEY
-- DOCMOSIS_ENDPOINT
-
+#### To clone repo and prepare to pull containers:
 ```
-#Cloning repo and running though docker
-
 git clone https://github.com/hmcts/dg-docassembly-api.git
-cd dg-docassembly-api
+cd dg-docassembly-api/
+```
 
-az login
-az acr login --name hmctspublic
-
-docker-compose -f docker-compose-dependencies-simulator.yml pull
-docker-compose -f docker-compose-dependencies-simulator.yml up
-
-wait for 2-3 minutes till all the dependencies in the docker are up and running.
+#### Clean and build the application:
+```
 ./gradlew clean
 ./gradlew build
-
-To set up IDAM data run: ./idam-client-setup.sh 
-To check the data you can log into IDAM-web-admin `http://localhost:8082` with:
-Username: idamOwner@hmcts.net
-Password: Ref0rmIsFun
-
-DOCMOSIS_ACCESS_KEY=<DOCMOSIS_ACCESS_KEY> ./gradlew bootRun
 ```
+
+#### To run the application:
+
+VPN connection is required
+
+```
+az login
+./gradlew bootWithCCD
+```
+
 
 
 ### Running contract or pact tests:
