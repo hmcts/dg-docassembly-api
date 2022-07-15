@@ -1,15 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.testutil;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
@@ -20,20 +12,11 @@ import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.em.test.ccddata.CcdDataHelper;
-import uk.gov.hmcts.reform.em.test.ccddefinition.CcdDefinitionHelper;
 import uk.gov.hmcts.reform.em.test.cdam.CdamHelper;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 
-import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ExtendedCcdHelper {
@@ -46,9 +29,6 @@ public class ExtendedCcdHelper {
 
     @Autowired
     private CcdDataHelper ccdDataHelper;
-
-    @Autowired
-    private CcdDefinitionHelper ccdDefinitionHelper;
 
     @Autowired
     private CdamHelper cdamHelper;
@@ -76,84 +56,18 @@ public class ExtendedCcdHelper {
                     + "      }";
 
     private String redactionTestUser = "docassemblyTestUser@docassemblyTest.com";
-    private List<String> redactionTestUserRoles = Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList());
-
-    @PostConstruct
-    public void init() throws Exception {
-        importCcdDefinitionFile();
-    }
-
-    public void importCcdDefinitionFile() throws Exception {
-
-        ccdDefinitionHelper.importDefinitionFile(redactionTestUser,
-                "caseworker-publiclaw",
-                getEnvSpecificDefinitionFile());
-    }
 
     public CaseDetails createCase(String documents) throws Exception {
         return ccdDataHelper.createCase(redactionTestUser, "PUBLICLAW", getEnvCcdCaseTypeId(), "createCase",
             objectMapper.readTree(String.format(createCaseTemplate, documents)));
     }
 
-    public CaseDetails getCase(String caseId) {
-        return ccdDataHelper.getCase(redactionTestUser, caseId);
-    }
-
-    public JsonNode triggerEvent(String caseId, String eventId) throws Exception {
-        return objectMapper.readTree(objectMapper.writeValueAsString(ccdDataHelper.triggerEvent(redactionTestUser,
-            caseId, eventId)));
-    }
-
-    public JsonNode getCaseJson(String caseId) throws Exception {
-        return objectMapper.readTree(objectMapper.writeValueAsString(ccdDataHelper.getCase(redactionTestUser, caseId)));
-    }
-
     public String getEnvCcdCaseTypeId() {
-        return String.format("REDACTION_%d", testUrl.hashCode());
-    }
-
-    public InputStream getEnvSpecificDefinitionFile() throws Exception {
-        Workbook workbook = new XSSFWorkbook(ClassLoader.getSystemResourceAsStream(
-            "adv_docassembly_functional_tests_ccd_def.xlsx"));
-        Sheet caseEventSheet = workbook.getSheet("CaseEvent");
-
-
-        Sheet caseTypeSheet = workbook.getSheet("CaseType");
-
-        caseTypeSheet.getRow(3).getCell(3).setCellValue(getEnvCcdCaseTypeId());
-
-        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
-            Sheet sheet = workbook.getSheetAt(i);
-            for (Row row : sheet) {
-                for (Cell cell : row) {
-                    if (cell.getCellType().equals(CellType.STRING)
-                            && cell.getStringCellValue().trim().equals("CCD_BUNDLE_MVP_TYPE_ASYNC")) {
-                        cell.setCellValue(getEnvCcdCaseTypeId());
-                    }
-                    if (cell.getCellType().equals(CellType.STRING)
-                            && cell.getStringCellValue().trim().equals("bundle-tester@gmail.com")) {
-                        cell.setCellValue(redactionTestUser);
-                    }
-                }
-            }
-        }
-
-        File outputFile = File.createTempFile("ccd", "ftest-def");
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
-            workbook.write(fileOutputStream);
-        }
-
-        return new FileInputStream(outputFile);
+        return "CCD_BUNDLE_MVP_TYPE_ASYNC";
     }
 
     public String getCcdDocumentJson(String documentName, String dmUrl, String fileName, String dochash) {
         return String.format(documentTemplate, documentName, dmUrl, dmUrl, fileName, dochash);
-    }
-
-    public JsonNode assignEnvCcdCaseTypeIdToCase(JsonNode ccdCase) {
-        ((ObjectNode) ccdCase.get("case_details")).put("case_type_id", getEnvCcdCaseTypeId());
-        return ccdCase;
     }
 
     public UploadResponse uploadCdamDocument(String username, String caseTypeId, String jurisdictionId,
