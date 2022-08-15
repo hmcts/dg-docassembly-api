@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
+import uk.gov.hmcts.reform.authorisation.exceptions.ServiceException;
 import uk.gov.hmcts.reform.dg.docassembly.config.security.SecurityUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,8 +45,8 @@ public class ServiceNameAspect {
                 }
                 log.info("dg-docassembly : Endpoint : {}  for : {} method is accessed by {} ", request.getRequestURI(),
                         request.getMethod(), serviceName);
-            } catch (InvalidTokenException invalidTokenException) {
-                log.warn("invalidTokenException logged is: {} ", invalidTokenException.getMessage());
+            } catch (InvalidTokenException | ServiceException exception) {
+                log.warn("exception logged is: {} ", exception.getMessage());
             }
         }
     }
