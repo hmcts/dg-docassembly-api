@@ -1,7 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.specification.RequestSpecification;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
@@ -95,8 +99,10 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
         CreateTemplateRenditionDto response =
                 request
-                        .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOCX\", \"outputFilename\":\"test-output-name\", \"templateId\":\""
-                                + base64("FL-FRM-APP-ENG-00002.docx")
+                        .body("{\"formPayload\":{\"a\":1},"
+                                + " \"outputType\":\"DOCX\", "
+                                + "\"outputFilename\":\"test-output-name\","
+                                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
                                 + "\"}")
                         .post("/api/template-renditions")
                         .then()

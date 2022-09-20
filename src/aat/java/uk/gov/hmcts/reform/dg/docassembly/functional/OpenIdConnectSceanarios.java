@@ -119,6 +119,8 @@ public class OpenIdConnectSceanarios extends BaseTest {
     }
 
     private String getBodyForRequest() {
-        return "{\"formPayload\":{\"a\":1}, \"outputType\":\"DOC\", \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}";
+        return "{\"formPayload\":{\"a\":1}, "
+                + "\"outputType\":\"DOC\","
+                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}";
     }
 }

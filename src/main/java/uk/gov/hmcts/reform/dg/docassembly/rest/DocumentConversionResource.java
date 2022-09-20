@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -43,25 +43,29 @@ public class DocumentConversionResource {
         this.fileToPDFConverterService = fileToPDFConverterService;
     }
 
-    @Operation(summary = "Convert Document to PDF", description = "A POST request to convert document type to PDF and "
-        + "return the converted document. secureDocStoreEnabled attribute is disabled by default.",
+    @Operation(
+            summary = "Convert Document to PDF",
+            description = "A POST request to convert document type to PDF and "
+                    + "return the converted document. secureDocStoreEnabled attribute is disabled by default.",
             parameters = {
-                    @Parameter(in = ParameterIn.HEADER, name = "authorization",
-                            description = "Authorization (Idam Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
-                            description = "Service Authorization (S2S Bearer token)", required = true,
-                            schema = @Schema(type = "string")),
-                    @Parameter(in = ParameterIn.PATH, name = "documentId",
-                            description = "Document Id", required = true,
-                            schema = @Schema(type = "string"))})
+                @Parameter(in = ParameterIn.HEADER, name = "authorization",
+                      description = "Authorization (Idam Bearer token)", required = true,
+                      schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                      description = "Service Authorization (S2S Bearer token)", required = true,
+                      schema = @Schema(type = "string")),
+                @Parameter(in = ParameterIn.PATH, name = "documentId",
+                      description = "Document Id", required = true,
+                      schema = @Schema(type = "string"))}
+    )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully redacted"),
-            @ApiResponse(responseCode = "400", description = "Invalid request"),
-            @ApiResponse(responseCode = "401", description = "Unauthorised"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
-            @ApiResponse(responseCode = "500", description = "Server Error"),
-    })
+        @ApiResponse(responseCode = "200", description = "Successfully redacted"),
+        @ApiResponse(responseCode = "400", description = "Invalid request"),
+        @ApiResponse(responseCode = "401", description = "Unauthorised"),
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "500", description = "Server Error"),
+    }
+    )
     @PostMapping("/convert/{documentId}")
     public ResponseEntity<Object> convert(HttpServletRequest request, @PathVariable UUID documentId) {
         try {

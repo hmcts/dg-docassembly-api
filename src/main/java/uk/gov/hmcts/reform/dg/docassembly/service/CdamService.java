@@ -82,7 +82,10 @@ public class CdamService {
         }
     }
 
-    public void uploadDocuments(File file, CreateTemplateRenditionDto createTemplateRenditionDto) throws DocumentTaskProcessingException {
+    public void uploadDocuments(
+            File file,
+            CreateTemplateRenditionDto createTemplateRenditionDto
+    ) throws DocumentTaskProcessingException {
 
         logger.debug("Uploading document to CDAM with document name : {}  with JurisdictionId : {} and caseTypeId :"
                 + " {} ", createTemplateRenditionDto.getFullOutputFilename(),

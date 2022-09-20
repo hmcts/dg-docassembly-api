@@ -32,7 +32,8 @@ public class ServiceNameAspect {
             +  " execution(* uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource.convert(..))")
     public void logServiceName() {
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
         String s2sToken = request.getHeader("serviceauthorization");
         if (StringUtils.isNotBlank(s2sToken)) {
