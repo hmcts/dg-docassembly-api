@@ -64,19 +64,23 @@ public class CdamServiceTest {
             .thenReturn(document);
         ResponseEntity responseEntity = ResponseEntity.accepted().body(byteArrayResource);
         when(byteArrayResource.getInputStream()).thenReturn(inputStream);
-        when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID)).thenReturn(responseEntity);
+        when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID))
+                .thenReturn(responseEntity);
 
         cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
 
-        verify(caseDocumentClientApi, Mockito.atLeast(1)).getDocumentBinary("xxx", "serviceAuth", docStoreUUID);
-        verify(caseDocumentClientApi, Mockito.atLeast(1)).getMetadataForDocument("xxx", "serviceAuth", docStoreUUID);
+        verify(caseDocumentClientApi, Mockito.atLeast(1))
+                .getDocumentBinary("xxx", "serviceAuth", docStoreUUID);
+        verify(caseDocumentClientApi, Mockito.atLeast(1))
+                .getMetadataForDocument("xxx", "serviceAuth", docStoreUUID);
     }
 
     @Test(expected = DocumentTaskProcessingException.class)
     public void downloadFileCdamNullResponseBody() throws Exception {
 
         ResponseEntity responseEntity = ResponseEntity.accepted().body(null);
-        when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID)).thenReturn(responseEntity);
+        when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID))
+                .thenReturn(responseEntity);
 
         cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
 
@@ -90,7 +94,8 @@ public class CdamServiceTest {
                 .links(getLinks())
                 .build();
 
-        when(caseDocumentClientApi.uploadDocuments(any(), any(), any(DocumentUploadRequest.class))).thenReturn(uploadResponse);
+        when(caseDocumentClientApi.uploadDocuments(any(), any(), any(DocumentUploadRequest.class)))
+                .thenReturn(uploadResponse);
         when(uploadResponse.getDocuments()).thenReturn(documents);
         when(uploadResponse.getDocuments().get(0)).thenReturn(testDoc);
 
@@ -99,7 +104,8 @@ public class CdamServiceTest {
 
         cdamService.uploadDocuments(mockFile, createTemplateRenditionDto);
 
-        verify(caseDocumentClientApi, Mockito.atLeast(1)).uploadDocuments(any(), any(), any(DocumentUploadRequest.class));
+        verify(caseDocumentClientApi, Mockito.atLeast(1))
+                .uploadDocuments(any(), any(), any(DocumentUploadRequest.class));
 
         assertNotNull(createTemplateRenditionDto.getHashToken());
         assertNotNull(createTemplateRenditionDto.getRenditionOutputLocation());

@@ -43,7 +43,8 @@ public class FileToPDFConverterServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        fileToPDFConverterServiceImpl.fileExtensionsList = Arrays.asList("doc", "docx","pptx", "ppt", "rtf", "txt", "xlsx", "xls","jpeg");
+        fileToPDFConverterServiceImpl.fileExtensionsList =
+                Arrays.asList("doc", "docx","pptx", "ppt", "rtf", "txt", "xlsx", "xls","jpeg");
     }
 
     @Test
@@ -84,7 +85,8 @@ public class FileToPDFConverterServiceImplTest {
     public void convertNotProgressAsCdamException() throws DocumentTaskProcessingException, IOException {
 
         UUID docStoreUUID = UUID.randomUUID();
-        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenThrow(DocumentTaskProcessingException.class);
+        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID))
+                .thenThrow(DocumentTaskProcessingException.class);
 
         fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
     }
@@ -102,7 +104,8 @@ public class FileToPDFConverterServiceImplTest {
     public void convertNotProgressAsDmStoreDownloaderException() throws DocumentTaskProcessingException {
 
         UUID docStoreUUID = UUID.randomUUID();
-        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenThrow(DocumentTaskProcessingException.class);
+        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString()))
+                .thenThrow(DocumentTaskProcessingException.class);
 
         fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
     }
