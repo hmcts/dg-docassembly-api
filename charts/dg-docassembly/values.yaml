@@ -15,8 +15,6 @@ java:
           alias: DOCMOSIS_TEMPLATES_ENDPOINT_AUTH
         - name: docmosis-access-key
           alias: DOCMOSIS_ACCESS_KEY
-        - name: app-insights-connection-string
-          alias: app-insights-connection-string   
   environment:
     IDAM_API_BASE_URI: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
     OPEN_ID_API_BASE_URI: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net/o
