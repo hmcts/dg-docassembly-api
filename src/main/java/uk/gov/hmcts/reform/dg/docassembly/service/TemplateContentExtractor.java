@@ -11,7 +11,11 @@ import java.util.Optional;
 @Service
 public class TemplateContentExtractor {
 
-    public Optional<String> extractTextBetweenTags(InputStream wordInputStream, String startTag, String endTag) throws IOException {
+    public Optional<String> extractTextBetweenTags(
+            InputStream wordInputStream,
+            String startTag,
+            String endTag
+    ) throws IOException {
         XWPFDocument doc = new XWPFDocument(wordInputStream);
         XWPFWordExtractor extractor = new XWPFWordExtractor(doc);
         String docText = extractor.getText();

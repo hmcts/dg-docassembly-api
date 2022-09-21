@@ -46,7 +46,8 @@ public class TemplateRenditionService {
         }
 
         // Avoiding the utilisation of a user provided parameter and mapping against an enum
-        // to protect against a security vulnerability SonarCloud: javasecurity:S2083 (Protect against Path Injection Attacks)
+        // to protect against a security vulnerability SonarCloud:
+        // javasecurity:S2083 (Protect against Path Injection Attacks)
         String tempFileExtension;
         switch (createTemplateRenditionDto.getOutputType()) {
             case DOC:

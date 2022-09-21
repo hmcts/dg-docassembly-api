@@ -1,6 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +35,12 @@ public class DmStoreUploader {
 
     private static final String ENDPOINT = "/documents";
 
-    public DmStoreUploader(OkHttpClient okHttpClient,
-                           AuthTokenGenerator authTokenGenerator,
-                           @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
-                           SubjectResolver<User> userResolver) {
+    public DmStoreUploader(
+            OkHttpClient okHttpClient,
+            AuthTokenGenerator authTokenGenerator,
+            @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
+            SubjectResolver<User> userResolver
+    ) {
         this.okHttpClient = okHttpClient;
         this.authTokenGenerator = authTokenGenerator;
         this.dmStoreAppBaseUrl = dmStoreAppBaseUrl;
@@ -59,7 +66,11 @@ public class DmStoreUploader {
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("classification", "PUBLIC")
                     .addFormDataPart("files", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()), file))
+                            RequestBody.create(
+                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()),
+                                    file
+                            )
+                    )
                     .build();
 
             Request request = new Request.Builder()
@@ -85,7 +96,10 @@ public class DmStoreUploader {
 
                 createTemplateRenditionDto.setRenditionOutputLocation(documentUri);
             } else {
-                throw new DocumentUploaderException("Couldn't upload the file. Response code: " + response.code(), null);
+                throw new DocumentUploaderException(
+                        "Couldn't upload the file. Response code: " + response.code(),
+                        null
+                );
             }
 
         } catch (RuntimeException | IOException e) {
@@ -116,7 +130,10 @@ public class DmStoreUploader {
             Response response = okHttpClient.newCall(request).execute();
 
             if (!response.isSuccessful()) {
-                throw new DocumentUploaderException("Couldn't upload the file. HTTP Response code from Document Store: " + response.code(), null);
+                throw new DocumentUploaderException(
+                        "Couldn't upload the file. HTTP Response code from Document Store: " + response.code(),
+                        null
+                );
             }
 
         } catch (RuntimeException | IOException e) {

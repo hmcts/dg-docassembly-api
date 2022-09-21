@@ -61,12 +61,19 @@ public class DmStoreUploaderTest {
         Mockito.when(mockedUser.getPrincipal()).thenReturn("p1");
         Mockito.when(userResolver.getTokenDetails("x")).thenReturn(mockedUser);
 
-        interceptor.addRule(new Rule.Builder()
-                .post()
-                .respond("{\"_embedded\":{\"documents\":[{\"_links\":{\"self\":{\"href\":\"http://success.com/1\"}}}]}}"));
+        interceptor.addRule(
+                new Rule.Builder()
+                        .post()
+                        .respond("{\"_embedded\""
+                                + ":{\"documents\":[{\"_links\":{\"self\":{\"href\":\"http://success.com/1\"}}}]}}"
+                        )
+        );
 
         CreateTemplateRenditionDto updatedCreateTemplateRenditionDto =
-                dmStoreUploader.uploadFile(File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"), createTemplateRenditionDto);
+                dmStoreUploader.uploadFile(
+                        File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                        createTemplateRenditionDto
+                );
 
         Assert.assertEquals("http://success.com/1",
                 updatedCreateTemplateRenditionDto.getRenditionOutputLocation());
@@ -90,7 +97,10 @@ public class DmStoreUploaderTest {
                 .post()
                 .respond("").code(404));
 
-        dmStoreUploader.uploadFile(File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"), createTemplateRenditionDto);
+        dmStoreUploader.uploadFile(
+                File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                createTemplateRenditionDto
+        );
 
     }
 
@@ -111,10 +121,16 @@ public class DmStoreUploaderTest {
         interceptor.addRule(new Rule.Builder()
                 .post()
                 .url("http://success.com/1")
-                .respond("{\"_embedded\":{\"documents\":[{\"_links\":{\"self\":{\"href\":\"http://success.com/1\"}}}]}}"));
+                .respond("{\"_embedded\""
+                        + ":{\"documents\":[{\"_links\":{\"self\":{\"href\":\"http://success.com/1\"}}}]}}"
+                )
+        );
 
         CreateTemplateRenditionDto updatedCreateTemplateRenditionDto =
-                dmStoreUploader.uploadFile(File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"), createTemplateRenditionDto);
+                dmStoreUploader.uploadFile(
+                        File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                        createTemplateRenditionDto
+                );
 
         Assert.assertEquals("http://success.com/1",
                 updatedCreateTemplateRenditionDto.getRenditionOutputLocation());
@@ -141,7 +157,10 @@ public class DmStoreUploaderTest {
                 .respond("").code(500));
 
 
-        dmStoreUploader.uploadFile(File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"), createTemplateRenditionDto);
+        dmStoreUploader.uploadFile(
+                File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                createTemplateRenditionDto
+        );
 
     }
 }

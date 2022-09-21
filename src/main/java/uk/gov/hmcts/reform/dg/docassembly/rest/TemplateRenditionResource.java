@@ -17,8 +17,8 @@ import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
-import javax.validation.Valid;
 import java.io.IOException;
+import javax.validation.Valid;
 
 @ConditionalOnProperty("endpoint-toggles.template-renditions")
 @RestController

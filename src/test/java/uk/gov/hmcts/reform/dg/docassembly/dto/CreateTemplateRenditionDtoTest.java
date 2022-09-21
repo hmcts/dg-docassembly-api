@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.dg.docassembly.dto;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 
 public class CreateTemplateRenditionDtoTest {
 

@@ -11,10 +11,10 @@ import uk.gov.hmcts.reform.em.test.dm.DmHelper;
 import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.PostConstruct;
 
 @Service
 public class TestUtil {
@@ -133,7 +133,10 @@ public class TestUtil {
     }
 
     public String uploadPptxDocumentAndReturnUrl() {
-        return uploadDocumentAndReturnUrl("Performance_Out.pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation");
+        return uploadDocumentAndReturnUrl(
+                "Performance_Out.pptx",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        );
     }
 
     public String uploadPptDocumentAndReturnUrl() {
@@ -141,11 +144,17 @@ public class TestUtil {
     }
 
     public String uploadXlsxDocumentAndReturnUrl() {
-        return uploadDocumentAndReturnUrl("TestExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        return uploadDocumentAndReturnUrl(
+                "TestExcel.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
     }
 
     public String uploadDocxDocumentAndReturnUrl() {
-        return uploadDocumentAndReturnUrl("largeDocument.docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        return uploadDocumentAndReturnUrl(
+                "largeDocument.docx",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        );
     }
 
     public String uploadDOCDocumentAndReturnUrl() {

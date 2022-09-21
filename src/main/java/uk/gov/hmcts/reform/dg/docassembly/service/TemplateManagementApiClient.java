@@ -50,9 +50,13 @@ public class TemplateManagementApiClient {
         }
 
         if (!response.isSuccessful()) {
-            throw new FormDefinitionRetrievalException(String.format(
-                    "Could not retrieve a template. Http code and message %d, %s", response.code(), response.body().string()
-            ));
+            throw new FormDefinitionRetrievalException(
+                    String.format(
+                            "Could not retrieve a template. Http code and message %d, %s",
+                            response.code(),
+                            response.body().string()
+                    )
+            );
         }
 
         return response.body().byteStream();

@@ -1,6 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.conversion;
 
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +24,11 @@ public class DocmosisConverter {
     private final String docmosisConvertEndpoint;
     private final OkHttpClient httpClient;
 
-    public DocmosisConverter(@Value("${docmosis.accessKey}") String docmosisAccessKey,
-                             @Value("${docmosis.convert.endpoint}") String docmosisConvertEndpoint,
-                             OkHttpClient httpClient) {
+    public DocmosisConverter(
+            @Value("${docmosis.accessKey}") String docmosisAccessKey,
+            @Value("${docmosis.convert.endpoint}") String docmosisConvertEndpoint,
+            OkHttpClient httpClient
+    ) {
         this.docmosisAccessKey = docmosisAccessKey;
         this.docmosisConvertEndpoint = docmosisConvertEndpoint;
         this.httpClient = httpClient;
