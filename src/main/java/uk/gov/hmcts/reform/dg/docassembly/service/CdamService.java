@@ -87,9 +87,14 @@ public class CdamService {
             CreateTemplateRenditionDto createTemplateRenditionDto
     ) throws DocumentTaskProcessingException {
 
-        logger.debug("Uploading document to CDAM with document name : {}  with JurisdictionId : {} and caseTypeId :"
-                + " {} ", createTemplateRenditionDto.getFullOutputFilename(),
-            createTemplateRenditionDto.getJurisdictionId(), createTemplateRenditionDto.getCaseTypeId());
+        logger.info(
+                "Uploading document to CDAM with document name : {}  "
+                        + "with JurisdictionId : {} and caseTypeId :{}, templateId {}",
+                createTemplateRenditionDto.getFullOutputFilename(),
+                createTemplateRenditionDto.getJurisdictionId(),
+                createTemplateRenditionDto.getCaseTypeId(),
+                createTemplateRenditionDto.getTemplateId()
+        );
 
         try {
             ByteArrayMultipartFile multipartFile =
@@ -111,9 +116,14 @@ public class CdamService {
             createTemplateRenditionDto.setRenditionOutputLocation(document.links.self.href);
             createTemplateRenditionDto.setHashToken(document.hashToken);
 
-            logger.debug("Document upload completed to CDAM with document name : {}  with JurisdictionId : {} and "
-                    + "caseTypeId : {} ", createTemplateRenditionDto.getFullOutputFilename(),
-                createTemplateRenditionDto.getJurisdictionId(), createTemplateRenditionDto.getCaseTypeId());
+            logger.info(
+                    "Document upload completed to CDAM with document name : {}  with JurisdictionId : {} "
+                            + "and caseTypeId : {} templateId {}",
+                    createTemplateRenditionDto.getFullOutputFilename(),
+                    createTemplateRenditionDto.getJurisdictionId(),
+                    createTemplateRenditionDto.getCaseTypeId(),
+                    createTemplateRenditionDto.getTemplateId()
+            );
         } catch (IOException e) {
             throw new DocumentTaskProcessingException("Could not download the file from CDAM", e);
         } catch (Exception e) {
