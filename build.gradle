@@ -51,7 +51,7 @@ def versions = [
         serenityRestAssured: '2.6.0',
         serenity           : '2.6.0',
         serenityreporter   : '2.6.0',
-        fasterXmlJackson   : '2.13.2',
+        fasterXmlJackson   : '2.14.0-rc1',
         pact_version       : '4.0.10',
         logging            : '5.1.7',
         junit5             : '5.8.2',
@@ -114,7 +114,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.7.0'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.11'
