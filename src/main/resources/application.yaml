@@ -113,6 +113,7 @@ docmosis-conversion:
 
 httpclient:
   call-timeout: ${HTTPCLIENT_CALL_TIMEOUT:30}
+  connection-timeout: ${HTTPCLIENT_CONNECTION_TIMEOUT:60}
 
 case_document_am:
   url: ${CDAM_URL:http://localhost:4455}
