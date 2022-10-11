@@ -74,7 +74,7 @@ public class DocmosisApiClient {
             log.info("Time taken for Docmosis call : {} milliseconds", timeElapsed);
 
             return response;
-        }catch (SocketException se){
+        } catch (SocketException se) {
             throw new DocmosisTimeoutException("Docmosis Socket Timeout", se);
         }
     }

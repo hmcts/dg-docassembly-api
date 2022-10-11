@@ -61,9 +61,9 @@ public class DocmosisApiClientTest {
                 .thenReturn(mockCall);
         when(mockCall.execute())
                 .thenThrow(new SocketException("Docmosis socket timeout"));
-        assertThatThrownBy(()->docmosisApiClient.render(createTemplateRenditionDto))
+        assertThatThrownBy(() -> docmosisApiClient.render(createTemplateRenditionDto))
                 .isInstanceOf(DocmosisTimeoutException.class)
-                .hasMessageContaining("Docmosis Socket Timeout");;
+                .hasMessageContaining("Docmosis Socket Timeout");
         verify(httpClient, times(1)).newCall(any());
     }
 
