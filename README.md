@@ -14,7 +14,7 @@ cd dg-docassembly-api/
 ./gradlew clean
 ./gradlew build
 ```
-
+d
 #### To run the application:
 
 VPN connection is required
