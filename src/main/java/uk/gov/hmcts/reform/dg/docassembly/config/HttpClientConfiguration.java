@@ -21,8 +21,8 @@ public class HttpClientConfiguration {
     public OkHttpClient okHttpClient() {
 
         Dispatcher dispatcher = new Dispatcher();
-        dispatcher.setMaxRequests(100);
-        dispatcher.setMaxRequestsPerHost(100);
+        dispatcher.setMaxRequests(300);
+        dispatcher.setMaxRequestsPerHost(200);
         return new OkHttpClient
                 .Builder()
                 .connectTimeout(connectionTimeout, TimeUnit.SECONDS)
