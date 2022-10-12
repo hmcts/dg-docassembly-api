@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,7 +66,6 @@ public class DocmosisApiClientTest {
         verify(httpClient, times(1)).newCall(any());
     }
 
-    @NotNull
     private CreateTemplateRenditionDto getCreateTemplateRenditionDto() throws JsonProcessingException {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setRenditionOutputLocation("x");
