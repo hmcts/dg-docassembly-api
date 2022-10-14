@@ -18,7 +18,6 @@ import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +30,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${oidc.issuer}")
     private String issuerOverride;
 
-    private final ServiceAuthFilter serviceAuthFilter;
+    private final DgAssemblyServiceAuthFilter serviceAuthFilter;
 
-    public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
+    public SecurityConfiguration(final DgAssemblyServiceAuthFilter serviceAuthFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
     }
 
