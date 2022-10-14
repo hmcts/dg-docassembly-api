@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.dg.docassembly.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -38,8 +40,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-
-
         web.ignoring().antMatchers("/swagger-ui.html",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
@@ -54,14 +54,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/health/**")
-                .permitAll()
-                .and()
-                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-                .csrf().disable()
+        http.csrf().disable()
                 .formLogin().disable()
                 .logout().disable()
+                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -87,4 +83,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return jwtDecoder;
     }
 
+
+    @Bean
+    @ConditionalOnProperty("idam.s2s-authorised.services")
+    public FilterRegistrationBean deRegisterServiceAuthFilter(DgAssemblyServiceAuthFilter serviceAuthFilter) {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(serviceAuthFilter);
+        filterRegistrationBean.setEnabled(false);
+        return  filterRegistrationBean;
+    }
 }
