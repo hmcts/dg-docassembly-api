@@ -38,6 +38,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+
+
         web.ignoring().antMatchers("/swagger-ui.html",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
@@ -52,10 +54,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.authorizeRequests()
+                .antMatchers("/health/**")
+                .permitAll()
+                .and()
+                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+                .csrf().disable()
                 .formLogin().disable()
                 .logout().disable()
-                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
