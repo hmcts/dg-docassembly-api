@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-@ConditionalOnProperty("idam.s2s-authorised.services")
+@ConditionalOnProperty("idam.s2s-authorised.services2")
 public class DgAssemblyServiceAuthFilter extends OncePerRequestFilter {
 
     public static final String AUTHORISATION = "ServiceAuthorization";
@@ -36,7 +36,7 @@ public class DgAssemblyServiceAuthFilter extends OncePerRequestFilter {
 
     public DgAssemblyServiceAuthFilter(
             ServiceAuthorisationApi authorisationApi,
-            @Value("${idam.s2s-authorised.services}") List<String> authorisedServices
+            @Value("${idam.s2s-authorised.services2}") List<String> authorisedServices
     ) {
         this.authTokenValidator = new ServiceAuthTokenValidator(authorisationApi);
         if (authorisedServices == null || authorisedServices.isEmpty()) {

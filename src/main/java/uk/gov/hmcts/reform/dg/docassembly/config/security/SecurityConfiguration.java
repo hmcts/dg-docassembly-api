@@ -84,7 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @ConditionalOnProperty("idam.s2s-authorised.services")
+    @ConditionalOnProperty("idam.s2s-authorised.services2")
     public FilterRegistrationBean deRegisterServiceAuthFilter(DgAssemblyServiceAuthFilter serviceAuthFilter) {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(serviceAuthFilter);

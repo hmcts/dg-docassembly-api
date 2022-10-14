@@ -81,7 +81,7 @@ idam:
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
     microservice: dg_docassembly_api
   s2s-authorised:
-    services: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,xui_webapp}
+    services2: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,xui_webapp}
 
 template-management-api:
   base-url: ${DOCMOSIS_TEMPLATES_ENDPOINT:https://docmosis.aat.platform.hmcts.net}
