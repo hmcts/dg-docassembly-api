@@ -83,13 +83,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return jwtDecoder;
     }
 
-
     @Bean
     @ConditionalOnProperty("idam.s2s-authorised.services")
     public FilterRegistrationBean deRegisterServiceAuthFilter(DgAssemblyServiceAuthFilter serviceAuthFilter) {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(serviceAuthFilter);
         filterRegistrationBean.setEnabled(false);
-        return  filterRegistrationBean;
+        return filterRegistrationBean;
     }
 }
