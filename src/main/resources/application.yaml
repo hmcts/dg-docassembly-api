@@ -80,8 +80,9 @@ idam:
     url: ${S2S_BASE_URI:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
     microservice: dg_docassembly_api
-  s2s-authorised:
+  s2s-custom-authorised:
     services2: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,xui_webapp}
+
 
 template-management-api:
   base-url: ${DOCMOSIS_TEMPLATES_ENDPOINT:https://docmosis.aat.platform.hmcts.net}
