@@ -51,7 +51,6 @@ public class DgAssemblyServiceAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            LOG.info("dg-docassemby custome auth ");
             String bearerToken = extractBearerToken(request);
             String serviceName = this.authTokenValidator.getServiceName(bearerToken);
             LOG.info("dg-docassembly : Endpoint : {}  for : {} method is accessed by {} ", request.getRequestURI(),
