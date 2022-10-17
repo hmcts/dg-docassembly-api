@@ -146,7 +146,8 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.4'
-    
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign-core', version: '3.1.4'
+
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
@@ -200,12 +201,6 @@ dependencyManagement {
         //CVE-2021-40690
         dependencySet(group: 'org.apache.santuario', version: '3.0.1') {
             entry 'xmlsec'
-        }
-
-        //CVE-2021-22044
-        dependencySet(group: 'org.springframework.cloud', version: '3.1.4') {
-            entry 'spring-cloud-openfeign-core'
-            entry 'spring-cloud-starter-openfeign'
         }
 
         //CVE-2022-23437
