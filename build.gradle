@@ -128,7 +128,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    implementation group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '4.0.0'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.1'
     implementation 'com.github.hmcts:ccd-case-document-am-client:1.59'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0', withoutCVE202011987
@@ -146,7 +146,9 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.4'
-    
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign-core', version: '3.1.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
+
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
@@ -177,6 +179,7 @@ dependencies {
     contractTestImplementation sourceSets.test.runtimeClasspath
 
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.21.4'
+
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
 
@@ -200,12 +203,6 @@ dependencyManagement {
         //CVE-2021-40690
         dependencySet(group: 'org.apache.santuario', version: '3.0.1') {
             entry 'xmlsec'
-        }
-
-        //CVE-2021-22044
-        dependencySet(group: 'org.springframework.cloud', version: '3.1.4') {
-            entry 'spring-cloud-openfeign-core'
-            entry 'spring-cloud-starter-openfeign'
         }
 
         //CVE-2022-23437

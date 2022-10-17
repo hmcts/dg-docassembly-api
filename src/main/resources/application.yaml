@@ -121,3 +121,7 @@ case_document_am:
 springdoc:
   packagesToScan: uk.gov.hmcts.reform.dg.docassembly.rest
   pathsToMatch: /**
+
+logging:
+  level:
+    uk.gov.hmcts.reform.authorisation.filters: DEBUG
