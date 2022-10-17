@@ -147,6 +147,7 @@ dependencies {
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.4'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign-core', version: '3.1.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
 
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
 
@@ -178,6 +179,7 @@ dependencies {
     contractTestImplementation sourceSets.test.runtimeClasspath
 
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.21.4'
+
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
 
