@@ -57,7 +57,7 @@ def versions = [
         logging            : '5.1.7',
         junit5             : '5.8.2',
         log4JVersion       : '2.17.0',
-        springSecurity     : '5.7.1'
+        springSecurity     : '5.7.5'
 ]
 sourceSets {
     aat {
@@ -211,6 +211,13 @@ dependencyManagement {
         //CVE-2022-25857
         dependencySet(group: 'org.yaml', version: '1.33') {
             entry 'snakeyaml'
+        }
+
+        // CVE-2022-31692 - CVE-2022-31690
+        dependencySet(group: 'org.springframework.security', version: '5.7.5') {
+            entry 'spring-security-crypto'
+            entry 'spring-security-core'
+            entry 'spring-security-web'
         }
     }
 }
