@@ -20,6 +20,8 @@ import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import java.io.File;
 import java.io.IOException;
 
+import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.closeResponse;
+
 @Service
 public class DmStoreUploader {
 
@@ -58,7 +60,7 @@ public class DmStoreUploader {
     }
 
     private void uploadNewDocument(File file, CreateTemplateRenditionDto createTemplateRenditionDto) {
-
+        Response response = null;
         try {
 
             MultipartBody requestBody = new MultipartBody
@@ -81,7 +83,7 @@ public class DmStoreUploader {
                     .method("POST", requestBody)
                     .build();
 
-            Response response = okHttpClient.newCall(request).execute();
+            response = okHttpClient.newCall(request).execute();
 
             if (response.isSuccessful()) {
 
@@ -105,12 +107,14 @@ public class DmStoreUploader {
         } catch (RuntimeException | IOException e) {
             log.error(e.getMessage(), e);
             throw new DocumentUploaderException(String.format("Couldn't upload the file:  %s", e.getMessage()), e);
+        } finally {
+            closeResponse(response);
         }
     }
 
     private void uploadNewDocumentVersion(File file, CreateTemplateRenditionDto createTemplateRenditionDto) {
+        Response response =  null;
         try {
-
             MultipartBody requestBody = new MultipartBody
                     .Builder()
                     .setType(MultipartBody.FORM)
@@ -127,7 +131,7 @@ public class DmStoreUploader {
                     .method("POST", requestBody)
                     .build();
 
-            Response response = okHttpClient.newCall(request).execute();
+            response = okHttpClient.newCall(request).execute();
 
             if (!response.isSuccessful()) {
                 throw new DocumentUploaderException(
@@ -139,6 +143,8 @@ public class DmStoreUploader {
         } catch (RuntimeException | IOException e) {
             log.error(e.getMessage(), e);
             throw new DocumentUploaderException("Couldn't upload the file", e);
+        } finally {
+            closeResponse(response);
         }
     }
 

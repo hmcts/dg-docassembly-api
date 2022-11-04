@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.Base64;
 
+import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.closeResponse;
+
 @Service
 public class DocmosisApiClient {
 
@@ -37,7 +39,7 @@ public class DocmosisApiClient {
 
     @DependencyProfiler(name = "docmosis", action = "render")
     public Response render(CreateTemplateRenditionDto createTemplateRenditionDto) throws IOException {
-
+        Response response = null;
         try {
             MultipartBody requestBody = new MultipartBody
                     .Builder()
@@ -61,8 +63,6 @@ public class DocmosisApiClient {
                     .method("POST", requestBody)
                     .build();
 
-            Response response = null;
-
             StopWatch stopwatch = new StopWatch();
             stopwatch.start();
 
@@ -76,6 +76,8 @@ public class DocmosisApiClient {
             return response;
         } catch (SocketException se) {
             throw new DocmosisTimeoutException("Docmosis Socket Timeout", se);
+        } finally {
+            closeResponse(response);
         }
     }
 }

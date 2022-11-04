@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 
+import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.closeResponse;
+
 @Service
 public class TemplateManagementApiClient {
 
@@ -34,6 +36,8 @@ public class TemplateManagementApiClient {
 
     @DependencyProfiler(name = "template-management", action = "get template")
     public InputStream getTemplate(TemplateIdDto templateIdDto) throws IOException {
+        Response response = null;
+      try{
         String filename = new String(Base64.getDecoder().decode(templateIdDto.getTemplateId()));
         final Request request = new Request.Builder()
                 .addHeader("Authorization", String.format("Basic %s", templateManagementApiAuth))
@@ -42,7 +46,7 @@ public class TemplateManagementApiClient {
                 .build();
 
 
-        Response response = httpClient.newCall(request).execute();
+        response = httpClient.newCall(request).execute();
 
         if (!response.isSuccessful() && response.code() == 404) {
             throw new TemplateNotFoundException(
@@ -60,7 +64,9 @@ public class TemplateManagementApiClient {
         }
 
         return response.body().byteStream();
-
+      } finally {
+          closeResponse(response);
+      }
     }
 
 }
