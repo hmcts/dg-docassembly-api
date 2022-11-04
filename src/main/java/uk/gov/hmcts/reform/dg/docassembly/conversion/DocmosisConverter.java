@@ -49,9 +49,13 @@ public class DocmosisConverter {
             response = httpClient.newCall(request).execute();
 
             if (!response.isSuccessful()) {
-
-                throw new DocumentProcessingException(String.format("Docmosis can not convert file %s. HTTP response %d",
-                        file.getName(), response.code()));
+                throw new DocumentProcessingException(
+                        String.format(
+                                "Docmosis can not convert file %s. HTTP response %d",
+                                file.getName(),
+                                response.code()
+                        )
+                );
             }
             return createConvertedFile(response);
         } finally {
