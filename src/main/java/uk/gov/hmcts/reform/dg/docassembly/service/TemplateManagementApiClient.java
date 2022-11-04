@@ -37,36 +37,36 @@ public class TemplateManagementApiClient {
     @DependencyProfiler(name = "template-management", action = "get template")
     public InputStream getTemplate(TemplateIdDto templateIdDto) throws IOException {
         Response response = null;
-      try{
-        String filename = new String(Base64.getDecoder().decode(templateIdDto.getTemplateId()));
-        final Request request = new Request.Builder()
-                .addHeader("Authorization", String.format("Basic %s", templateManagementApiAuth))
-                .url(templateManagementApiUrl + filename)
-                .get()
-                .build();
+        try {
+            String filename = new String(Base64.getDecoder().decode(templateIdDto.getTemplateId()));
+            final Request request = new Request.Builder()
+                    .addHeader("Authorization", String.format("Basic %s", templateManagementApiAuth))
+                    .url(templateManagementApiUrl + filename)
+                    .get()
+                    .build();
 
 
-        response = httpClient.newCall(request).execute();
+            response = httpClient.newCall(request).execute();
 
-        if (!response.isSuccessful() && response.code() == 404) {
-            throw new TemplateNotFoundException(
-                    String.format("Template %s could not be found", templateIdDto.getTemplateId()));
+            if (!response.isSuccessful() && response.code() == 404) {
+                throw new TemplateNotFoundException(
+                        String.format("Template %s could not be found", templateIdDto.getTemplateId()));
+            }
+
+            if (!response.isSuccessful()) {
+                throw new FormDefinitionRetrievalException(
+                        String.format(
+                                "Could not retrieve a template. Http code and message %d, %s",
+                                response.code(),
+                                response.body().string()
+                        )
+                );
+            }
+
+            return response.body().byteStream();
+        } finally {
+            closeResponse(response);
         }
-
-        if (!response.isSuccessful()) {
-            throw new FormDefinitionRetrievalException(
-                    String.format(
-                            "Could not retrieve a template. Http code and message %d, %s",
-                            response.code(),
-                            response.body().string()
-                    )
-            );
-        }
-
-        return response.body().byteStream();
-      } finally {
-          closeResponse(response);
-      }
     }
 
 }
