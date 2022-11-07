@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.closeResponse;
+
 
 @Service
 public class DmStoreDownloaderImpl implements DmStoreDownloader {
@@ -35,9 +37,12 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
 
     private final ObjectMapper objectMapper;
 
-    public DmStoreDownloaderImpl(OkHttpClient okHttpClient, AuthTokenGenerator authTokenGenerator,
-                                 @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
-                                 ObjectMapper objectMapper) {
+    public DmStoreDownloaderImpl(
+            OkHttpClient okHttpClient,
+            AuthTokenGenerator authTokenGenerator,
+            @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
+            ObjectMapper objectMapper
+    ) {
         this.okHttpClient = okHttpClient;
         this.authTokenGenerator = authTokenGenerator;
         this.dmStoreAppBaseUrl = dmStoreAppBaseUrl;
@@ -47,10 +52,10 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
 
     @Override
     public File downloadFile(String id) throws DocumentTaskProcessingException {
-
+        Response response = null;
         try {
 
-            Response response = getDocumentStoreResponse(dmStoreAppBaseUrl + DM_STORE_DOWNLOAD_ENDPOINT + id);
+            response = getDocumentStoreResponse(dmStoreAppBaseUrl + DM_STORE_DOWNLOAD_ENDPOINT + id);
 
             if (response.isSuccessful()) {
                 JsonNode documentMetaData = objectMapper.readTree(response.body().byteStream());
@@ -84,8 +89,9 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
                     String.format("Could not access the binary: %s", e.getMessage()),
                     e
             );
+        } finally {
+            closeResponse(response);
         }
-
     }
 
     private Response getDocumentStoreResponse(String documentUri) throws IOException {

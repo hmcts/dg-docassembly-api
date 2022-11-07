@@ -37,7 +37,6 @@ public class DocmosisApiClient {
 
     @DependencyProfiler(name = "docmosis", action = "render")
     public Response render(CreateTemplateRenditionDto createTemplateRenditionDto) throws IOException {
-
         try {
             MultipartBody requestBody = new MultipartBody
                     .Builder()
@@ -61,12 +60,10 @@ public class DocmosisApiClient {
                     .method("POST", requestBody)
                     .build();
 
-            Response response = null;
-
             StopWatch stopwatch = new StopWatch();
             stopwatch.start();
 
-            response = httpClient.newCall(request).execute();
+            Response response = httpClient.newCall(request).execute();
 
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();

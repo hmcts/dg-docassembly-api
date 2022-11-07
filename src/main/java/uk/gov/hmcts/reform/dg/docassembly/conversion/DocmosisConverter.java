@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.closeResponse;
+
 @Service
 public class DocmosisConverter {
     private final Logger log = LoggerFactory.getLogger(DocmosisConverter.class);
@@ -41,15 +43,24 @@ public class DocmosisConverter {
      * @return the converted file
      */
     private File convert(File file) throws IOException {
-        final Request request = this.createRequest(file);
-        final Response response = httpClient.newCall(request).execute();
+        Response response = null;
+        try {
+            final Request request = this.createRequest(file);
+            response = httpClient.newCall(request).execute();
 
-        if (!response.isSuccessful()) {
-
-            throw new DocumentProcessingException(String.format("Docmosis can not convert file %s. HTTP response %d",
-                file.getName(), response.code()));
+            if (!response.isSuccessful()) {
+                throw new DocumentProcessingException(
+                        String.format(
+                                "Docmosis can not convert file %s. HTTP response %d",
+                                file.getName(),
+                                response.code()
+                        )
+                );
+            }
+            return createConvertedFile(response);
+        } finally {
+            closeResponse(response);
         }
-        return createConvertedFile(response);
     }
 
     /**
