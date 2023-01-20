@@ -48,11 +48,11 @@ public class TemplateRenditionResource {
         throws IOException, DocumentTaskProcessingException {
         logger.info(
                 "template-renditions request document name : {}  "
-                        + "with JurisdictionId : {} and caseTypeId :{}, templateId {}",
+                        + "with JurisdictionId : {} and caseTypeId :{}, isSecureDocStoreEnabled {}",
                 createTemplateRenditionDto.getFullOutputFilename(),
                 createTemplateRenditionDto.getJurisdictionId(),
                 createTemplateRenditionDto.getCaseTypeId(),
-                createTemplateRenditionDto.getTemplateId()
+                createTemplateRenditionDto.isSecureDocStoreEnabled()
         );
         createTemplateRenditionDto.setJwt(jwt);
         createTemplateRenditionDto.setServiceAuth(serviceAuth);
