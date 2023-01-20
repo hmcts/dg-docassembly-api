@@ -2,6 +2,8 @@ package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,8 @@ public class TemplateRenditionResource {
     @Autowired
     private TemplateRenditionService templateRenditionService;
 
+    private final Logger logger = LoggerFactory.getLogger(TemplateRenditionResource.class);
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
@@ -42,7 +46,14 @@ public class TemplateRenditionResource {
             @RequestBody @Valid CreateTemplateRenditionDto createTemplateRenditionDto,
             @RequestHeader("Authorization") String jwt, @RequestHeader("ServiceAuthorization") String serviceAuth)
         throws IOException, DocumentTaskProcessingException {
-
+        logger.info(
+                "template-renditions request document name : {}  "
+                        + "with JurisdictionId : {} and caseTypeId :{}, templateId {}",
+                createTemplateRenditionDto.getFullOutputFilename(),
+                createTemplateRenditionDto.getJurisdictionId(),
+                createTemplateRenditionDto.getCaseTypeId(),
+                createTemplateRenditionDto.getTemplateId()
+        );
         createTemplateRenditionDto.setJwt(jwt);
         createTemplateRenditionDto.setServiceAuth(serviceAuth);
         CreateTemplateRenditionDto templateRenditionOutputDto =
