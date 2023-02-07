@@ -35,9 +35,6 @@ variable "oidc_issuer_base_uri" {
   default = "idam-api"
 }
 
-
-variable "ilbIp"{}
-
 variable "tenant_id" {}
 
 variable "jenkins_AAD_objectId" {
