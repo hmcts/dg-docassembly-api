@@ -54,3 +54,6 @@ To view our REST API go to http://{HOST}/swagger-ui/index.html
 On local machine with server up and running, link to swagger is as below
 > http://localhost:8080/swagger-ui/index.html
 > if running on AAT, replace localhost with ingressHost data inside values.yaml class in the necessary component, making sure port number is also removed.
+
+
+Checking genertaed TEST_URL for preview
