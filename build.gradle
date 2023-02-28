@@ -107,7 +107,7 @@ dependencies {
         exclude group: 'org.apache.xmlgraphics', module: 'batik-all'
     }
 
-    implementation group: 'org.json', name: 'json', version: '20220924'
+    implementation group: 'org.json', name: 'json', version: '20230227'
     
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '12.2'
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
