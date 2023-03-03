@@ -231,6 +231,11 @@ dependencyManagement {
         dependencySet(group: 'com.fasterxml.woodstox', version: '6.5.0') {
             entry 'woodstox-core'
         }
+
+        //CVE-2023-24998
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
+            entry 'commons-fileupload'
+        }
     }
 }
 
