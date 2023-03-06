@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2023-03-04">
+    <suppress until="2023-04-04">
         <notes>
             To fix CVE-2022-26336, you will need these (currently breaking the build):
                 implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.2',
