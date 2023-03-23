@@ -261,8 +261,8 @@ jacocoTestReport {
     executionData(test)
 
     reports {
-        xml.enabled = true
-        csv.enabled = false
+//        xml.enabled = true
+//        csv.enabled = false
         xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
