@@ -259,10 +259,13 @@ def coverageExclusionList = [
 
 jacocoTestReport {
     executionData(test)
-
     reports {
-//        xml.enabled = true
-//        csv.enabled = false
+        xml{
+            enabled true
+        }
+        csv{
+            enabled true
+        }
         xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
