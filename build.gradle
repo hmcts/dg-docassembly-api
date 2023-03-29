@@ -221,12 +221,6 @@ dependencyManagement {
             entry 'spring-security-web'
         }
 
-        //CVE-2023-28708
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.6') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-websocket'
-        }
-
         //CVE-2022-40152
         dependencySet(group: 'com.fasterxml.woodstox', version: '6.5.0') {
             entry 'woodstox-core'
