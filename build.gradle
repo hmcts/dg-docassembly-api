@@ -177,7 +177,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.21.8'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '1.21.9'
 
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
@@ -219,12 +219,6 @@ dependencyManagement {
             entry 'spring-security-crypto'
             entry 'spring-security-core'
             entry 'spring-security-web'
-        }
-
-        //CVE-2022-45143
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.69') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-websocket'
         }
 
         //CVE-2022-40152
