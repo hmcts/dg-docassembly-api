@@ -1,11 +1,11 @@
 name: dg-docassembly
 apiVersion: v2
 home: https://github.com/hmcts/dg-docassembly-api
-version: 1.1.23
+version: 1.1.24
 description: HMCTS Document Assembly API
 maintainers:
   - name: HMCTS EM Team
 dependencies:
   - name: java
-    version: 4.0.13
+    version: 4.1.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
