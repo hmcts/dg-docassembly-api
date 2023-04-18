@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -34,16 +33,14 @@ public class WelcomeResource {
         produces = APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public ResponseEntity<Object> welcome() {
+    public ResponseEntity<Map<String,String>> welcome() {
 
         log.info("Welcome message : '{}'", MESSAGE);
-
-        Map<String, String> mapMessage = new HashMap<>();
-        mapMessage.put("message", MESSAGE);
 
         return ResponseEntity
                 .ok()
                 .cacheControl(CacheControl.noCache())
-                .body(mapMessage);
+                .body(Map.of("message",MESSAGE));
+
     }
 }

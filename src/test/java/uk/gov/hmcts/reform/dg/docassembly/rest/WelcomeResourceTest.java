@@ -17,7 +17,7 @@ public class WelcomeResourceTest {
 
     @Test
     public void testEndPointResponseCode() {
-        ResponseEntity<Object> responseEntity = welcomeResource.welcome();
+        ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -25,7 +25,7 @@ public class WelcomeResourceTest {
 
     @Test
     public void testEndpointResponseMessage() {
-        ResponseEntity<Object> responseEntity = welcomeResource.welcome();
+        ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
         Map<String,String> expectedResponse = new HashMap<>();
         expectedResponse.put("message","Welcome to Document Assembly API!");
