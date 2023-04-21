@@ -14,6 +14,7 @@ import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.Base64;
 
 @Service
@@ -37,6 +38,9 @@ public class DocmosisApiClient {
 
     @DependencyProfiler(name = "docmosis", action = "render")
     public Response render(CreateTemplateRenditionDto createTemplateRenditionDto) throws IOException {
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+
         try {
             MultipartBody requestBody = new MultipartBody
                     .Builder()
@@ -60,18 +64,28 @@ public class DocmosisApiClient {
                     .method("POST", requestBody)
                     .build();
 
-            StopWatch stopwatch = new StopWatch();
-            stopwatch.start();
-
             Response response = httpClient.newCall(request).execute();
 
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.info("Time taken for Docmosis call : {} milliseconds", timeElapsed);
-
+            log.info("Time taken for Docmosis call : {} milliseconds for Template Id: {} for jurisdictionId {}",
+                    timeElapsed, createTemplateRenditionDto.getTemplateId(),
+                    createTemplateRenditionDto.getJurisdictionId());
             return response;
         } catch (SocketException se) {
+            stopwatch.stop();
+            long timeElapsed = stopwatch.getTime();
+            log.info("SocketException for Template Id: {} Time taken {} milliseconds for jurisdictionId {}",
+                    createTemplateRenditionDto.getTemplateId(), timeElapsed,
+                    createTemplateRenditionDto.getJurisdictionId());
+            throw new DocmosisTimeoutException("Docmosis Socket Timeout", se);
+        } catch (SocketTimeoutException se) {
+            stopwatch.stop();
+            long timeElapsed = stopwatch.getTime();
+            log.info("SocketTimeoutException for Template Id: {} Time taken {} milliseconds for jurisdictionId {}",
+                    createTemplateRenditionDto.getTemplateId(), timeElapsed,
+                    createTemplateRenditionDto.getJurisdictionId());
             throw new DocmosisTimeoutException("Docmosis Socket Timeout", se);
         }
     }
