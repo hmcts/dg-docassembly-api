@@ -94,7 +94,7 @@ resource "azurerm_key_vault_secret" "local_docmosis_templates_auth" {
 
 # Load AppInsights key from rpa vault
 data "azurerm_key_vault_secret" "app_insights_key" {
-  name      = "AppInsightsInstrumentationKey"
+  name      = "EmAppInsightsInstrumentationKey"
   key_vault_id = data.azurerm_key_vault.product.id
 }
 
@@ -105,7 +105,7 @@ resource "azurerm_key_vault_secret" "local_app_insights_key" {
 }
   
 data "azurerm_key_vault_secret" "app_insights_connection_string" {
-  name      = "app-insights-connection-string"
+  name      = "em-app-insights-connection-string"
   key_vault_id = data.azurerm_key_vault.product.id
 }
 
