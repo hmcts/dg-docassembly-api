@@ -81,7 +81,7 @@ public class TemplateRenditionService {
             } else {
                 dmStoreUploader.uploadFile(file, createTemplateRenditionDto);
             }
-
+            file.delete();
             return createTemplateRenditionDto;
         } finally {
             closeResponse(response);
