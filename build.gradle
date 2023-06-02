@@ -129,7 +129,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
     implementation 'com.github.hmcts:ccd-case-document-am-client:1.59'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0', withoutCVE202011987
