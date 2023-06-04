@@ -104,7 +104,9 @@ dependencies {
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.8.0'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
