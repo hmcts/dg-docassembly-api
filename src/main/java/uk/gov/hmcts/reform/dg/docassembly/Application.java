@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class},
+    scanBasePackages = {
+        "uk.gov.hmcts.reform.ccd.document.am",
+        "uk.gov.hmcts.reform.dg.docassembly",
+        "uk.gov.hmcts.reform.auth"}
+)
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class

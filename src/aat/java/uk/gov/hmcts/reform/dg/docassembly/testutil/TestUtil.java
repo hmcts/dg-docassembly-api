@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.testutil;
 
 import io.restassured.specification.RequestSpecification;
+import jakarta.annotation.PostConstruct;
 import net.serenitybdd.rest.SerenityRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +15,6 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
 
 @Service
 public class TestUtil {
