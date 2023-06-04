@@ -79,6 +79,9 @@ configurations.all {
     exclude group: 'org.glassfish', module: 'jakarta.el'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
+
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    exclude group: 'org.springframework.boot', module: 'logback-classic'
 }
 
 dependencies {
