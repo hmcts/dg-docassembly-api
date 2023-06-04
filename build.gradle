@@ -53,7 +53,7 @@ def versions = [
         serenityRestAssured: '3.7.0',
         serenity           : '3.7.0',
         serenityreporter   : '3.7.0',
-        fasterXmlJackson   : '2.14.0-rc1',
+        fasterXmlJackson   : '2.15.2',
         pact_version       : '4.0.10',
         logging            : '6.0.1',
         junit5             : '5.8.2',
@@ -77,17 +77,6 @@ sourceSets {
 configurations.all {
     exclude group: 'com.vaadin.external.google',module: 'android-json'
     exclude group: 'org.glassfish', module: 'jakarta.el'
-    exclude group: 'io.netty', module: 'netty-buffer'
-    exclude group: 'io.netty', module: 'netty-codec'
-    exclude group: 'io.netty', module: 'netty-codec-http'
-    exclude group: 'io.netty', module: 'netty-codec-http2'
-    exclude group: 'io.netty', module: 'netty-common'
-    exclude group: 'io.netty', module: 'netty-handler'
-    exclude group: 'io.netty', module: 'netty-resolver'
-    exclude group: 'io.netty', module: 'netty-transport'
-    exclude group: 'io.netty', module: 'netty-transport-native-epoll'
-    exclude group: 'io.netty', module: 'netty-transport-native-kqueue'
-    exclude group: 'io.netty', module: 'netty-transport-native-unix-common'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
 }
@@ -143,6 +132,7 @@ dependencies {
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.3'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
+
 
     annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
 
