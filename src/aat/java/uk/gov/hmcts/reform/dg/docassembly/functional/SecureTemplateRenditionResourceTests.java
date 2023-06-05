@@ -90,6 +90,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("testTemplateRenditionToDoc jsonObject post {}", jsonObject.toString());
 
         cdamRequest
                 .body(jsonObject)
@@ -108,6 +109,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("testTemplateRenditionToDocX jsonObject post {}", jsonObject.toString());
 
         cdamRequest
                 .body(jsonObject)
@@ -127,6 +129,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         createTemplateRenditionDto.setOutputFilename("test-output-name");
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("testTemplateRenditionToOutputName jsonObject post {}", jsonObject.toString());
 
         CreateTemplateRenditionDto response =
                 cdamRequest
@@ -153,6 +156,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setFormPayload(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("shouldReturn500WhenMandatoryFormPayloadIsMissing jsonObject post {}", jsonObject.toString());
 
         cdamRequest
                 .body(jsonObject)
@@ -173,6 +177,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setTemplateId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("shouldReturn500WhenMandatoryTemplateIdIsMissing jsonObject post {}", jsonObject.toString());
 
         cdamRequest
                 .body(jsonObject)
@@ -191,6 +196,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("shouldReturn401WhenUnAthenticateUserPostRequest jsonObject post {}", jsonObject.toString());
 
         unAuthenticatedRequest
                 .body(jsonObject)
@@ -210,6 +216,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setJurisdictionId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("shouldReturn400WhenPostRequestMissingJurisdication jsonObject post {}", jsonObject.toString());
 
         cdamRequest
             .body(jsonObject)
@@ -229,6 +236,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setCaseTypeId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("shouldReturn400WhenPostRequestMissingCaseType jsonObject post {}", jsonObject.toString());
 
         cdamRequest
             .body(jsonObject)
