@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
-@Ignore
 public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Autowired
