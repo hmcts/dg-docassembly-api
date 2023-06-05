@@ -77,10 +77,6 @@ configurations.all {
 
 dependencies {
 
-    def withoutStuff = {
-        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
-    }
-
     def withoutAlpnApi = {
         exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
@@ -122,8 +118,6 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
 
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
-    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
 
@@ -133,9 +127,9 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
 
 
-    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
+    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.5.0'
 
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
@@ -148,8 +142,8 @@ dependencies {
     }
     
     //pact contract testing
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
