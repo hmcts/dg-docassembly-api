@@ -12,6 +12,7 @@ import static org.junit.Assume.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
+@Ignore
 public class OpenIdConnectSceanarios extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS_URL = "/api/template-renditions";

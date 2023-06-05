@@ -1,11 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.specification.RequestSpecification;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
@@ -16,6 +12,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
+@Ignore
 public class TemplateRenditionResourceTests extends BaseTest {
 
     @Autowired

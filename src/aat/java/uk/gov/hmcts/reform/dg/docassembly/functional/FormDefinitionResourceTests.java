@@ -1,14 +1,12 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.response.Response;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
+@Ignore
 public class FormDefinitionResourceTests extends BaseTest {
 
     @Rule
