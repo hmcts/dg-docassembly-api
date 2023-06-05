@@ -10,6 +10,8 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
@@ -22,6 +24,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 public class SecureTemplateRenditionResourceTests extends BaseTest {
+
+    private static Logger log = LoggerFactory.getLogger(SecureTemplateRenditionResourceTests.class);
 
     @Autowired
     private TestUtil testUtil;
@@ -64,7 +68,9 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
 
+        log.info("testTemplateRendition getTemplateId post {}", createTemplateRenditionDto.getTemplateId());
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
+        log.info("testTemplateRendition jsonObject post {}", jsonObject.toString());
 
         cdamRequest
                 .body(jsonObject)

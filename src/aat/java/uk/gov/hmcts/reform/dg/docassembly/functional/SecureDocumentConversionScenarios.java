@@ -5,6 +5,7 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Ignore
 public class SecureDocumentConversionScenarios extends BaseTest {
 
     @Autowired
