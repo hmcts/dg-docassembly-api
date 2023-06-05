@@ -47,8 +47,10 @@ public class TemplateRenditionResource {
             @RequestHeader("Authorization") String jwt, @RequestHeader("ServiceAuthorization") String serviceAuth)
         throws IOException, DocumentTaskProcessingException {
         logger.info(
-                "template-renditions request document name : {}  "
+                "template-renditions request: "
+                        + "TemplateId: {}, document name : {}  "
                         + "with JurisdictionId : {} and caseTypeId :{}, isSecureDocStoreEnabled {}",
+                createTemplateRenditionDto.getTemplateId(),
                 createTemplateRenditionDto.getFullOutputFilename(),
                 createTemplateRenditionDto.getJurisdictionId(),
                 createTemplateRenditionDto.getCaseTypeId(),
