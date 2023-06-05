@@ -1,9 +1,3 @@
-buildscript {
-    dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.6.0")
-    }
-}
 
 plugins {
     id 'application'
@@ -19,11 +13,11 @@ plugins {
     id "info.solidsoft.pitest" version '1.9.0'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.702'
     id "io.freefair.lombok" version "8.0.1"
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'net.serenity-bdd.aggregator'
 
 group 'uk.gov.hmcts.reform.dg.docassembly'
 version '1.0.0'
@@ -128,9 +122,6 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
 
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
-    testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-    testImplementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
-
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
 
