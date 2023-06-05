@@ -122,6 +122,9 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
 
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
+    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.2'
+
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
 
