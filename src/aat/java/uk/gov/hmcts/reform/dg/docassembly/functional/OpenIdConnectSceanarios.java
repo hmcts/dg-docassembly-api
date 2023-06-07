@@ -9,7 +9,6 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 public class OpenIdConnectSceanarios extends BaseTest {
