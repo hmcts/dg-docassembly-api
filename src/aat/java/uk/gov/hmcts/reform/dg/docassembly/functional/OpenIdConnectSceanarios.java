@@ -5,10 +5,10 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 public class OpenIdConnectSceanarios extends BaseTest {
@@ -18,9 +18,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
     @Test
     public void testValidAuthenticationAndAuthorisation() {
         assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
@@ -28,7 +25,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .authRequest()
-                        .header("Content-Type", "application/json")
+                        .contentType(APPLICATION_JSON_VALUE)
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -44,7 +41,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
                 testUtil
                         .invalidIdamAuthrequest()
                         .baseUri(testUtil.getTestUrl())
-                        .header("Content-Type", "application/json")
+                        .contentType(APPLICATION_JSON_VALUE)
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -58,7 +55,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .invalidIdamAuthrequest()
-                        .header("Content-Type", "application/json")
+                        .contentType(APPLICATION_JSON_VALUE)
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -72,15 +69,12 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         exceptionThrown.expect(IllegalArgumentException.class);
 
-        final Response response =
-                testUtil
-                        .validAuthRequestWithEmptyS2SAuth()
-                        .header("Content-Type", "application/json")
-                        .body(getBodyForRequest())
-                        .post(API_TEMPLATE_RENDITIONS_URL);
 
-        assertEquals(401, response.getStatusCode());
-
+        testUtil
+                .validAuthRequestWithEmptyS2SAuth()
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(getBodyForRequest())
+                .post(API_TEMPLATE_RENDITIONS_URL);
     }
 
     @Test
@@ -91,7 +85,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .header("Content-Type", "application/json")
+                .contentType(APPLICATION_JSON_VALUE)
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -105,7 +99,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .header("Content-Type", "application/json")
+                .contentType(APPLICATION_JSON_VALUE)
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
     }
