@@ -65,11 +65,13 @@ public class TestUtil {
         return RestAssured
                 .given()
                 .header("Authorization", idamAuth)
-                .header("ServiceAuthorization", s2sAuth);
+                .header("ServiceAuthorization", s2sAuth)
+                .header("Content-Type", "application/json");
     }
 
     public RequestSpecification cdamAuthRequest() {
         return cdamS2sAuthRequest()
+                .header("Content-Type", "application/json")
                 .header("Authorization", idamAuth);
     }
 
@@ -82,14 +84,14 @@ public class TestUtil {
     }
 
     private RequestSpecification s2sAuthRequest() {
-        return RestAssured.given().header("ServiceAuthorization", s2sAuth);
+        return RestAssured
+                .given()
+                .header("ServiceAuthorization", s2sAuth);
     }
 
     public RequestSpecification cdamS2sAuthRequest() {
         return RestAssured
                 .given()
-                .log()
-                .all()
                 .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
     }
 
