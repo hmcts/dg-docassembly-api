@@ -116,7 +116,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0', withoutCVE202011987
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3', withoutCVE202011987
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'commons-io', name: 'commons-io', version: '2.12.0'
@@ -135,9 +135,6 @@ dependencies {
     
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.3'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
-
-
-    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
     testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.5.0'
@@ -183,21 +180,6 @@ processAatResources {
 dependencyManagement {
     dependencies {
 
-        //CVE-2021-27807, CVE-2021-27906
-        dependencySet(group: 'org.apache.pdfbox', version: '2.0.28') {
-            entry 'pdfbox'
-        }
-
-        //CVE-2021-35515, CVE-2021-35516, CVE-2021-35517, CVE-2021-36090
-        dependencySet(group: 'org.apache.commons', version: '1.23.0') {
-            entry 'commons-compress'
-        }
-
-        //CVE-2021-40690
-        dependencySet(group: 'org.apache.santuario', version: '3.0.2') {
-            entry 'xmlsec'
-        }
-
         //CVE-2022-23437
         dependencySet(group: 'xerces', version: '2.12.2') {
             entry 'xercesImpl'
@@ -207,7 +189,7 @@ dependencyManagement {
         dependencySet(group: 'org.yaml', version: '2.0') {
             entry 'snakeyaml'
         }
-        
+
         //CVE-2023-24998
         dependencySet(group: 'commons-fileupload', version: '1.5') {
             entry 'commons-fileupload'
