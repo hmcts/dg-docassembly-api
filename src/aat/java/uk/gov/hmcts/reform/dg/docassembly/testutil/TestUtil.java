@@ -1,9 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.testutil;
 
+import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import jakarta.annotation.PostConstruct;
-import net.serenitybdd.rest.SerenityRest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,37 +22,47 @@ public class TestUtil {
     private final String invalidAuthToken = "238beab2-b563-4fee-80fa-63f224bc56f6";
     private final String invalidServiceAuthToken = "438bexy2-b545-4fef-80ab-63f234ae57f58f6";
 
-    @Autowired
-    private IdamHelper idamHelper;
-    @Autowired
-    private S2sHelper s2sHelper;
-    @Autowired
-    private DmHelper dmHelper;
+    private final IdamHelper idamHelper;
+    private final S2sHelper s2sHelper;
+    private final DmHelper dmHelper;
 
-    @Value("${test.url}")
-    private String testUrl;
+    private final S2sHelper cdamS2sHelper;
 
-    @Value("${document_management.base-url}")
-    private String dmApiUrl;
+    public final String testUrl;
 
-    @Value("${document_management.docker_url}")
-    private String dmDocumentApiUrl;
+    public final String dmApiUrl;
 
-    @Autowired
-    @Qualifier("xuiS2sHelper")
-    private S2sHelper cdamS2sHelper;
+    public final String dmDocumentApiUrl;
 
-    @PostConstruct
-    public void init() {
+    public TestUtil(IdamHelper idamHelper,
+                    S2sHelper s2sHelper,
+                    DmHelper dmHelper,
+                    @Qualifier("xuiS2sHelper") S2sHelper cdamS2sHelper,
+                    @Value("${test.url}") String testUrl,
+                    @Value("${document_management.base-url}") String dmApiUrl,
+                    @Value("${document_management.docker_url}") String dmDocumentApiUrl
+    ) {
+        this.idamHelper = idamHelper;
+        this.s2sHelper = s2sHelper;
+        this.dmHelper = dmHelper;
+        this.cdamS2sHelper = cdamS2sHelper;
+        this.testUrl = testUrl;
+        this.dmApiUrl = dmApiUrl;
+        this.dmDocumentApiUrl = dmDocumentApiUrl;
+        RestAssured.baseURI = testUrl;
+        this.init();
+    }
+
+    private void init() {
         idamHelper.createUser("docassemblyTestUser@docassemblyTest.com",
             Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
-        SerenityRest.useRelaxedHTTPSValidation();
+        RestAssured.useRelaxedHTTPSValidation();
         idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com");
         s2sAuth = s2sHelper.getS2sToken();
     }
 
     public RequestSpecification authRequest() {
-        return SerenityRest
+        return RestAssured
                 .given()
                 .header("Authorization", idamAuth)
                 .header("ServiceAuthorization", s2sAuth);
@@ -70,15 +78,15 @@ public class TestUtil {
     }
 
     public RequestSpecification unAuthenticatedRequest() {
-        return SerenityRest.given();
+        return RestAssured.given();
     }
 
     private RequestSpecification s2sAuthRequest() {
-        return SerenityRest.given().header("ServiceAuthorization", s2sAuth);
+        return RestAssured.given().header("ServiceAuthorization", s2sAuth);
     }
 
     public RequestSpecification cdamS2sAuthRequest() {
-        return SerenityRest
+        return RestAssured
             .given()
             .log().all()
             .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
@@ -89,11 +97,11 @@ public class TestUtil {
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
-        return SerenityRest.given().header("ServiceAuthorization", null).header("Authorization", null);
+        return RestAssured.given().header("ServiceAuthorization", null).header("Authorization", null);
     }
 
     public RequestSpecification randomHeadersInRequest() {
-        return SerenityRest.given().header("randomHeader1", "random1").header("randomHeader2", "random2");
+        return RestAssured.given().header("randomHeader1", "random1").header("randomHeader2", "random2");
     }
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
@@ -105,7 +113,7 @@ public class TestUtil {
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
-        return SerenityRest.given().header("ServiceAuthorization", null);
+        return RestAssured.given().header("ServiceAuthorization", null);
     }
 
     public RequestSpecification invalidIdamAuthrequest() {
@@ -113,7 +121,7 @@ public class TestUtil {
     }
 
     public RequestSpecification noHeadersInRequest() {
-        return SerenityRest.given();
+        return RestAssured.given();
     }
 
     public RequestSpecification invalidS2SAuth() {
@@ -121,7 +129,7 @@ public class TestUtil {
     }
 
     private RequestSpecification invalidS2sAuthRequest() {
-        return SerenityRest.given().header("ServiceAuthorization", invalidServiceAuthToken);
+        return RestAssured.given().header("ServiceAuthorization", invalidServiceAuthToken);
     }
 
     public String getDmApiUrl() {
