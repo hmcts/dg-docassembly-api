@@ -55,7 +55,7 @@ public class TestUtil {
 
     private void init() {
         idamHelper.createUser("docassemblyTestUser@docassemblyTest.com",
-            Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
+                Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
         RestAssured.useRelaxedHTTPSValidation();
         idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com");
         s2sAuth = s2sHelper.getS2sToken();
@@ -70,7 +70,7 @@ public class TestUtil {
 
     public RequestSpecification cdamAuthRequest() {
         return cdamS2sAuthRequest()
-            .header("Authorization", idamAuth);
+                .header("Authorization", idamAuth);
     }
 
     public String getTestUrl() {
@@ -87,37 +87,49 @@ public class TestUtil {
 
     public RequestSpecification cdamS2sAuthRequest() {
         return RestAssured
-            .given()
-            .log().all()
-            .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
+                .given()
+                .log()
+                .all()
+                .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
     }
 
     public RequestSpecification emptyIdamAuthRequest() {
-        return s2sAuthRequest().header("Authorization", null);
+        return s2sAuthRequest()
+                .header("Authorization", null);
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
-        return RestAssured.given().header("ServiceAuthorization", null).header("Authorization", null);
+        return RestAssured
+                .given()
+                .header("ServiceAuthorization", null).header("Authorization", null);
     }
 
     public RequestSpecification randomHeadersInRequest() {
-        return RestAssured.given().header("randomHeader1", "random1").header("randomHeader2", "random2");
+        return RestAssured
+                .given()
+                .header("randomHeader1", "random1")
+                .header("randomHeader2", "random2");
     }
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
-        return emptyS2sAuthRequest().header("Authorization", idamAuth);
+        return emptyS2sAuthRequest()
+                .header("Authorization", idamAuth);
     }
 
     public RequestSpecification validS2SAuthWithEmptyIdamAuth() {
-        return s2sAuthRequest().header("Authorization", null);
+        return s2sAuthRequest()
+                .header("Authorization", null);
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
-        return RestAssured.given().header("ServiceAuthorization", null);
+        return RestAssured
+                .given()
+                .header("ServiceAuthorization", null);
     }
 
     public RequestSpecification invalidIdamAuthrequest() {
-        return s2sAuthRequest().header("Authorization", invalidAuthToken);
+        return s2sAuthRequest()
+                .header("Authorization", invalidAuthToken);
     }
 
     public RequestSpecification noHeadersInRequest() {
@@ -125,11 +137,14 @@ public class TestUtil {
     }
 
     public RequestSpecification invalidS2SAuth() {
-        return invalidS2sAuthRequest().header("Authorization", idamAuth);
+        return invalidS2sAuthRequest()
+                .header("Authorization", idamAuth);
     }
 
     private RequestSpecification invalidS2sAuthRequest() {
-        return RestAssured.given().header("ServiceAuthorization", invalidServiceAuthToken);
+        return RestAssured
+                .given()
+                .header("ServiceAuthorization", invalidServiceAuthToken);
     }
 
     public String getDmApiUrl() {
@@ -184,9 +199,10 @@ public class TestUtil {
     public String uploadDocumentAndReturnUrl(String fileName, String mimeType) {
         try {
             String url = dmHelper.getDocumentMetadata(
-                    dmHelper.uploadAndGetId(
-                            ClassLoader.getSystemResourceAsStream(fileName), mimeType, fileName))
-                    .links.self.href;
+                    dmHelper.uploadAndGetId(ClassLoader.getSystemResourceAsStream(fileName), mimeType, fileName))
+                    .links
+                    .self
+                    .href;
 
             return getDmApiUrl().equals("http://localhost:4603")
                     ? url.replaceAll(getDmApiUrl(), getDmDocumentApiUrl())
