@@ -70,7 +70,9 @@ public class TestUtil {
     }
 
     public RequestSpecification cdamAuthRequest() {
-        return cdamS2sAuthRequest()
+        return RestAssured
+                .given()
+                .header("ServiceAuthorization", cdamS2sHelper.getS2sToken())
                 .header("Content-Type", "application/json")
                 .header("Authorization", idamAuth);
     }
@@ -103,7 +105,8 @@ public class TestUtil {
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", null).header("Authorization", null);
+                .header("ServiceAuthorization", null)
+                .header("Authorization", null);
     }
 
     public RequestSpecification randomHeadersInRequest() {

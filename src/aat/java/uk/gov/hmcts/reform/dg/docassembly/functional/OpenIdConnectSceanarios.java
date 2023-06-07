@@ -29,7 +29,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .authRequest()
-                        .contentType(APPLICATION_JSON_VALUE)
+                        .header("Content-Type", "application/json")
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -45,7 +45,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
                 testUtil
                         .invalidIdamAuthrequest()
                         .baseUri(testUtil.getTestUrl())
-                        .contentType(APPLICATION_JSON_VALUE)
+                        .header("Content-Type", "application/json")
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -59,8 +59,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .invalidIdamAuthrequest()
-                        .baseUri(testUtil.getTestUrl())
-                        .contentType(APPLICATION_JSON_VALUE)
+                        .header("Content-Type", "application/json")
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -77,7 +76,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .validAuthRequestWithEmptyS2SAuth()
-                        .contentType(APPLICATION_JSON_VALUE)
+                        .header("Content-Type", "application/json")
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -93,7 +92,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .contentType(APPLICATION_JSON_VALUE)
+                .header("Content-Type", "application/json")
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
 
@@ -109,7 +108,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .contentType(APPLICATION_JSON_VALUE)
+                .header("Content-Type", "application/json")
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
     }
