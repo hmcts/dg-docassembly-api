@@ -29,7 +29,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .authRequest()
-                        .baseUri(testUtil.getTestUrl())
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
@@ -78,7 +77,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
         final Response response =
                 testUtil
                         .validAuthRequestWithEmptyS2SAuth()
-                        .baseUri(testUtil.getTestUrl())
                         .contentType(APPLICATION_JSON_VALUE)
                         .body(getBodyForRequest())
                         .post(API_TEMPLATE_RENDITIONS_URL);
@@ -95,7 +93,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .baseUri(testUtil.getTestUrl())
                 .contentType(APPLICATION_JSON_VALUE)
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
@@ -112,7 +109,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
-                .baseUri(testUtil.getTestUrl())
                 .contentType(APPLICATION_JSON_VALUE)
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
