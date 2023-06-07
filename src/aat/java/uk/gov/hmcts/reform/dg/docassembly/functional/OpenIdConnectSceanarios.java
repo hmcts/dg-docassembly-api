@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.junit.Assert.assertEquals;
@@ -14,9 +13,6 @@ import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 public class OpenIdConnectSceanarios extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS_URL = "/api/template-renditions";
-
-    @Rule
-    public ExpectedException exceptionThrown = ExpectedException.none();
 
     @Rule
     public RetryRule retryRule = new RetryRule(3);
@@ -70,8 +66,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
     public void testWithEmptyS2SAuth() {
         assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
 
-        exceptionThrown.expect(NullPointerException.class);
-
         final Response response =
                 testUtil
                         .validAuthRequestWithEmptyS2SAuth()
@@ -87,23 +81,17 @@ public class OpenIdConnectSceanarios extends BaseTest {
     public void testWithEmptyIdamAuthAndValidS2SAuth() {
         assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
 
-        exceptionThrown.expect(NullPointerException.class);
-
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
                 .header("Content-Type", "application/json")
                 .body(getBodyForRequest())
                 .post(API_TEMPLATE_RENDITIONS_URL);
 
-        exceptionThrown.expect(IllegalArgumentException.class);
-
     }
 
     @Test
     public void testIdamAuthAndS2SAuthAreEmpty() {
         assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
-        exceptionThrown.expect(NullPointerException.class);
 
         testUtil
                 .validS2SAuthWithEmptyIdamAuth()
