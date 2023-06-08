@@ -20,8 +20,6 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.web.SecurityFilterChain;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -55,14 +53,19 @@ public class SecurityConfiguration {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .formLogin(login -> login.disable())
-                .logout(logout -> logout.disable())
+        http.csrf(csrf->csrf.disable())
+                .formLogin(login->login.disable())
+                .logout(logout->logout.disable())
                 .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-                .sessionManagement(ses -> ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/**").authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-                .oauth2Client(withDefaults());
+                .sessionManagement(ses->ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeRequests()
+                .requestMatchers("/api/**").authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .and()
+                .and()
+                .oauth2Client();
         return http.build();
     }
 
