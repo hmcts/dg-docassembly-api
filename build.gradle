@@ -156,7 +156,7 @@ dependencies {
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version
-    implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
+    testImplementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
 
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
