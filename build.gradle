@@ -91,10 +91,6 @@ dependencies {
         exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
 
-    def withoutCVE202011987 = {
-        exclude group: 'org.apache.xmlgraphics', module: 'batik-all'
-    }
-
     implementation group: 'org.json', name: 'json', version: '20230227'
     
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '12.3'
@@ -107,16 +103,20 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
-    implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
-    implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
+
+    implementation group: 'pl.touk', name: 'throwing-function', version: '1.4'
+    implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
+
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3', withoutCVE202011987
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'commons-io', name: 'commons-io', version: '2.12.0'
@@ -126,23 +126,18 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
+    implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
 
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.3'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
-
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
-    testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.5.0'
-
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
     testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
 
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
+    testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.5.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.3.0', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
@@ -158,8 +153,7 @@ dependencies {
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version
-    implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
-    
+
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
 
