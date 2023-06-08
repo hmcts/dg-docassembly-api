@@ -53,11 +53,13 @@ public class SecurityConfiguration {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        http.csrf(csrf->csrf.disable())
-                .formLogin(login->login.disable())
-                .logout(logout->logout.disable())
+        http.csrf().disable()
+                .formLogin().disable()
+                .logout().disable()
                 .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-                .sessionManagement(ses->ses.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .requestMatchers("/api/**").authenticated()
                 .and()
