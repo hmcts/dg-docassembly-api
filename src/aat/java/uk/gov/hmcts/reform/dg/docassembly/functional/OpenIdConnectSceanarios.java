@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -15,6 +16,9 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Rule
     public ExpectedException exceptionThrown = ExpectedException.none();
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void testValidAuthenticationAndAuthorisation() {
