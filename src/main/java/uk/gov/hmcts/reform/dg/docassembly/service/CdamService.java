@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class CdamService {
         logger.debug("Downloading document from CDAM with documentId : {} ", documentId);
 
         ResponseEntity<Resource> response =  caseDocumentClientApi.getDocumentBinary(auth, serviceAuth, documentId);
-        HttpStatus status = null;
+        HttpStatusCode status = null;
 
         if (Objects.nonNull(response)) {
             status = response.getStatusCode();

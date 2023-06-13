@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.IOException;
-import javax.validation.Valid;
 
 @ConditionalOnProperty("endpoint-toggles.template-renditions")
 @RestController
