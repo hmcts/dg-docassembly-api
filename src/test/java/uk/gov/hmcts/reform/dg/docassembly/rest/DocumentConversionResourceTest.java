@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,6 @@ import uk.gov.hmcts.reform.dg.docassembly.service.exception.FileTypeException;
 
 import java.io.File;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;

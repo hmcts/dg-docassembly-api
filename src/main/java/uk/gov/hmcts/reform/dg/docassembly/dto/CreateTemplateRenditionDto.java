@@ -2,11 +2,11 @@ package uk.gov.hmcts.reform.dg.docassembly.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
 
 public class CreateTemplateRenditionDto extends TemplateIdDto {
 

@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '2.7.12'
+    id 'org.springframework.boot' version '3.1.0'
     id 'uk.gov.hmcts.java' version '0.12.43'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id 'com.github.ben-manes.versions' version '0.47.0'
@@ -50,15 +50,14 @@ repositories {
 }
 
 def versions = [
-        serenityRestAssured: '2.6.0',
-        serenity           : '2.6.0',
-        serenityreporter   : '2.6.0',
-        fasterXmlJackson   : '2.14.0-rc1',
+        serenityRestAssured: '3.7.0',
+        serenity           : '3.7.0',
+        serenityreporter   : '3.7.0',
+        fasterXmlJackson   : '2.15.2',
         pact_version       : '4.0.10',
-        logging            : '5.1.7',
+        logging            : '6.0.1',
         junit5             : '5.8.2',
-        log4JVersion       : '2.17.0',
-        springSecurity     : '5.7.8'
+        springSecurity     : '6.1.0'
 ]
 sourceSets {
     aat {
@@ -78,17 +77,6 @@ sourceSets {
 configurations.all {
     exclude group: 'com.vaadin.external.google',module: 'android-json'
     exclude group: 'org.glassfish', module: 'jakarta.el'
-    exclude group: 'io.netty', module: 'netty-buffer'
-    exclude group: 'io.netty', module: 'netty-codec'
-    exclude group: 'io.netty', module: 'netty-codec-http'
-    exclude group: 'io.netty', module: 'netty-codec-http2'
-    exclude group: 'io.netty', module: 'netty-common'
-    exclude group: 'io.netty', module: 'netty-handler'
-    exclude group: 'io.netty', module: 'netty-resolver'
-    exclude group: 'io.netty', module: 'netty-transport'
-    exclude group: 'io.netty', module: 'netty-transport-native-epoll'
-    exclude group: 'io.netty', module: 'netty-transport-native-kqueue'
-    exclude group: 'io.netty', module: 'netty-transport-native-unix-common'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
 }
@@ -103,25 +91,18 @@ dependencies {
         exclude group: 'org.eclipse.jetty.alpn', module: 'alpn-api'
     }
 
-    def withoutCVE202011987 = {
-        exclude group: 'org.apache.xmlgraphics', module: 'batik-all'
-    }
 
     implementation group: 'org.json', name: 'json', version: '20230227'
     
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '12.3'
     implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.11.0'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.8.0'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
@@ -129,36 +110,42 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
-    implementation 'com.github.hmcts:ccd-case-document-am-client:1.59'
+
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0', withoutCVE202011987
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
+
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
+    implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.7.3'
+
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.8.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-openfeign-core', version: '3.1.5'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.5'
 
-    annotationProcessor group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', withoutStuff
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.3'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.3'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
     testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '1.5.0'
 
-    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
+    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
+    testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+    testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.3.0', classifier: 'all'
-    
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.3.0', classifier: 'all', {
+        exclude group: 'commons-io', module: 'commons-io'
+        exclude group: 'org.apache.commons', module: 'commons-lang3'
+    }
+
     //pact contract testing
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured, withoutStuff
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
@@ -169,8 +156,8 @@ dependencies {
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius', name: 'pact-jvm-consumer-java8', version: versions.pact_version
-    implementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
-    
+    testImplementation group: 'au.com.dius', name: 'pact-jvm-consumer', version: versions.pact_version, withoutAlpnApi
+
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
 
@@ -189,21 +176,6 @@ processAatResources {
 dependencyManagement {
     dependencies {
 
-        //CVE-2021-27807, CVE-2021-27906
-        dependencySet(group: 'org.apache.pdfbox', version: '2.0.28') {
-            entry 'pdfbox'
-        }
-
-        //CVE-2021-35515, CVE-2021-35516, CVE-2021-35517, CVE-2021-36090
-        dependencySet(group: 'org.apache.commons', version: '1.23.0') {
-            entry 'commons-compress'
-        }
-
-        //CVE-2021-40690
-        dependencySet(group: 'org.apache.santuario', version: '3.0.2') {
-            entry 'xmlsec'
-        }
-
         //CVE-2022-23437
         dependencySet(group: 'xerces', version: '2.12.2') {
             entry 'xercesImpl'
@@ -213,16 +185,17 @@ dependencyManagement {
         dependencySet(group: 'org.yaml', version: '2.0') {
             entry 'snakeyaml'
         }
-        
+
         //CVE-2023-24998
         dependencySet(group: 'commons-fileupload', version: '1.5') {
             entry 'commons-fileupload'
         }
 
-        //CVE-2022-45688
-        dependencySet(group: 'org.json', version: '20230227') {
-            entry 'json'
+        //CVE-2020-13956
+        dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
+            entry 'fluent-hc'
         }
+
     }
 }
 

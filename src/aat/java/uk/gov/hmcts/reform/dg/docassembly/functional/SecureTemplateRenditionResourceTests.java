@@ -8,15 +8,12 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.document.domain.Document;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
@@ -25,12 +22,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Autowired
     private TestUtil testUtil;
-
-    @Value("${test.url}")
-    private String testUrl;
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(1);
 
     private RequestSpecification request;
     private RequestSpecification cdamRequest;
@@ -42,17 +33,13 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
-                .baseUri(testUrl)
                 .contentType(APPLICATION_JSON_VALUE);
 
         cdamRequest = testUtil
-            .cdamAuthRequest()
-            .baseUri(testUrl)
-            .contentType(APPLICATION_JSON_VALUE);
+            .cdamAuthRequest();
 
         unAuthenticatedRequest = testUtil
                 .unAuthenticatedRequest()
-                .baseUri(testUrl)
                 .contentType(APPLICATION_JSON_VALUE);
     }
 
@@ -67,7 +54,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
@@ -86,7 +73,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions").then()
                 .assertThat()
                 .statusCode(200)
@@ -104,7 +91,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions").then()
                 .assertThat()
                 .statusCode(200)
@@ -124,7 +111,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
         CreateTemplateRenditionDto response =
                 cdamRequest
-                        .body(jsonObject)
+                        .body(jsonObject.toString())
                         .post("/api/template-renditions")
                         .then()
                         .statusCode(200)
@@ -149,7 +136,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
@@ -169,7 +156,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
@@ -187,7 +174,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         unAuthenticatedRequest
-                .body(jsonObject)
+                .body(jsonObject.toString())
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
@@ -206,7 +193,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-            .body(jsonObject)
+            .body(jsonObject.toString())
             .post("/api/template-renditions")
             .then()
             .assertThat()
@@ -225,7 +212,7 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-            .body(jsonObject)
+            .body(jsonObject.toString())
             .post("/api/template-renditions")
             .then()
             .assertThat()
