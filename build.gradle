@@ -57,7 +57,7 @@ def versions = [
         pact_version       : '4.0.10',
         logging            : '6.0.1',
         junit5             : '5.8.2',
-        springSecurity     : '6.1.0'
+        springSecurity     : '6.1.2'
 ]
 sourceSets {
     aat {
@@ -198,6 +198,10 @@ dependencyManagement {
             entry 'fluent-hc'
         }
 
+        //CVE-2023-3635
+        dependencySet(group: 'com.squareup.okio', version: '3.4.0') {
+            entry 'okio-jvm'
+        }
     }
 }
 
