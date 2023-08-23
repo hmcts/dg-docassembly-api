@@ -53,7 +53,7 @@ public class DocumentConversionResourceTest {
             .thenReturn(TEST_PDF_FILE);
 
         ResponseEntity response = documentConversionResource.convert(request, docId);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
@@ -66,7 +66,7 @@ public class DocumentConversionResourceTest {
             .thenReturn(TEST_PDF_FILE);
 
         ResponseEntity response = documentConversionResource.convert(request, docId);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
@@ -84,7 +84,7 @@ public class DocumentConversionResourceTest {
         documentConversionResource.cdamEnabled = true;
 
         ResponseEntity response = documentConversionResource.convert(request, docId);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId, auth, serviceAuth);
@@ -100,7 +100,7 @@ public class DocumentConversionResourceTest {
                 .thenThrow(DocumentProcessingException.class);
 
         ResponseEntity response = documentConversionResource.convert(request, docId);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(400, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce())
                 .convertFile(docId);
@@ -113,7 +113,7 @@ public class DocumentConversionResourceTest {
             .thenThrow(FileTypeException.class);
 
         ResponseEntity response = documentConversionResource.convert(request, docId);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(400, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce())
             .convertFile(docId);
