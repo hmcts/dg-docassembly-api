@@ -69,8 +69,8 @@ public class DmStoreUploader {
                     .addFormDataPart("classification", "PUBLIC")
                     .addFormDataPart("files", createTemplateRenditionDto.getFullOutputFilename(),
                             RequestBody.create(
-                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()),
-                                    file
+                                    file,
+                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())
                             )
                     )
                     .build();
@@ -119,8 +119,9 @@ public class DmStoreUploader {
                     .Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("file", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType()),
-                                    file))
+                            RequestBody.create(
+                                    file,
+                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
                     .build();
 
             Request request = new Request.Builder()
