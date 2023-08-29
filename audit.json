@@ -4,6 +4,7 @@
   "10096_Timestamp Disclosure - Unix_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "100000_A Client Error response code was returned by the server_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
-  "10049_Non-Storable Content_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
+  "10049_Non-Storable Content_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "10112_Session Management Response Identified_http://dg-docassembly-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
 
