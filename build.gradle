@@ -96,7 +96,7 @@ dependencies {
 
     implementation group: 'org.json', name: 'json', version: '20230618'
     
-    implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '12.4'
+    implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '12.5'
     implementation group: 'com.google.guava', name: 'guava', version: '32.1.2-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.11.0'
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-afterburner', version: versions.fasterXmlJackson
