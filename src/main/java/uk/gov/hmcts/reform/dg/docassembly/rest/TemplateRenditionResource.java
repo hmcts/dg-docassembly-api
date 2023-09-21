@@ -3,9 +3,11 @@ package uk.gov.hmcts.reform.dg.docassembly.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -33,6 +35,9 @@ public class TemplateRenditionResource {
 
     private final Logger logger = LoggerFactory.getLogger(TemplateRenditionResource.class);
 
+    @Value("${enable-secure-document-templ-rend-endpoint}")
+    boolean cdamEnabled;
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
@@ -54,6 +59,10 @@ public class TemplateRenditionResource {
                 createTemplateRenditionDto.getCaseTypeId(),
                 createTemplateRenditionDto.isSecureDocStoreEnabled()
         );
+        if (cdamEnabled && ((StringUtils.isBlank(createTemplateRenditionDto.getCaseTypeId())
+                || StringUtils.isBlank(createTemplateRenditionDto.getJurisdictionId())))) {
+
+        }
         createTemplateRenditionDto.setJwt(jwt);
         createTemplateRenditionDto.setServiceAuth(serviceAuth);
         CreateTemplateRenditionDto templateRenditionOutputDto =
