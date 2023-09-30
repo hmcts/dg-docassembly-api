@@ -47,6 +47,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void testTemplateRendition() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
@@ -64,6 +65,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void testTemplateRenditionToDoc() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOC\", \"templateId\":\""
@@ -80,6 +82,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void testTemplateRenditionToDocX() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOCX\", \"templateId\":\""
@@ -96,6 +99,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void testTemplateRenditionToOutputName() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         CreateTemplateRenditionDto response =
                 request
@@ -121,6 +125,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}")
@@ -136,6 +141,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void shouldReturn500WhenMandatoryTemplateIdIsMissing() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}}")
@@ -151,6 +157,7 @@ public class TemplateRenditionResourceTests extends BaseTest {
     public void shouldReturn401WhenUnAthenticateUserPostRequest() {
         // If the Endpoint Toggles are enabled, continue, if not skip and ignore
         Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         unAuthenticatedRequest
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
@@ -162,5 +169,64 @@ public class TemplateRenditionResourceTests extends BaseTest {
                 .statusCode(401)
                 .log()
                 .all();
+    }
+
+    @Test
+    public void shouldReturn400WhenCaseTypeIdFromPayloadIsMissing() {
+        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
+        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+        request
+            .body("{\"formPayload\":{\"a\":1},"
+                + " \"outputType\":\"DOCX\", "
+                + "\"outputFilename\":\"test-output-name\","
+                + "\"jurisdictionId\":\"dummyJurisdictionId\","
+                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + "\"}")
+            .post("/api/template-renditions")
+            .then()
+            .assertThat()
+            .statusCode(400)
+            .log()
+            .all();
+    }
+
+    @Test
+    public void shouldReturn400WhenJurisdictionIdFromPayloadIsMissing() {
+        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
+        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+        request
+            .body("{\"formPayload\":{\"a\":1},"
+                + " \"outputType\":\"DOCX\", "
+                + "\"outputFilename\":\"test-output-name\","
+                + "\"caseTypeId\":\"dummyCaseTypeId\","
+                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + "\"}")
+            .post("/api/template-renditions")
+            .then()
+            .assertThat()
+            .statusCode(400)
+            .log()
+            .all();
+    }
+
+    @Test
+    public void shouldReturn400WhenCaseTypeIdAndJurisdictionIdFromPayloadIsMissing() {
+        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
+        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
+        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+        request
+            .body("{\"formPayload\":{\"a\":1},"
+                + " \"outputType\":\"DOCX\", "
+                + "\"outputFilename\":\"test-output-name\","
+                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + "\"}")
+            .post("/api/template-renditions")
+            .then()
+            .assertThat()
+            .statusCode(400)
+            .log()
+            .all();
     }
 }

@@ -4,6 +4,7 @@ import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
@@ -21,6 +22,9 @@ import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.cl
 public class TemplateRenditionService {
 
     private static Logger log = LoggerFactory.getLogger(TemplateRenditionService.class);
+
+    @Value("${endpoint-toggles.enable-secure-document-templ-rend-endpoint}")
+    boolean cdamEnabled;
 
     private final DmStoreUploader dmStoreUploader;
     private final DocmosisApiClient docmosisApiClient;
@@ -76,7 +80,7 @@ public class TemplateRenditionService {
                 IOUtils.closeQuietly(out);
             }
 
-            if (createTemplateRenditionDto.isSecureDocStoreEnabled()) {
+            if (cdamEnabled || createTemplateRenditionDto.isSecureDocStoreEnabled()) {
                 cdamService.uploadDocuments(file, createTemplateRenditionDto);
             } else {
                 dmStoreUploader.uploadFile(file, createTemplateRenditionDto);
