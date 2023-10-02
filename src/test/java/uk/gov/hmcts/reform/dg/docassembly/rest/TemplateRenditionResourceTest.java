@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -71,7 +72,7 @@ public class TemplateRenditionResourceTest {
 
     @Test
     public void validateCdamChecks() throws DocumentTaskProcessingException, IOException {
-        templateRenditionResource.cdamEnabled = true;
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
         createTemplateRenditionDto.setJurisdictionId("dummyJurisdictionId");
@@ -87,7 +88,7 @@ public class TemplateRenditionResourceTest {
 
     @Test
     public void validateCdamChecksCaseTypeIdMissing() throws DocumentTaskProcessingException, IOException {
-        templateRenditionResource.cdamEnabled = true;
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJurisdictionId("dummyJurisdictionId");
         when(templateRenditionService.renderTemplate(any()))
@@ -103,7 +104,7 @@ public class TemplateRenditionResourceTest {
 
     @Test
     public void validateCdamChecksJurisdictionIdMissing() throws DocumentTaskProcessingException, IOException {
-        templateRenditionResource.cdamEnabled = true;
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
         when(templateRenditionService.renderTemplate(any()))
@@ -119,7 +120,7 @@ public class TemplateRenditionResourceTest {
 
     @Test
     public void validateCdamChecksBothMissingErrorScenario() throws DocumentTaskProcessingException, IOException {
-        templateRenditionResource.cdamEnabled = true;
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
 
         when(templateRenditionService.renderTemplate(any()))

@@ -24,7 +24,7 @@ public class TemplateRenditionService {
     private static Logger log = LoggerFactory.getLogger(TemplateRenditionService.class);
 
     @Value("${endpoint-toggles.enable-secure-document-templ-rend-endpoint}")
-    boolean cdamEnabled;
+    private boolean cdamEnabled;
 
     private final DmStoreUploader dmStoreUploader;
     private final DocmosisApiClient docmosisApiClient;

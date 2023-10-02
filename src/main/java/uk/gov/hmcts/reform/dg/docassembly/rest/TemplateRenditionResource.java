@@ -40,7 +40,7 @@ public class TemplateRenditionResource {
     private final Logger logger = LoggerFactory.getLogger(TemplateRenditionResource.class);
 
     @Value("${endpoint-toggles.enable-secure-document-templ-rend-endpoint}")
-    boolean cdamEnabled;
+    private boolean cdamEnabled;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
