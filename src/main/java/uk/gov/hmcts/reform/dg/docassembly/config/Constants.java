@@ -3,13 +3,9 @@ package uk.gov.hmcts.reform.dg.docassembly.config;
 /**
  * Application constants.
  */
-public final class Constants {
+public interface Constants {
+    String IS_ADMIN = "isAdmin";
 
-    public static final String SYSTEM_ACCOUNT = "system";
-    public static final String ANONYMOUS_USER = "anonymoususer";
-    public static final String DEFAULT_LANGUAGE = "en";
-    public static final String IS_ADMIN = "isAdmin";
+    String CDAM_VALIDATION_MSG = "caseTypeId and jurisdictionId are required attributes.";
 
-    private Constants() {
-    }
 }

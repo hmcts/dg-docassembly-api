@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CreateTemplateRenditionDto extends TemplateIdDto {
@@ -34,6 +36,10 @@ public class CreateTemplateRenditionDto extends TemplateIdDto {
     @Getter
     @Setter
     private String hashToken;
+
+    @Getter
+    @Setter
+    private List<String> errors = new ArrayList<>();
 
     public JsonNode getFormPayload() {
         return formPayload;
