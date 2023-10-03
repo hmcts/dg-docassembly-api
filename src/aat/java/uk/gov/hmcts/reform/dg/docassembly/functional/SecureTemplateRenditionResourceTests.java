@@ -20,6 +20,7 @@ import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 public class SecureTemplateRenditionResourceTests extends BaseTest {
 
+    //The calling service has enabled CDAM via a feature flag in the request payload in all instances in this test.
     @Autowired
     private TestUtil testUtil;
 

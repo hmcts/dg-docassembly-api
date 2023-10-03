@@ -102,6 +102,7 @@ endpoint-toggles:
   template-renditions: ${ENABLE_TEMPLATE_RENDITION_ENDPOINT:true}
   document-conversion: ${ENABLE_DOCUMENT_CONVERSION_ENDPOINT:true}
   enable-secure-document-conversion-endpoint: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:false}
+  enable-secure-document-templ-rend-endpoint: ${ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT:false}
 
 # Delete when issueOverride variable is no longer used in SecurityConfiguration.class
 oidc:

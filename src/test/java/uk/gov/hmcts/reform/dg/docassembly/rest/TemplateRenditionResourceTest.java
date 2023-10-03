@@ -10,11 +10,15 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
+import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,6 +34,9 @@ public class TemplateRenditionResourceTest {
     @Mock
     TemplateRenditionService templateRenditionService;
 
+    public static final String auth = "xxx";
+    public static final String serviceAuth = "yyy";
+
     ObjectMapper mapper = new ObjectMapper();
 
     @Before
@@ -44,8 +51,6 @@ public class TemplateRenditionResourceTest {
         createTemplateRenditionDto.setRenditionOutputLocation("x");
         createTemplateRenditionDto.setFormPayload(mapper.readTree("{\"outputType\":\"PDF\", \"templateId\":\"1\"}"));
         createTemplateRenditionDto.setTemplateId("1234");
-        String auth = "xxx";
-        String serviceAuth = "yyy";
         createTemplateRenditionDto.setJwt(auth);
         createTemplateRenditionDto.setServiceAuth(serviceAuth);
 
@@ -62,6 +67,70 @@ public class TemplateRenditionResourceTest {
         assertNull(renditionDtoResponseEntity.getBody().getServiceAuth());
         assertNull(renditionDtoResponseEntity.getBody().getJwt());
         assertNotNull(renditionDtoResponseEntity.getBody().getOutputFilename());
+        assertEquals(0, renditionDtoResponseEntity.getBody().getErrors().size());
     }
 
+    @Test
+    public void validateCdamChecks() throws DocumentTaskProcessingException, IOException {
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
+        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
+        createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
+        createTemplateRenditionDto.setJurisdictionId("dummyJurisdictionId");
+        when(templateRenditionService.renderTemplate(any()))
+                .thenReturn(createTemplateRenditionDto);
+
+        ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
+                templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                        auth,serviceAuth);
+
+        assertEquals(0, renditionDtoResponseEntity.getBody().getErrors().size());
+    }
+
+    @Test
+    public void validateCdamChecksCaseTypeIdMissing() throws DocumentTaskProcessingException, IOException {
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
+        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
+        createTemplateRenditionDto.setJurisdictionId("dummyJurisdictionId");
+        when(templateRenditionService.renderTemplate(any()))
+            .thenReturn(createTemplateRenditionDto);
+
+        ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
+            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                auth,serviceAuth);
+
+        assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
+        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+    }
+
+    @Test
+    public void validateCdamChecksJurisdictionIdMissing() throws DocumentTaskProcessingException, IOException {
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
+        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
+        createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
+        when(templateRenditionService.renderTemplate(any()))
+            .thenReturn(createTemplateRenditionDto);
+
+        ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
+            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                auth,serviceAuth);
+
+        assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
+        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+    }
+
+    @Test
+    public void validateCdamChecksBothMissingErrorScenario() throws DocumentTaskProcessingException, IOException {
+        ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
+        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
+
+        when(templateRenditionService.renderTemplate(any()))
+            .thenReturn(createTemplateRenditionDto);
+
+        ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
+            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                auth,serviceAuth);
+
+        assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
+        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+    }
 }
