@@ -69,7 +69,7 @@ public class DocmosisApiClient {
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.info("Time taken for Docmosis call : {} milliseconds for Template Id: {} for jurisdictionId {}",
+            log.debug("Time taken for Docmosis call : {} milliseconds for Template Id: {} for jurisdictionId {}",
                     timeElapsed, createTemplateRenditionDto.getTemplateId(),
                     createTemplateRenditionDto.getJurisdictionId());
             return response;

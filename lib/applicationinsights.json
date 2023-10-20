@@ -2,7 +2,7 @@
   "connectionString": "${file:/mnt/secrets/dg-docassembly/app-insights-connection-string}",
   "role": {
     "name": "dg-docassembly"
-  }
+  },
   "preview": {
     "sampling": {
       "overrides": [

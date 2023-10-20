@@ -96,8 +96,6 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
 
     private Response getDocumentStoreResponse(String documentUri) throws IOException {
 
-        log.info("getDocumentStoreResponse - URL: {}", documentUri);
-
         return okHttpClient.newCall(new Request.Builder()
             .addHeader("user-roles", "caseworker")
             .addHeader("ServiceAuthorization", authTokenGenerator.generate())
