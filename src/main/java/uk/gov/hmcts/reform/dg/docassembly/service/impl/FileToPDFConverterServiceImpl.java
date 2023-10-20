@@ -45,10 +45,10 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
             return transformFile(originalFile);
 
         } catch (DocumentTaskProcessingException e) {
-            log.error(e.getMessage(), e);
+            log.error("documentId {}, error message: {}, error: ", documentId, e.getMessage(), e);
             throw new DocumentProcessingException("Error processing PDF Conversion Task");
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("documentId {}, error message: {}, error: ", documentId, e.getMessage(), e);
             throw new DocumentProcessingException("File processing error encountered");
         }
     }
@@ -71,7 +71,7 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
 
         File updatedFile;
         if (fileExtensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileType))) {
-            log.info("Converting Document to PDF");
+            log.debug("Converting Document to PDF");
             updatedFile = docmosisConverter.convertFileToPDF(originalFile);
             log.info("File {} successfully converted to PDF", originalFile.getName());
         } else {
