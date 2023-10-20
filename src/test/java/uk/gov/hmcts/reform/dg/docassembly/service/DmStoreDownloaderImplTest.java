@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mock.MockInterceptor;
@@ -7,6 +9,7 @@ import okhttp3.mock.Rule;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
@@ -39,6 +42,9 @@ public class DmStoreDownloaderImplTest {
             authTokenGenerator,
             "http://localhost:4603",
             new ObjectMapper());
+
+        Logger restClientLogger = (Logger) LoggerFactory.getLogger(DmStoreDownloaderImpl.class);
+        restClientLogger.setLevel(Level.DEBUG);
     }
 
     @Test(expected = DocumentTaskProcessingException.class)
