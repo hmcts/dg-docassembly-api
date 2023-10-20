@@ -104,7 +104,6 @@ public class DocmosisConverter {
 
 
     public File convertFileToPDF(File originalFile) throws IOException {
-        log.info("Call to Convert {} with Docmosis converter ", originalFile.getName());
         return convert(originalFile);
     }
 }
