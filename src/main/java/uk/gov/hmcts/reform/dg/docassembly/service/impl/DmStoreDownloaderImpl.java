@@ -64,7 +64,7 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
                     String docBinary = objectMapper
                             .writerWithDefaultPrettyPrinter()
                             .writeValueAsString(documentMetaData);
-                    log.info("Accessing binary of the DM document: {}", docBinary);
+                    log.debug("Accessing binary of the DM document: {}", docBinary);
                 }
                 String documentBinaryUrl = new StringBuffer()
                                                 .append(dmStoreAppBaseUrl)
