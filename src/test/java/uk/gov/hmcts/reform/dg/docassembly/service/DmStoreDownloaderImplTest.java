@@ -43,8 +43,8 @@ public class DmStoreDownloaderImplTest {
             "http://localhost:4603",
             new ObjectMapper());
 
-        Logger restClientLogger = (Logger) LoggerFactory.getLogger(DmStoreDownloaderImpl.class);
-        restClientLogger.setLevel(Level.DEBUG);
+        Logger logger = (Logger) LoggerFactory.getLogger(DmStoreDownloaderImpl.class);
+        logger.setLevel(Level.DEBUG);
     }
 
     @Test(expected = DocumentTaskProcessingException.class)
