@@ -47,6 +47,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven { url 'https://jitpack.io' }
+    maven { url  'https://repo.spring.io/milestone/'}
 }
 
 def versions = [
@@ -131,8 +132,8 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.4'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.0-RC1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0-RC1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
     testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '2.0.0'
