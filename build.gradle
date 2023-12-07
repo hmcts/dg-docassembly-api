@@ -17,7 +17,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.9.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.935'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.951'
     id "io.freefair.lombok" version "8.4"
 }
 
@@ -214,6 +214,11 @@ dependencyManagement {
             entry 'jackson-databind'
             entry 'jackson-annotations'
         }
+        // CVE-2023-6378
+        dependencySet(group: 'ch.qos.logback', version: '1.4.14') {
+          entry 'logback-classic'
+          entry 'logback-core'
+        } 
     }
 }
 
