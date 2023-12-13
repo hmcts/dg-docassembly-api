@@ -194,11 +194,6 @@ dependencyManagement {
             entry 'commons-fileupload'
         }
 
-        //CVE-2020-13956
-        dependencySet(group: 'org.apache.httpcomponents', version: '4.5.14') {
-            entry 'fluent-hc'
-        }
-
         //CVE-2023-3635
         dependencySet(group: 'com.squareup.okio', version: '3.6.0') {
             entry 'okio-jvm'
