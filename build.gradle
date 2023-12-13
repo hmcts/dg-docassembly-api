@@ -194,11 +194,6 @@ dependencyManagement {
             entry 'commons-fileupload'
         }
 
-        //CVE-2023-3635
-        dependencySet(group: 'com.squareup.okio', version: '3.6.0') {
-            entry 'okio-jvm'
-        }
-
         dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.0') {
             entry 'jackson-core'
             entry 'jackson-databind'
