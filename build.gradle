@@ -204,11 +204,6 @@ dependencyManagement {
             entry 'okio-jvm'
         }
 
-        //CVE-2023-41080
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.16') {
-            entry 'tomcat-embed-websocket'
-            entry 'tomcat-embed-core'
-        }
         dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.0') {
             entry 'jackson-core'
             entry 'jackson-databind'
