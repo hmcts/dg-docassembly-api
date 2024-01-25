@@ -1,3 +1,5 @@
+server:
+  shutdown: graceful
 spring:
   application:
     name: Document Assembly API
@@ -47,6 +49,8 @@ management:
      git:
        enabled: true # Whether to enable git info.
        mode: simple # Mode to use to expose git information.
+  lifecycle:
+    timeout-per-shutdown-phase: 2m
 
 info:
   app:
