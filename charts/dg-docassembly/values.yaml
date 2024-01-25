@@ -3,7 +3,6 @@ java:
   image: hmctspublic.azurecr.io/dg/docassembly:latest
   ingressHost: dg-docassembly-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: dg
-  terminationGracePeriodSeconds: 120
   keyVaults:
     dg-docassembly:
       resourceGroup: dg-docassembly
