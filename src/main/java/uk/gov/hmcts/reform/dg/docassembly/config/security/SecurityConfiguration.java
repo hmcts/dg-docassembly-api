@@ -61,8 +61,8 @@ public class SecurityConfiguration {
                 .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
                 .sessionManagement(sessionManagementConfigurer ->
                     sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequestsConfigurer ->
-                    authorizeHttpRequestsConfigurer.requestMatchers("/api/**").authenticated())
+                .authorizeRequests(expressionInterceptUrlRegistry ->
+                    expressionInterceptUrlRegistry.requestMatchers("/api/**").authenticated())
                 .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
                     httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
                 .oauth2Client(Customizer.withDefaults());
