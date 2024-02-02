@@ -3,10 +3,12 @@ package uk.gov.hmcts.reform.dg.docassembly.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
@@ -16,7 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
@@ -53,21 +55,19 @@ public class SecurityConfiguration {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .formLogin().disable()
-                .logout().disable()
-                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .requestMatchers("/api/**").authenticated()
-                .and()
-                .oauth2ResourceServer()
-                .jwt()
-                .and()
-                .and()
-                .oauth2Client();
+        http.csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .logout(AbstractHttpConfigurer::disable)
+            .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+            .sessionManagement(sessionManagementConfigurer ->
+                sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/api/**").authenticated())
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/error").authenticated())
+            .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
+                    httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
+            .oauth2Client(Customizer.withDefaults());
         return http.build();
     }
 
