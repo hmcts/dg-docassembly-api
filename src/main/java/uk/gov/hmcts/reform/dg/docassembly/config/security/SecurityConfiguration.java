@@ -56,16 +56,18 @@ public class SecurityConfiguration {
     @Bean
     protected SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
-                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-                .sessionManagement(sessionManagementConfigurer ->
-                    sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeRequests(expressionInterceptUrlRegistry ->
-                    expressionInterceptUrlRegistry.requestMatchers("/api/**").authenticated())
-                .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
+            .formLogin(AbstractHttpConfigurer::disable)
+            .logout(AbstractHttpConfigurer::disable)
+            .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+            .sessionManagement(sessionManagementConfigurer ->
+                sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/api/**").authenticated())
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.requestMatchers("/error").authenticated())
+            .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
                     httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
-                .oauth2Client(Customizer.withDefaults());
+            .oauth2Client(Customizer.withDefaults());
         return http.build();
     }
 
