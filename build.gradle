@@ -192,7 +192,12 @@ dependencyManagement {
         dependencySet(group: 'ch.qos.logback', version: '1.5.0') {
           entry 'logback-classic'
           entry 'logback-core'
-        } 
+        }
+
+        //CVE-2024-26308, CVE-2024-25710
+        dependencySet(group: 'org.apache.commons', version: '1.26.0') {
+            entry 'commons-compress'
+        }
     }
 }
 
