@@ -178,21 +178,16 @@ processAatResources {
 
 dependencyManagement {
     dependencies {
-        //CVE-2022-23437
-        dependencySet(group: 'xerces', version: '2.12.2') {
-            entry 'xercesImpl'
-        }
-
         dependencySet(group: 'com.fasterxml.jackson.core', version: '2.16.1') {
             entry 'jackson-core'
             entry 'jackson-databind'
             entry 'jackson-annotations'
         }
-        // CVE-2023-6378
-        dependencySet(group: 'ch.qos.logback', version: '1.5.0') {
-          entry 'logback-classic'
-          entry 'logback-core'
-        } 
+
+        //CVE-2024-26308, CVE-2024-25710
+        dependencySet(group: 'org.apache.commons', version: '1.26.0') {
+            entry 'commons-compress'
+        }
     }
 }
 
