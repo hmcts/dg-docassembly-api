@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
+import uk.gov.hmcts.reform.dg.docassembly.config.security.CustomSessionManagementFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,8 @@ public class TestSecurityConfiguration {
     @MockBean
     ServiceAuthFilter serviceAuthFilter;
 
+    @MockBean
+    private CustomSessionManagementFilter customSessionManagementFilter;
     @MockBean
     private JwtDecoder jwtDecoder;
 

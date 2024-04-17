@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.SessionManagementFilter;
 import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 @Configuration
@@ -34,9 +35,12 @@ public class SecurityConfiguration {
     private String issuerOverride;
 
     private final ServiceAuthFilter serviceAuthFilter;
+    private final CustomSessionManagementFilter customSessionManagementFilter;
 
-    public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
+    public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter,
+                                 CustomSessionManagementFilter customSessionManagementFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
+        this.customSessionManagementFilter = customSessionManagementFilter;
     }
 
     @Bean
@@ -58,8 +62,9 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable)
             .logout(AbstractHttpConfigurer::disable)
-            .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
-            .sessionManagement(sessionManagementConfigurer ->
+                .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
+                .addFilterBefore(customSessionManagementFilter, SessionManagementFilter.class)
+                .sessionManagement(sessionManagementConfigurer ->
                 sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry.requestMatchers("/api/**").authenticated())
