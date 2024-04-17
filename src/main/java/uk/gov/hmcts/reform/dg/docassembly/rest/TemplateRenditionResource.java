@@ -89,7 +89,5 @@ public class TemplateRenditionResource {
         templateRenditionOutputDto.setServiceAuth(null);
 
         return ResponseEntity.ok(templateRenditionOutputDto);
-
     }
-
 }
