@@ -55,17 +55,11 @@ public class TemplateRenditionService {
             // Avoiding the utilisation of a user provided parameter and mapping against an enum
             // to protect against a security vulnerability SonarCloud:
             // javasecurity:S2083 (Protect against Path Injection Attacks)
-            String tempFileExtension;
-            switch (createTemplateRenditionDto.getOutputType()) {
-                case DOC:
-                    tempFileExtension = RenditionOutputType.DOC.getFileExtension();
-                    break;
-                case DOCX:
-                    tempFileExtension = RenditionOutputType.DOCX.getFileExtension();
-                    break;
-                default:
-                    tempFileExtension = RenditionOutputType.PDF.getFileExtension();
-            }
+            String tempFileExtension = switch (createTemplateRenditionDto.getOutputType()) {
+                case DOC -> RenditionOutputType.DOC.getFileExtension();
+                case DOCX -> RenditionOutputType.DOCX.getFileExtension();
+                default -> RenditionOutputType.PDF.getFileExtension();
+            };
 
             File file = File.createTempFile(
                     "docmosis-rendition",
@@ -92,3 +86,12 @@ public class TemplateRenditionService {
         }
     }
 }
+
+
+//    closeResponse(response);
+//            return createTemplateRenditionDto;
+//                    } catch(Exception e) {
+//                    log.info("");
+//                    }
+//                    }
+//                    }

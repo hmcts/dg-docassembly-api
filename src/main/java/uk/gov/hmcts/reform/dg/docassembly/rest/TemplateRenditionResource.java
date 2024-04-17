@@ -34,8 +34,7 @@ import java.io.IOException;
 @Tag(name = "Template Rendition Service", description = "Endpoint for Template Rendition.")
 public class TemplateRenditionResource {
 
-    @Autowired
-    private TemplateRenditionService templateRenditionService;
+    private final TemplateRenditionService templateRenditionService;
 
     private final Logger logger = LoggerFactory.getLogger(TemplateRenditionResource.class);
 
@@ -45,6 +44,11 @@ public class TemplateRenditionResource {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.setDisallowedFields(Constants.IS_ADMIN);
+    }
+
+    @Autowired
+    public TemplateRenditionResource(TemplateRenditionService templateRenditionService) {
+        this.templateRenditionService = templateRenditionService;
     }
 
     @Operation(
@@ -69,8 +73,8 @@ public class TemplateRenditionResource {
                 createTemplateRenditionDto.getCaseTypeId(),
                 createTemplateRenditionDto.isSecureDocStoreEnabled()
         );
-        if (cdamEnabled && ((StringUtils.isBlank(createTemplateRenditionDto.getCaseTypeId())
-                || StringUtils.isBlank(createTemplateRenditionDto.getJurisdictionId())))) {
+        if (cdamEnabled && (StringUtils.isBlank(createTemplateRenditionDto.getCaseTypeId())
+                || StringUtils.isBlank(createTemplateRenditionDto.getJurisdictionId()))) {
             createTemplateRenditionDto.getErrors().add(Constants.CDAM_VALIDATION_MSG);
             return ResponseEntity
                 .badRequest()

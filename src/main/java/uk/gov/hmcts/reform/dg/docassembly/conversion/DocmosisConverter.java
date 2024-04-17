@@ -20,7 +20,6 @@ import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.cl
 
 @Service
 public class DocmosisConverter {
-    private final Logger log = LoggerFactory.getLogger(DocmosisConverter.class);
     private static final String PDF_CONTENT_TYPE = "application/pdf";
     private final String docmosisAccessKey;
     private final String docmosisConvertEndpoint;
