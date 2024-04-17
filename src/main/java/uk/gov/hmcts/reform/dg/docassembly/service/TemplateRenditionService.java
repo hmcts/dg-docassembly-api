@@ -80,7 +80,7 @@ public class TemplateRenditionService {
                 "docmosis-rendition",
                 tempFileExtension);
 
-        try(InputStream in = response.body().byteStream(); OutputStream out = new FileOutputStream(file)) {
+        try (InputStream in = response.body().byteStream();OutputStream out = new FileOutputStream(file)) {
             IOUtils.copy(in, out);
         }
         return file;
