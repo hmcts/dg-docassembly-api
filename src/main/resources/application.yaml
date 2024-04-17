@@ -128,3 +128,4 @@ springdoc:
 logging:
   level:
     uk.gov.hmcts.reform.authorisation.filters: DEBUG
+    org.springframework.security: DEBUG
