@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class TemplateRenditionResourceTest {
 
-    @InjectMocks
     TemplateRenditionResource templateRenditionResource;
 
     @Mock
@@ -42,6 +41,7 @@ public class TemplateRenditionResourceTest {
     @Before
     public void setup() throws IOException {
         MockitoAnnotations.openMocks(this);
+        this.templateRenditionResource = new TemplateRenditionResource(templateRenditionService);
     }
 
     @Test
