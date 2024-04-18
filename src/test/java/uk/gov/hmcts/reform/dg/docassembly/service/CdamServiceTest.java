@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.dg.docassembly.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -31,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CdamServiceTest {
-    @InjectMocks
+
     private CdamService cdamService;
 
     @Mock
@@ -51,6 +50,7 @@ public class CdamServiceTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        cdamService = new CdamService(caseDocumentClientApi);
     }
 
     @Test
@@ -83,9 +83,7 @@ public class CdamServiceTest {
                 .thenReturn(responseEntity);
 
         cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
-
     }
-
 
     @Test
     public void testUploadDocuments() throws DocumentTaskProcessingException {
