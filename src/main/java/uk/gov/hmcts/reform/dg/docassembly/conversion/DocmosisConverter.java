@@ -6,8 +6,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
@@ -20,7 +18,6 @@ import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.cl
 
 @Service
 public class DocmosisConverter {
-    private final Logger log = LoggerFactory.getLogger(DocmosisConverter.class);
     private static final String PDF_CONTENT_TYPE = "application/pdf";
     private final String docmosisAccessKey;
     private final String docmosisConvertEndpoint;

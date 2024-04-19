@@ -37,8 +37,12 @@ public class CdamService {
 
     private static Logger logger = LoggerFactory.getLogger(CdamService.class);
 
+    private final CaseDocumentClientApi caseDocumentClientApi;
+
     @Autowired
-    private CaseDocumentClientApi caseDocumentClientApi;
+    public CdamService(CaseDocumentClientApi caseDocumentClientApi) {
+        this.caseDocumentClientApi = caseDocumentClientApi;
+    }
 
 
     public File downloadFile(String auth, String serviceAuth, UUID documentId) throws

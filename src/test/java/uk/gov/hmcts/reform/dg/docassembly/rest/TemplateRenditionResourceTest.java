@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -28,7 +27,6 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class TemplateRenditionResourceTest {
 
-    @InjectMocks
     TemplateRenditionResource templateRenditionResource;
 
     @Mock
@@ -42,6 +40,7 @@ public class TemplateRenditionResourceTest {
     @Before
     public void setup() throws IOException {
         MockitoAnnotations.openMocks(this);
+        this.templateRenditionResource = new TemplateRenditionResource(templateRenditionService);
     }
 
     @Test

@@ -52,33 +52,7 @@ public class TemplateRenditionService {
                 throw exceptionToThrow;
             }
 
-            // Avoiding the utilisation of a user provided parameter and mapping against an enum
-            // to protect against a security vulnerability SonarCloud:
-            // javasecurity:S2083 (Protect against Path Injection Attacks)
-            String tempFileExtension;
-            switch (createTemplateRenditionDto.getOutputType()) {
-                case DOC:
-                    tempFileExtension = RenditionOutputType.DOC.getFileExtension();
-                    break;
-                case DOCX:
-                    tempFileExtension = RenditionOutputType.DOCX.getFileExtension();
-                    break;
-                default:
-                    tempFileExtension = RenditionOutputType.PDF.getFileExtension();
-            }
-
-            File file = File.createTempFile(
-                    "docmosis-rendition",
-                    tempFileExtension);
-
-            InputStream in = response.body().byteStream();
-            OutputStream out = new FileOutputStream(file);
-            try {
-                IOUtils.copy(in, out);
-            } finally {
-                IOUtils.closeQuietly(in);
-                IOUtils.closeQuietly(out);
-            }
+            File file = createFile(createTemplateRenditionDto.getOutputType(), response);
 
             if (cdamEnabled || createTemplateRenditionDto.isSecureDocStoreEnabled()) {
                 cdamService.uploadDocuments(file, createTemplateRenditionDto);
@@ -90,5 +64,25 @@ public class TemplateRenditionService {
         } finally {
             closeResponse(response);
         }
+    }
+
+    private static File createFile(RenditionOutputType renditionOutputType, Response response) throws IOException {
+        // Avoiding the utilisation of a user provided parameter and mapping against an enum
+        // to protect against a security vulnerability SonarCloud:
+        // javasecurity:S2083 (Protect against Path Injection Attacks)
+        String tempFileExtension = switch (renditionOutputType) {
+            case DOC -> RenditionOutputType.DOC.getFileExtension();
+            case DOCX -> RenditionOutputType.DOCX.getFileExtension();
+            default -> RenditionOutputType.PDF.getFileExtension();
+        };
+
+        File file = File.createTempFile(
+                "docmosis-rendition",
+                tempFileExtension);
+
+        try (InputStream in = response.body().byteStream();OutputStream out = new FileOutputStream(file)) {
+            IOUtils.copy(in, out);
+        }
+        return file;
     }
 }

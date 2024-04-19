@@ -105,7 +105,6 @@ public class DmStoreUploader {
             }
 
         } catch (RuntimeException | IOException e) {
-            log.error(e.getMessage(), e);
             throw new DocumentUploaderException(String.format("Couldn't upload the file:  %s", e.getMessage()), e);
         } finally {
             closeResponse(response);
