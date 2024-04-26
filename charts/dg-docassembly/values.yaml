@@ -50,6 +50,8 @@ java:
     HTTPCLIENT_CALL_TIMEOUT: 30
     ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT: false
     ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT: false
+  spotInstances:
+    enabled: true
 xui-webapp:
   enabled: false
 idam-pr:
