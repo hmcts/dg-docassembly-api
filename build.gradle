@@ -167,7 +167,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '2.0.4'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '2.0.7'
 
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
