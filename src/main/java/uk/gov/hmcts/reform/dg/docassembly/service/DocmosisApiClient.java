@@ -69,9 +69,15 @@ public class DocmosisApiClient {
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.debug("Time taken for Docmosis call : {} milliseconds for Template Id: {} for jurisdictionId {}",
-                    timeElapsed, createTemplateRenditionDto.getTemplateId(),
-                    createTemplateRenditionDto.getJurisdictionId());
+            log.info("Time taken for Docmosis call : {} milliseconds for Template Id: {}" +
+                            " for jurisdictionId {},headers {}, response {} ",
+                    timeElapsed,
+                    createTemplateRenditionDto.getTemplateId(),
+                    createTemplateRenditionDto.getJurisdictionId(),
+                    response.headers(),
+                    response.body().string()
+
+            );
             return response;
         } catch (SocketException se) {
             stopwatch.stop();
