@@ -66,6 +66,7 @@ public class DocmosisApiClient {
 
             Response response = httpClient.newCall(request).execute();
 
+
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
             log.info("Time taken for Docmosis call : {} milliseconds for Template Id: {}" +
