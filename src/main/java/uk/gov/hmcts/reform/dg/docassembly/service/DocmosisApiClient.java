@@ -4,6 +4,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +78,14 @@ public class DocmosisApiClient {
             );
 
             if (response != null) {
-                log.info("RESPONSE log, headers:{} body:{} ",
-                        response.headers(),
-                        response.body() == null ? "NULL" : response.body().string());
+                ResponseBody responseBody = response.body();
+                String bodyString = responseBody.string();
+                log.info("headers {},  Response Body: {} ", response.headers(), bodyString);
+                ResponseBody newResponseBody = ResponseBody.create(responseBody.contentType(), bodyString);
+                Response newResponse = response.newBuilder()
+                        .body(newResponseBody)
+                        .build();
+                return newResponse;
             }
 
             return response;
