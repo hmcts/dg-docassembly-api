@@ -112,19 +112,19 @@ variable "endpoints_info_sensitive" {
 // Toggle Features
 ////////////////////////////////////////////////
 variable "enable_idam_healthcheck" {
-    default = "false"
+  default = "false"
 }
 
 variable "enable_s2s_healthcheck" {
-    default = "false"
+  default = "false"
 }
 
 variable "enable_form_definition_endpoint" {
-    default = "true"
+  default = "true"
 }
 
 variable "enable_template_rendition_endpoint" {
-    default = "true"
+  default = "true"
 }
 
 ////////////////////////////////////////////////
