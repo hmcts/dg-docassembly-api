@@ -56,7 +56,7 @@ def versions = [
         serenityreporter   : '3.7.0',
         fasterXmlJackson   : '2.17.2',
         pact_version       : '4.0.10',
-        logging            : '6.1.5',
+        logging            : '6.1.6',
         junit5             : '5.10.3',
         springSecurity     : '6.3.1'
 ]
