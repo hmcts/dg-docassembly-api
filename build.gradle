@@ -58,7 +58,7 @@ def versions = [
         pact_version       : '4.0.10',
         logging            : '6.1.6',
         junit5             : '5.11.0',
-        springSecurity     : '6.3.2'
+        springSecurity     : '6.3.3'
 ]
 sourceSets {
     aat {
