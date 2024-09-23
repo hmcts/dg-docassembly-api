@@ -17,7 +17,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.15.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1363'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1365'
     id "io.freefair.lombok" version "8.10"
 }
 
@@ -452,13 +452,19 @@ bootWithCCD {
             environment key, value
         }
 
+        exec {
+            commandLine 'docker', 'compose', '-f', 'src/cftlib/resources/docker-compose-local.yml', '-p', 'cftlib', 'up', '-d'
+        }
+
     }
-    environment 'ENABLE_LIQUIBASE', true
-    environment 'RSE_LIB_ADDITIONAL_DATABASES', 'emstitch'
+    environment 'DOC_ASSEMBLY_SERVER_PORT', '8081'
+    environment 'DM_STORE_BASE_URL', 'http://localhost:4603'
+    environment 'RSE_LIB_ADDITIONAL_DATABASES', 'evidence'
     environment 'DATA_STORE_S2S_AUTHORISED_SERVICES', 'ccd_gw,ccd_data,ccd_ps,aac_manage_case_assignment,ccd_case_document_am_api,am_role_assignment_service,hmc_cft_hearing_service,prl_citizen_frontend,xui_webapp'
+    environment 'CASE_DOCUMENT_S2S_AUTHORISED_SERVICES', 'em_gw,dg_docassembly_api,ccd_case_document_am_api,ccd_gw,xui_webapp,ccd_data'
     environment 'S2S_URL', 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
     environment 'CASE_DOCUMENT_AM_API_S2S_SECRET','${CASE_DOCUMENT_AM_API_S2S_SECRET}'
-    authMode = uk.gov.hmcts.rse.AuthMode.AAT
+    authMode = uk.gov.hmcts.rse.AuthMode.Local
 }
 
 // exclude the logback binding is coming in via cftlib
