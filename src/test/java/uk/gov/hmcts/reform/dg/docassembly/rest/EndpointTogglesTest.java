@@ -8,10 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
-import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -20,8 +18,6 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
