@@ -18,6 +18,9 @@ cd dg-docassembly-api/
 #### To run the application:
 
 VPN connection is required
+At the moment java version must be set to 17 as 21 is not supported for local setup by CFTLib
+For local setup only, there is a need to set the port in main/resources/application.yaml to 8080
+to avoid conflicting with CFTLib
 
 ```
 az login
