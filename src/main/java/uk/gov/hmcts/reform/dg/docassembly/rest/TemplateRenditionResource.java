@@ -28,7 +28,6 @@ import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessi
 
 import java.io.IOException;
 
-@ConditionalOnProperty("endpoint-toggles.template-renditions")
 @RestController
 @RequestMapping("/api")
 @Tag(name = "Template Rendition Service", description = "Endpoint for Template Rendition.")
