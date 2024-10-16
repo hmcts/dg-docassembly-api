@@ -148,7 +148,7 @@ dependencies {
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
 
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.10'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.10'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.11'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.4', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
