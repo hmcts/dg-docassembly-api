@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import static org.junit.Assume.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
@@ -22,8 +21,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     public void testValidAuthenticationAndAuthorisation() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         testUtil
                 .authRequest()
                 .contentType(APPLICATION_JSON_VALUE)
@@ -38,8 +35,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
     @Ignore(value = "Cftlib needs to be fixed to return 401")
     @Test // Invalid S2SAuth
     public void testInvalidS2SAuth() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         testUtil
                 .invalidIdamAuthrequest()
                 .baseUri(testUtil.getTestUrl())
@@ -53,8 +48,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     public void testWithInvalidIdamAuth() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         testUtil
                 .invalidIdamAuthrequest()
                 .contentType(APPLICATION_JSON_VALUE)
@@ -68,8 +61,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     public void testWithEmptyS2SAuth() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         exceptionThrown.expect(IllegalArgumentException.class);
 
         testUtil
@@ -81,8 +72,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     public void testWithEmptyIdamAuthAndValidS2SAuth() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         exceptionThrown.expect(IllegalArgumentException.class);
 
         testUtil
@@ -95,8 +84,6 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     public void testIdamAuthAndS2SAuthAreEmpty() {
-        assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         exceptionThrown.expect(IllegalArgumentException.class);
 
         testUtil

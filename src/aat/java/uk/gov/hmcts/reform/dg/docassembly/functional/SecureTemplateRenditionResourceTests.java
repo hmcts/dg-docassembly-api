@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRendition() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
 
@@ -66,9 +62,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToDoc() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -84,9 +77,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToDocX() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -102,9 +92,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToOutputName() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         createTemplateRenditionDto.setOutputFilename("test-output-name");
@@ -128,9 +115,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn500WhenMandatoryFormPayloadIsMissing() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setFormPayload(null);
@@ -148,9 +132,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn500WhenMandatoryTemplateIdIsMissing() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setTemplateId(null);
@@ -168,9 +149,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn401WhenUnAthenticateUserPostRequest() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
@@ -186,9 +164,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn400WhenPostRequestMissingJurisdication() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setJurisdictionId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -205,9 +180,6 @@ public class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn400WhenPostRequestMissingCaseType() throws JsonProcessingException {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
-
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setCaseTypeId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);

@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -28,7 +27,6 @@ import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessi
 
 import java.io.IOException;
 
-@ConditionalOnProperty("endpoint-toggles.template-renditions")
 @RestController
 @RequestMapping("/api")
 @Tag(name = "Template Rendition Service", description = "Endpoint for Template Rendition.")

@@ -45,8 +45,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRendition() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
@@ -63,8 +61,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToDoc() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
@@ -80,8 +76,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToDocX() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
@@ -97,8 +91,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void testTemplateRenditionToOutputName() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         CreateTemplateRenditionDto response =
@@ -123,8 +115,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
@@ -139,8 +129,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn500WhenMandatoryTemplateIdIsMissing() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
@@ -155,8 +143,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn401WhenUnAthenticateUserPostRequest() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         unAuthenticatedRequest
@@ -173,8 +159,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn400WhenCaseTypeIdFromPayloadIsMissing() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
@@ -193,8 +177,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn400WhenJurisdictionIdFromPayloadIsMissing() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
@@ -213,8 +195,6 @@ public class TemplateRenditionResourceTests extends BaseTest {
 
     @Test
     public void shouldReturn400WhenCaseTypeIdAndJurisdictionIdFromPayloadIsMissing() {
-        // If the Endpoint Toggles are enabled, continue, if not skip and ignore
-        Assume.assumeTrue(toggleProperties.isEnableTemplateRenditionEndpoint());
         Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
