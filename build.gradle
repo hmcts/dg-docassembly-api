@@ -17,7 +17,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.2.11'
     id "info.solidsoft.pitest" version '1.15.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1410'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1416'
     id "io.freefair.lombok" version "8.10.2"
 }
 
@@ -56,7 +56,7 @@ def versions = [
         serenityreporter   : '3.7.0',
         fasterXmlJackson   : '2.18.0',
         pact_version       : '4.0.10',
-        logging            : '6.1.6',
+        logging            : '6.1.7',
         junit5             : '5.11.2',
         springSecurity     : '6.3.3'
 ]
@@ -128,7 +128,7 @@ dependencies {
     implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
 
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
 
