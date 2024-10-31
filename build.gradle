@@ -54,7 +54,7 @@ def versions = [
         serenityRestAssured: '3.7.0',
         serenity           : '3.7.0',
         serenityreporter   : '3.7.0',
-        fasterXmlJackson   : '2.18.0',
+        fasterXmlJackson   : '2.18.1',
         pact_version       : '4.0.10',
         logging            : '6.1.7',
         junit5             : '5.11.3',
