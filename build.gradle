@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.springframework.boot' version '3.3.5'
+    id 'org.springframework.boot' version '3.4.0'
     id 'uk.gov.hmcts.java' version '0.12.63'
     id 'org.owasp.dependencycheck' version '11.1.0'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -139,8 +139,8 @@ dependencies {
     implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.22.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
-    testImplementation group: 'com.github.gmazzo', name: 'okhttp-mock', version: '2.0.0'
-
+    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.0.0'
+    
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
