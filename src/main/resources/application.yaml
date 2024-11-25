@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: Document Assembly API
+  cloud:
+    compatibility-verifier:
+      enabled: false
   config:
     import: "optional:configtree:/mnt/secrets/dg-docassembly/"
   security:
