@@ -9,6 +9,8 @@ import okhttp3.ResponseBody;
 import org.apache.pdfbox.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 
 import java.io.File;
@@ -67,31 +69,14 @@ class DocmosisConverterTest {
             .build();
     }
 
-    @Test
-    void convert() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("template1.docx").getPath());
+    @ParameterizedTest
+    @ValueSource(strings = {"template1.docx", "TestExcel.xlsx", "potential_and_kinetic.ppt"})
+    void convert(String resourceName) throws IOException {
+        File input = new File(ClassLoader.getSystemResource(resourceName).getPath());
         File output = converter.convertFileToPDF(input);
 
         assertNotEquals(input.getName(), output.getName());
     }
-
-    @Test
-    void convertExcelTest() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("TestExcel.xlsx").getPath());
-        File output = converter.convertFileToPDF(input);
-
-        assertNotEquals(input.getName(), output.getName());
-    }
-
-
-    @Test
-    void convertPptTest() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("potential_and_kinetic.ppt").getPath());
-        File output = converter.convertFileToPDF(input);
-
-        assertNotEquals(input.getName(), output.getName());
-    }
-
 
     @Test
     void convertPptxTest() throws IOException {
