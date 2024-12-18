@@ -20,7 +20,7 @@ class CreateTemplateRenditionDtoTest {
     @Test
     void filenameWithGivenOutputFilename() {
         dto.setOutputFilename("test-output-filename");
-        assertEquals( "test-output-filename.pdf", dto.getFullOutputFilename());
+        assertEquals("test-output-filename.pdf", dto.getFullOutputFilename());
     }
 
     @Test
