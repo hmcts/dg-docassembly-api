@@ -1,14 +1,12 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
@@ -17,48 +15,46 @@ import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessi
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class TemplateRenditionResourceTest {
+class TemplateRenditionResourceTest {
 
     TemplateRenditionResource templateRenditionResource;
 
     @Mock
     TemplateRenditionService templateRenditionService;
 
-    public static final String auth = "xxx";
-    public static final String serviceAuth = "yyy";
+    public static final String AUTH = "xxx";
+    public static final String SERVICE_AUTH = "yyy";
 
     ObjectMapper mapper = new ObjectMapper();
 
-    @Before
-    public void setup() throws IOException {
+    @BeforeEach
+    public void setup() {
         MockitoAnnotations.openMocks(this);
         this.templateRenditionResource = new TemplateRenditionResource(templateRenditionService);
     }
 
     @Test
-    public void shouldCallTemplateRenditionService() throws Exception {
-
+    void shouldCallTemplateRenditionService() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setRenditionOutputLocation("x");
         createTemplateRenditionDto.setFormPayload(mapper.readTree("{\"outputType\":\"PDF\", \"templateId\":\"1\"}"));
         createTemplateRenditionDto.setTemplateId("1234");
-        createTemplateRenditionDto.setJwt(auth);
-        createTemplateRenditionDto.setServiceAuth(serviceAuth);
+        createTemplateRenditionDto.setJwt(AUTH);
+        createTemplateRenditionDto.setServiceAuth(SERVICE_AUTH);
 
         when(templateRenditionService.renderTemplate(any()))
                 .thenReturn(createTemplateRenditionDto);
 
         ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
                 templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
-                auth,serviceAuth);
+                        AUTH, SERVICE_AUTH);
 
         verify(templateRenditionService, Mockito.times(1))
                 .renderTemplate(Mockito.any(CreateTemplateRenditionDto.class));
@@ -70,7 +66,7 @@ public class TemplateRenditionResourceTest {
     }
 
     @Test
-    public void validateCdamChecks() throws DocumentTaskProcessingException, IOException {
+    void validateCdamChecks() throws DocumentTaskProcessingException, IOException {
         ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
@@ -80,54 +76,54 @@ public class TemplateRenditionResourceTest {
 
         ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
                 templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
-                        auth,serviceAuth);
+                        AUTH, SERVICE_AUTH);
 
         assertEquals(0, renditionDtoResponseEntity.getBody().getErrors().size());
     }
 
     @Test
-    public void validateCdamChecksCaseTypeIdMissing() throws DocumentTaskProcessingException, IOException {
+    void validateCdamChecksCaseTypeIdMissing() throws DocumentTaskProcessingException, IOException {
         ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJurisdictionId("dummyJurisdictionId");
         when(templateRenditionService.renderTemplate(any()))
-            .thenReturn(createTemplateRenditionDto);
+                .thenReturn(createTemplateRenditionDto);
 
         ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
-            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
-                auth,serviceAuth);
+                templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                        AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
         assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
     }
 
     @Test
-    public void validateCdamChecksJurisdictionIdMissing() throws DocumentTaskProcessingException, IOException {
+    void validateCdamChecksJurisdictionIdMissing() throws DocumentTaskProcessingException, IOException {
         ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setCaseTypeId("dummyCaseTypeId");
         when(templateRenditionService.renderTemplate(any()))
-            .thenReturn(createTemplateRenditionDto);
+                .thenReturn(createTemplateRenditionDto);
 
         ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
-            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
-                auth,serviceAuth);
+                templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                        AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
         assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
     }
 
     @Test
-    public void validateCdamChecksBothMissingErrorScenario() throws DocumentTaskProcessingException, IOException {
+    void validateCdamChecksBothMissingErrorScenario() throws DocumentTaskProcessingException, IOException {
         ReflectionTestUtils.setField(templateRenditionResource, "cdamEnabled", true);
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
 
         when(templateRenditionService.renderTemplate(any()))
-            .thenReturn(createTemplateRenditionDto);
+                .thenReturn(createTemplateRenditionDto);
 
         ResponseEntity<CreateTemplateRenditionDto> renditionDtoResponseEntity =
-            templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
-                auth,serviceAuth);
+                templateRenditionResource.createTemplateRendition(createTemplateRenditionDto,
+                        AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
         assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));

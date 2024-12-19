@@ -7,22 +7,25 @@ import okhttp3.Protocol;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.pdfbox.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DocmosisConverterTest {
+class DocmosisConverterTest {
 
     private static final String PDF_FILENAME = "Test.pdf";
     private DocmosisConverter converter;
 
-    @Before
+    @BeforeEach
     public void setup() {
         OkHttpClient okHttpClient = new OkHttpClient
             .Builder()
@@ -66,46 +69,31 @@ public class DocmosisConverterTest {
             .build();
     }
 
-    @Test
-    public void convert() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("template1.docx").getPath());
+    @ParameterizedTest
+    @ValueSource(strings = {"template1.docx", "TestExcel.xlsx", "potential_and_kinetic.ppt"})
+    void convert(String resourceName) throws IOException {
+        File input = new File(ClassLoader.getSystemResource(resourceName).getPath());
         File output = converter.convertFileToPDF(input);
 
         assertNotEquals(input.getName(), output.getName());
     }
 
     @Test
-    public void convertExcelTest() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("TestExcel.xlsx").getPath());
-        File output = converter.convertFileToPDF(input);
-
-        assertNotEquals(input.getName(), output.getName());
-    }
-
-
-    @Test
-    public void convertPptTest() throws IOException {
-        File input = new File(ClassLoader.getSystemResource("potential_and_kinetic.ppt").getPath());
-        File output = converter.convertFileToPDF(input);
-
-        assertNotEquals(input.getName(), output.getName());
-    }
-
-
-    @Test
-    public void convertPptxTest() throws IOException {
+    void convertPptxTest() throws IOException {
         File input = new File(ClassLoader.getSystemResource("Performance_Out.pptx").getPath());
         File output = converter.convertFileToPDF(input);
 
         assertNotEquals(input.getName(), output.getName());
     }
 
-    @Test(expected = DocumentProcessingException.class)
-    public void convertFailureTest() throws IOException {
+    @Test
+    void convertFailureTest() {
         failureTestSetup();
         File input = new File(ClassLoader.getSystemResource("potential_and_kinetic.ppt").getPath());
-        converter.convertFileToPDF(input);
 
+        assertThrows(DocumentProcessingException.class, () -> {
+            converter.convertFileToPDF(input);
+        });
     }
 
 }
