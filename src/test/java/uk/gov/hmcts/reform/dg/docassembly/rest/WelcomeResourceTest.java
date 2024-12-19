@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -11,12 +11,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
-class WelcomeResourceTest {
+public class WelcomeResourceTest {
 
     private final WelcomeResource welcomeResource = new WelcomeResource();
 
     @Test
-    void testEndPointResponseCode() {
+    public void testEndPointResponseCode() {
         ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
         assertNotNull(responseEntity);
@@ -24,7 +24,7 @@ class WelcomeResourceTest {
     }
 
     @Test
-    void testEndpointResponseMessage() {
+    public void testEndpointResponseMessage() {
         ResponseEntity<Map<String,String>> responseEntity = welcomeResource.welcome();
 
         Map<String,String> expectedResponse = new HashMap<>();

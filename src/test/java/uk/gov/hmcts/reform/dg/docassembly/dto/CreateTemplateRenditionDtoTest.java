@@ -1,34 +1,33 @@
 package uk.gov.hmcts.reform.dg.docassembly.dto;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class CreateTemplateRenditionDtoTest {
+public class CreateTemplateRenditionDtoTest {
 
     CreateTemplateRenditionDto dto;
 
-    @BeforeEach
+    @Before
     public void setup() {
         dto = new CreateTemplateRenditionDto();
         dto.setOutputType(RenditionOutputType.PDF);
     }
 
     @Test
-    void filenameWithGivenOutputFilename() {
+    public void filenameWithGivenOutputFilename() {
         dto.setOutputFilename("test-output-filename");
-        assertEquals("test-output-filename.pdf", dto.getFullOutputFilename());
+
+        Assert.assertEquals(dto.getFullOutputFilename(), "test-output-filename.pdf");
     }
 
     @Test
-    void filenameWithNoOutputFilename() {
+    public void filenameWithNoOutputFilename() {
         String filename = dto.getFullOutputFilename();
-        assertTrue(
-                filename.matches("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\.pdf$"),
-                "Filename should match UUID.pdf pattern"
+        Assert.assertTrue("Matches UUID.pdf pattern",
+                filename.matches(
+                        "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\.pdf$"
+                )
         );
     }
 }
