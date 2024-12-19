@@ -291,7 +291,7 @@ task functional(type: Test) {
     setTestClassesDirs(sourceSets.aat.output.classesDirs)
     setClasspath(sourceSets.aat.runtimeClasspath)
     include "uk/gov/hmcts/reform/dg/docassembly/functional/**"
-
+    useJUnitPlatform()
     // Serenity Single page Reports
     // functional.finalizedBy(aggregate)
 
