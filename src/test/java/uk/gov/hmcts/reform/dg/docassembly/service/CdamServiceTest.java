@@ -1,12 +1,10 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
@@ -24,12 +22,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CdamServiceTest {
+class CdamServiceTest {
 
     private CdamService cdamService;
 
@@ -47,14 +45,14 @@ public class CdamServiceTest {
 
     private static final UUID docStoreUUID = UUID.randomUUID();
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         cdamService = new CdamService(caseDocumentClientApi);
     }
 
     @Test
-    public void downloadFileCdam() throws Exception {
+    void downloadFileCdam() throws Exception {
 
         Document document = Document.builder().originalDocumentName("template1.docx").build();
         File mockFile = new File("src/test/resources/template1.docx");
@@ -75,18 +73,19 @@ public class CdamServiceTest {
                 .getMetadataForDocument("xxx", "serviceAuth", docStoreUUID);
     }
 
-    @Test(expected = DocumentTaskProcessingException.class)
-    public void downloadFileCdamNullResponseBody() throws Exception {
+    void downloadFileCdamNullResponseBody() {
 
         ResponseEntity responseEntity = ResponseEntity.accepted().body(null);
         when(caseDocumentClientApi.getDocumentBinary("xxx", "serviceAuth", docStoreUUID))
                 .thenReturn(responseEntity);
 
-        cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
+        assertThrows(DocumentTaskProcessingException.class, () -> {
+            cdamService.downloadFile("xxx", "serviceAuth", docStoreUUID);
+        });
     }
 
     @Test
-    public void testUploadDocuments() throws DocumentTaskProcessingException {
+    void testUploadDocuments() throws DocumentTaskProcessingException {
         Document testDoc = Document.builder().originalDocumentName("template1.docx")
                 .hashToken("token")
                 .links(getLinks())
