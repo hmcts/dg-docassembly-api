@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 @ExtendWith(MockitoExtension.class)
-class FormDefinitionResourceTest extends BaseTest {
+class FormDefinitionResourceTest extends RestTestBase {
 
     @MockitoBean
     FormDefinitionService formDefinitionService;

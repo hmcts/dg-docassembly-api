@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ActiveProfiles("integration-web-test")
-public class BaseTest {
+public class RestTestBase {
 
     @Autowired
     private WebApplicationContext context;
