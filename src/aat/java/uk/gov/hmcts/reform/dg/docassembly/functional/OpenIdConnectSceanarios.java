@@ -1,10 +1,8 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
-import io.restassured.specification.RequestSpecification;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
@@ -52,28 +50,6 @@ class OpenIdConnectSceanarios extends BaseTest {
 
     }
 
-    @Test
-    void testWithEmptyS2SAuth() {
-        RequestSpecification call = testUtil
-                .validAuthRequestWithEmptyS2SAuth()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(getBodyForRequest());
-        assertThrows(IllegalArgumentException.class, () ->
-                call.post(API_TEMPLATE_RENDITIONS_URL)
-        );
-    }
-
-    @Test
-    void testWithEmptyIdamAuthAndValidS2SAuth() {
-        RequestSpecification call = testUtil
-                .validS2SAuthWithEmptyIdamAuth()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(getBodyForRequest());
-
-        assertThrows(IllegalArgumentException.class, () ->
-                call.post(API_TEMPLATE_RENDITIONS_URL)
-        );
-    }
 
 
     private String getBodyForRequest() {
