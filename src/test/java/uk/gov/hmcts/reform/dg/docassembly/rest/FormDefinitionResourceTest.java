@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionRetrievalException;
@@ -22,15 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class FormDefinitionResourceTest extends BaseTest {
+@ExtendWith(MockitoExtension.class)
+class FormDefinitionResourceTest extends BaseTest {
 
-    @MockBean
+    @MockitoBean
     FormDefinitionService formDefinitionService;
 
     @Test
-    public void shouldCallFormDefinitionService() throws Exception {
+    void shouldCallFormDefinitionService() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -44,7 +44,7 @@ public class FormDefinitionResourceTest extends BaseTest {
     }
 
     @Test
-    public void testTemplateNotFoundErrorCode() throws Exception {
+    void testTemplateNotFoundErrorCode() throws Exception {
 
         when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))
                 .thenThrow(new TemplateNotFoundException("xxx"));
@@ -59,7 +59,7 @@ public class FormDefinitionResourceTest extends BaseTest {
     }
 
     @Test
-    public void testTemplateRetrievalException() throws Exception {
+    void testTemplateRetrievalException() throws Exception {
 
         when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))
                 .thenThrow(new FormDefinitionRetrievalException("xxx"));
