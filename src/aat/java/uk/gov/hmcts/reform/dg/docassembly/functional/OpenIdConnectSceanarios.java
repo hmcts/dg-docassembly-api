@@ -1,26 +1,19 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
+import io.restassured.specification.RequestSpecification;
 import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
-public class OpenIdConnectSceanarios extends BaseTest {
+class OpenIdConnectSceanarios extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS_URL = "/api/template-renditions";
 
-    @Rule
-    public ExpectedException exceptionThrown = ExpectedException.none();
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
     @Test
-    public void testValidAuthenticationAndAuthorisation() {
+    void testValidAuthenticationAndAuthorisation() {
         testUtil
                 .authRequest()
                 .contentType(APPLICATION_JSON_VALUE)
@@ -34,7 +27,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
 
     @Ignore(value = "Cftlib needs to be fixed to return 401")
     @Test // Invalid S2SAuth
-    public void testInvalidS2SAuth() {
+    void testInvalidS2SAuth() {
         testUtil
                 .invalidIdamAuthrequest()
                 .baseUri(testUtil.getTestUrl())
@@ -47,7 +40,7 @@ public class OpenIdConnectSceanarios extends BaseTest {
     }
 
     @Test
-    public void testWithInvalidIdamAuth() {
+    void testWithInvalidIdamAuth() {
         testUtil
                 .invalidIdamAuthrequest()
                 .contentType(APPLICATION_JSON_VALUE)
@@ -60,38 +53,28 @@ public class OpenIdConnectSceanarios extends BaseTest {
     }
 
     @Test
-    public void testWithEmptyS2SAuth() {
-        exceptionThrown.expect(IllegalArgumentException.class);
-
-        testUtil
+    void testWithEmptyS2SAuth() {
+        RequestSpecification call = testUtil
                 .validAuthRequestWithEmptyS2SAuth()
                 .contentType(APPLICATION_JSON_VALUE)
-                .body(getBodyForRequest())
-                .post(API_TEMPLATE_RENDITIONS_URL);
+                .body(getBodyForRequest());
+        assertThrows(IllegalArgumentException.class, () ->
+                call.post(API_TEMPLATE_RENDITIONS_URL)
+        );
     }
 
     @Test
-    public void testWithEmptyIdamAuthAndValidS2SAuth() {
-        exceptionThrown.expect(IllegalArgumentException.class);
-
-        testUtil
+    void testWithEmptyIdamAuthAndValidS2SAuth() {
+        RequestSpecification call = testUtil
                 .validS2SAuthWithEmptyIdamAuth()
                 .contentType(APPLICATION_JSON_VALUE)
-                .body(getBodyForRequest())
-                .post(API_TEMPLATE_RENDITIONS_URL);
+                .body(getBodyForRequest());
 
+        assertThrows(IllegalArgumentException.class, () ->
+                call.post(API_TEMPLATE_RENDITIONS_URL)
+        );
     }
 
-    @Test
-    public void testIdamAuthAndS2SAuthAreEmpty() {
-        exceptionThrown.expect(IllegalArgumentException.class);
-
-        testUtil
-                .validS2SAuthWithEmptyIdamAuth()
-                .contentType(APPLICATION_JSON_VALUE)
-                .body(getBodyForRequest())
-                .post(API_TEMPLATE_RENDITIONS_URL);
-    }
 
     private String getBodyForRequest() {
         return "{\"formPayload\":{\"a\":1}, "

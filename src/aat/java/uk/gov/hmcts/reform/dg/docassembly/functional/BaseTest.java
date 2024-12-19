@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import org.junit.runner.RunWith;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +17,7 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class, ExtendedCcdHelper.class})
 @TestPropertySource(value = "classpath:application.yml")
 @EnableConfigurationProperties(ToggleProperties.class)
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith(SerenityJUnit5Extension.class)
 @ComponentScan({ "uk.gov.hmcts.reform" })
 @WithTags({@WithTag("testType:Functional")})
 public abstract class BaseTest {
