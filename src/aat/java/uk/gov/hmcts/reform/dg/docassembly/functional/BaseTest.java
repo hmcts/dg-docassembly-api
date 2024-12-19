@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
@@ -17,7 +18,7 @@ import uk.gov.hmcts.reform.em.EmTestConfig;
 @SpringBootTest(classes = {TestUtil.class, EmTestConfig.class, ExtendedCcdHelper.class})
 @TestPropertySource(value = "classpath:application.yml")
 @EnableConfigurationProperties(ToggleProperties.class)
-@ExtendWith(SerenityJUnit5Extension.class)
+@ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
 @ComponentScan({ "uk.gov.hmcts.reform" })
 @WithTags({@WithTag("testType:Functional")})
 public abstract class BaseTest {
