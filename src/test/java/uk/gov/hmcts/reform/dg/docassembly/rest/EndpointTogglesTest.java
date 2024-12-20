@@ -1,14 +1,14 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
 import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
@@ -20,29 +20,29 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-public class EndpointTogglesTest extends BaseTest {
+@ExtendWith({MockitoExtension.class})
+class EndpointTogglesTest extends RestTestBase {
 
-    @MockBean
+    @MockitoBean
     TemplateRenditionService templateRenditionService;
 
-    @MockBean
+    @MockitoBean
     FormDefinitionService formDefinitionService;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         System.setProperty("endpoint-toggles.form-definitions", "false");
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanup() {
         System.setProperty("endpoint-toggles.form-definitions", "true");
     }
 
 
     @Test
-    public void testFormDefinitionToggle() throws Exception {
+    void testFormDefinitionToggle() throws Exception {
 
         ObjectMapper objectMapper = new ObjectMapper();
         when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))

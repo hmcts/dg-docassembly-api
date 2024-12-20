@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,7 +20,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseTest {
+@ActiveProfiles("integration-web-test")
+public class RestTestBase {
 
     @Autowired
     private WebApplicationContext context;
@@ -33,7 +34,7 @@ public class BaseTest {
 
     protected MockMvc restLogoutMockMvc;
 
-    @Before
+    @BeforeEach
     public void setupMocks() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", "ROLE_USER");
@@ -43,7 +44,6 @@ public class BaseTest {
                 Instant.now().plusSeconds(60), claims);
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
-        SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
         this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
