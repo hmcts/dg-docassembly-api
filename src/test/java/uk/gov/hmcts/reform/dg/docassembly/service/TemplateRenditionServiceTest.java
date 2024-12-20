@@ -6,8 +6,8 @@ import okhttp3.mock.ClasspathResources;
 import okhttp3.mock.MockInterceptor;
 import okhttp3.mock.Rule;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
@@ -16,7 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 
-public class TemplateRenditionServiceTest {
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class TemplateRenditionServiceTest {
 
     private MockInterceptor interceptor = new MockInterceptor();
 
@@ -28,9 +30,7 @@ public class TemplateRenditionServiceTest {
 
     private CreateTemplateRenditionDto createTemplateRenditionDto;
 
-    private static final String serviceAuth = "xyz";
-
-    @Before
+    @BeforeEach
     public void setup() throws IOException {
 
         interceptor.reset();
@@ -53,7 +53,7 @@ public class TemplateRenditionServiceTest {
     }
 
     @Test
-    public void testRenditionWithTypePDF() throws Exception {
+    void testRenditionWithTypePDF() throws Exception {
 
         createTemplateRenditionDto.setOutputType(RenditionOutputType.PDF);
 
@@ -73,7 +73,7 @@ public class TemplateRenditionServiceTest {
     }
 
     @Test
-    public void testRenditionWithTypeDoc() throws Exception {
+    void testRenditionWithTypeDoc() throws Exception {
 
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOC);
 
@@ -93,7 +93,7 @@ public class TemplateRenditionServiceTest {
     }
 
     @Test
-    public void testRenditionWithTypeDocX() throws Exception {
+    void testRenditionWithTypeDocX() throws Exception {
 
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
 
@@ -113,7 +113,7 @@ public class TemplateRenditionServiceTest {
     }
 
     @Test
-    public void testRenditionWithNoData() throws Exception {
+    void testRenditionWithNoData() throws Exception {
         createTemplateRenditionDto.setFormPayload(null);
 
         interceptor.addRule(new Rule.Builder()
@@ -131,8 +131,8 @@ public class TemplateRenditionServiceTest {
         Assert.assertEquals("x", templateRenditionOutputDto.getRenditionOutputLocation());
     }
 
-    @Test(expected = TemplateRenditionException.class)
-    public void testRenditionException() throws Exception {
+    @Test
+    void testRenditionException() {
 
         interceptor.addRule(new Rule.Builder()
                 .post()
@@ -142,20 +142,22 @@ public class TemplateRenditionServiceTest {
                 dmStoreUploader.uploadFile(Mockito.any(File.class),
                         Mockito.any(CreateTemplateRenditionDto.class))).thenReturn(createTemplateRenditionDto);
 
-        templateRenditionService.renderTemplate(createTemplateRenditionDto);
+
+        assertThrows(TemplateRenditionException.class,
+                () -> templateRenditionService.renderTemplate(createTemplateRenditionDto));
     }
 
     private CreateTemplateRenditionDto createTemplateRenditionDto() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
+        CreateTemplateRenditionDto createTemplateDto = new CreateTemplateRenditionDto();
 
-        createTemplateRenditionDto.setJwt("x");
-        createTemplateRenditionDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.PDF);
-        createTemplateRenditionDto.setFormPayload(objectMapper.readTree("{}"));
-        createTemplateRenditionDto.setRenditionOutputLocation("x");
+        createTemplateDto.setJwt("x");
+        createTemplateDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
+        createTemplateDto.setOutputType(RenditionOutputType.PDF);
+        createTemplateDto.setFormPayload(objectMapper.readTree("{}"));
+        createTemplateDto.setRenditionOutputLocation("x");
 
-        return createTemplateRenditionDto;
+        return createTemplateDto;
     }
 }
