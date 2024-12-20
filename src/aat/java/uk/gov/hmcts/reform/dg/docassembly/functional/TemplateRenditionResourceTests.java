@@ -1,22 +1,21 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.specification.RequestSpecification;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.document.domain.Document;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
-public class TemplateRenditionResourceTests extends BaseTest {
+class TemplateRenditionResourceTests extends BaseTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -24,13 +23,10 @@ public class TemplateRenditionResourceTests extends BaseTest {
     @Value("${test.url}")
     private String testUrl;
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -44,8 +40,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void testTemplateRendition() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void testTemplateRendition() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
@@ -60,8 +56,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void testTemplateRenditionToDoc() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void testTemplateRenditionToDoc() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOC\", \"templateId\":\""
@@ -75,8 +71,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void testTemplateRenditionToDocX() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void testTemplateRenditionToDocX() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOCX\", \"templateId\":\""
@@ -90,8 +86,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void testTemplateRenditionToOutputName() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void testTemplateRenditionToOutputName() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         CreateTemplateRenditionDto response =
                 request
@@ -110,12 +106,12 @@ public class TemplateRenditionResourceTests extends BaseTest {
         String dmStoreHref = response.getRenditionOutputLocation();
         Document doc = testUtil.getDocumentMetadata(dmStoreHref.substring(dmStoreHref.lastIndexOf("/") + 1));
 
-        Assert.assertEquals("test-output-name.docx", doc.originalDocumentName);
+        assertEquals("test-output-name.docx", doc.originalDocumentName);
     }
 
     @Test
-    public void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}")
@@ -128,22 +124,22 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void shouldReturn500WhenMandatoryTemplateIdIsMissing() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn500WhenMandatoryTemplateIdIsMissing() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
                 .body("{\"formPayload\":{\"a\":1}}")
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
-                .statusCode(500)//FIXME should be bad request
+                .statusCode(500)
                 .log()
                 .all();
     }
 
     @Test
-    public void shouldReturn401WhenUnAthenticateUserPostRequest() {
-        Assume.assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn401WhenUnAthenticateUserPostRequest() {
+        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         unAuthenticatedRequest
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
@@ -158,8 +154,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void shouldReturn400WhenCaseTypeIdFromPayloadIsMissing() {
-        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn400WhenCaseTypeIdFromPayloadIsMissing() {
+        assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
                 + " \"outputType\":\"DOCX\", "
@@ -176,8 +172,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void shouldReturn400WhenJurisdictionIdFromPayloadIsMissing() {
-        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn400WhenJurisdictionIdFromPayloadIsMissing() {
+        assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
                 + " \"outputType\":\"DOCX\", "
@@ -194,8 +190,8 @@ public class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    public void shouldReturn400WhenCaseTypeIdAndJurisdictionIdFromPayloadIsMissing() {
-        Assume.assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
+    void shouldReturn400WhenCaseTypeIdAndJurisdictionIdFromPayloadIsMissing() {
+        assumeTrue(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
         request
             .body("{\"formPayload\":{\"a\":1},"
                 + " \"outputType\":\"DOCX\", "
