@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DocmosisApiClientTest {
+class DocmosisApiClientTest {
 
     @Mock
     OkHttpClient httpClient;
@@ -31,7 +31,6 @@ public class DocmosisApiClientTest {
     private final String docmosisAccessKey = "docmosis-access-key";
     private final ObjectMapper mapper = new ObjectMapper();
 
-
     private DocmosisApiClient docmosisApiClient;
 
     @BeforeEach
@@ -40,19 +39,19 @@ public class DocmosisApiClientTest {
     }
 
     @Test
-    public void shouldReturnResponse() throws Exception {
+    void shouldReturnResponse() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = getCreateTemplateRenditionDto();
 
         var mockCall =  mock(Call.class);
         when(httpClient.newCall(any()))
                 .thenReturn(mockCall);
-        var response = docmosisApiClient.render(createTemplateRenditionDto);
+        docmosisApiClient.render(createTemplateRenditionDto);
         verify(httpClient, times(1)).newCall(any());
 
     }
 
     @Test
-    public void shouldThrowDocmosisTimeoutException() throws Exception {
+    void shouldThrowDocmosisTimeoutException() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = getCreateTemplateRenditionDto();
 
         var mockCall =  mock(Call.class);

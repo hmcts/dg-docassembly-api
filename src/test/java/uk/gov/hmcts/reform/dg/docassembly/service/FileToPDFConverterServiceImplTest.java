@@ -1,14 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.reform.dg.docassembly.conversion.DocmosisConverter;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
@@ -20,8 +17,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.UUID;
 
-@RunWith(MockitoJUnitRunner.class)
-public class FileToPDFConverterServiceImplTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class FileToPDFConverterServiceImplTest {
 
     @InjectMocks
     private FileToPDFConverterServiceImpl fileToPDFConverterServiceImpl;
@@ -35,12 +34,12 @@ public class FileToPDFConverterServiceImplTest {
     @Mock
     private CdamService cdamService;
 
-    private static final String auth = "abc";
-    private static final String serviceAuth = "xyz";
+    private static final String AUTH = "abc";
+    private static final String SERVICE_AUTH = "xyz";
 
     private static final UUID docStoreUUID = UUID.randomUUID();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         fileToPDFConverterServiceImpl.fileExtensionsList =
@@ -48,85 +47,86 @@ public class FileToPDFConverterServiceImplTest {
     }
 
     @Test
-    public void convertDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+    void convertDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
         Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
 
         File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
-        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+        assertEquals(convertedFile.getName(), mockFile.getName());
     }
 
     @Test
-    public void convertSecurePptDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+    void convertSecurePptDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
-        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenReturn(mockFile);
+        Mockito.when(cdamService.downloadFile(AUTH, SERVICE_AUTH, docStoreUUID)).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
 
-        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, AUTH, SERVICE_AUTH);
 
-        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(auth, serviceAuth, docStoreUUID);
-        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(AUTH, SERVICE_AUTH, docStoreUUID);
+        assertEquals(convertedFile.getName(), mockFile.getName());
     }
 
     @Test
-    public void convertSecureDocDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
+    void convertSecureDocDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("template1.DOC");
-        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenReturn(mockFile);
+        Mockito.when(cdamService.downloadFile(AUTH, SERVICE_AUTH, docStoreUUID)).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
 
-        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, AUTH, SERVICE_AUTH);
 
-        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(auth, serviceAuth, docStoreUUID);
-        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+        Mockito.verify(cdamService, Mockito.atLeast(1)).downloadFile(AUTH, SERVICE_AUTH, docStoreUUID);
+        assertEquals(convertedFile.getName(), mockFile.getName());
     }
 
-    @Test(expected = DocumentProcessingException.class)
-    public void convertNotProgressAsCdamException() throws DocumentTaskProcessingException, IOException {
-
-        UUID docStoreUUID = UUID.randomUUID();
-        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID))
+    @Test
+    void convertNotProgressAsCdamException() throws DocumentTaskProcessingException, IOException {
+        Mockito.when(cdamService.downloadFile(AUTH, SERVICE_AUTH, docStoreUUID))
                 .thenThrow(DocumentTaskProcessingException.class);
 
-        fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+
+        assertThrows(DocumentProcessingException.class, () ->
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID, AUTH, SERVICE_AUTH)
+        );
     }
 
-    @Test(expected = DocumentProcessingException.class)
-    public void convertFileAsCdamException() throws DocumentTaskProcessingException, IOException {
+    @Test
+    void convertFileAsCdamException() throws DocumentTaskProcessingException, IOException {
+        Mockito.when(cdamService.downloadFile(AUTH, SERVICE_AUTH, docStoreUUID)).thenThrow(IOException.class);
 
-        UUID docStoreUUID = UUID.randomUUID();
-        Mockito.when(cdamService.downloadFile(auth, serviceAuth, docStoreUUID)).thenThrow(IOException.class);
-
-        fileToPDFConverterServiceImpl.convertFile(docStoreUUID, auth, serviceAuth);
+        assertThrows(DocumentProcessingException.class, () ->
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID, AUTH, SERVICE_AUTH)
+        );
     }
 
-    @Test(expected = DocumentProcessingException.class)
-    public void convertNotProgressAsDmStoreDownloaderException() throws DocumentTaskProcessingException {
-
-        UUID docStoreUUID = UUID.randomUUID();
+    @Test
+    void convertNotProgressAsDmStoreDownloaderException() throws DocumentTaskProcessingException {
         Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString()))
                 .thenThrow(DocumentTaskProcessingException.class);
 
-        fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
+        assertThrows(DocumentProcessingException.class, () ->
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+        );
     }
 
-    @Test(expected = FileTypeException.class)
-    public void convertNotAllowedFileTypeTest() throws DocumentTaskProcessingException, IOException {
+    @Test
+    void convertNotAllowedFileTypeTest() throws DocumentTaskProcessingException {
         File mockFile = new File("sample.ppsx");
         Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
-
-
-        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
-        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+        assertThrows(FileTypeException.class, () ->
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+        );
     }
 
-    @Test(expected = DocumentProcessingException.class)
-    public void convertNotAllowedAsIOExceptionIsThrownTest() throws DocumentTaskProcessingException, IOException {
+    @Test
+    void convertNotAllowedAsIOExceptionIsThrownTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
         Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenThrow(IOException.class);
-        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
-        Assert.assertEquals(convertedFile.getName(), mockFile.getName());
+        assertThrows(DocumentProcessingException.class, () ->
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+        );
     }
 
 }
