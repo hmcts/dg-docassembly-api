@@ -136,7 +136,6 @@ dependencies {
     testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.0.0'
     
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
-    testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
     testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
@@ -388,7 +387,8 @@ pitest {
     timestampedReports = false
     failWhenNoMutations = false
     detectInlinedCode = true
-
+    junit5PluginVersion = '1.2.1'
+    pitestVersion = '1.17.3'
 }
 
 project.tasks['pitest'].group = "Verification"
