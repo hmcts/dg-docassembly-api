@@ -2,21 +2,19 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public class DocumentConversionScenarios extends BaseTest {
+class DocumentConversionScenarios extends BaseTest {
 
     @Autowired
     private TestUtil testUtil;
@@ -24,13 +22,10 @@ public class DocumentConversionScenarios extends BaseTest {
     @Value("${test.url}")
     private String testUrl;
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
-    @Before
+    @BeforeEach
     public void setupRequestSpecification() {
         request = testUtil
                 .authRequest()
@@ -44,92 +39,91 @@ public class DocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    public void testPDFConversionWithWordDocument() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithWordDocument() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testPDFConversionWithDocx() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithDocx() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadDocxDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
 
     @Test
-    public void testPDFConversionWithPptx() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithPptx() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadPptxDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
-
     @Test
-    public void testPDFConversionWithPPT() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithPPT() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadPptDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testPDFConversionWithXlsx() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithXlsx() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadXlsxDocumentAndReturnUrl();
 
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testPDFConversionWithXLS() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithXLS() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadXLSDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testPDFConversionWithRTF() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithRTF() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadRTFDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testPDFConversionWithTXT() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testPDFConversionWithTXT() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadTXTDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
-        Assert.assertEquals(200, response.getStatusCode());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void testFailedConversion() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void testFailedConversion() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadTXTDocumentAndReturnUrl();
         Response response = createAndProcessRequestFailure(newDocId + "567");
 
-        Assert.assertEquals(400, response.getStatusCode());
+        assertEquals(400, response.getStatusCode());
     }
 
     @Test
-    public void shouldReturn401WhenUnAuthenticateUserConvertWordDocumentToPDF() {
-        Assume.assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
+    void shouldReturn401WhenUnAuthenticateUserConvertWordDocumentToPDF() {
+        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         final String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
         final UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
         unAuthenticatedRequest
