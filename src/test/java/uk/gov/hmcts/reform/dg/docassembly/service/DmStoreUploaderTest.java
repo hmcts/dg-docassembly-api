@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mock.MockInterceptor;
 import okhttp3.mock.Rule;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
 import uk.gov.hmcts.reform.auth.checker.core.user.UserResolver;
@@ -17,7 +16,10 @@ import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import java.io.File;
 import java.util.Base64;
 
-public class DmStoreUploaderTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class DmStoreUploaderTest {
 
     AuthTokenGenerator authTokenGenerator;
 
@@ -29,7 +31,7 @@ public class DmStoreUploaderTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    @Before
+    @BeforeEach
     public void setup() {
 
         interceptor = new MockInterceptor();
@@ -49,7 +51,7 @@ public class DmStoreUploaderTest {
     }
 
     @Test
-    public void testUploadNewFile() throws Exception {
+    void testUploadNewFile() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJwt("x");
         createTemplateRenditionDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
@@ -75,13 +77,13 @@ public class DmStoreUploaderTest {
                         createTemplateRenditionDto
                 );
 
-        Assert.assertEquals("http://success.com/1",
+        assertEquals("http://success.com/1",
                 updatedCreateTemplateRenditionDto.getRenditionOutputLocation());
 
     }
 
-    @Test(expected = DocumentUploaderException.class)
-    public void testUploadNewFileHttpFailedException() throws Exception {
+    @Test
+    void testUploadNewFileHttpFailedException() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJwt("x");
         createTemplateRenditionDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
@@ -97,15 +99,17 @@ public class DmStoreUploaderTest {
                 .post()
                 .respond("").code(404));
 
-        dmStoreUploader.uploadFile(
-                File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
-                createTemplateRenditionDto
+        assertThrows(DocumentUploaderException.class, () ->
+            dmStoreUploader.uploadFile(
+                    File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                    createTemplateRenditionDto
+            )
         );
 
     }
 
     @Test
-    public void testUploadNewVersionOfFile() throws Exception {
+    void testUploadNewVersionOfFile() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJwt("x");
         createTemplateRenditionDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
@@ -132,13 +136,13 @@ public class DmStoreUploaderTest {
                         createTemplateRenditionDto
                 );
 
-        Assert.assertEquals("http://success.com/1",
+        assertEquals("http://success.com/1",
                 updatedCreateTemplateRenditionDto.getRenditionOutputLocation());
 
     }
 
-    @Test(expected = DocumentUploaderException.class)
-    public void testUploadNewVersionOfFileException() throws Exception {
+    @Test
+    void testUploadNewVersionOfFileException() throws Exception {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setJwt("x");
         createTemplateRenditionDto.setTemplateId(new String(Base64.getEncoder().encode("1".getBytes())));
@@ -157,10 +161,11 @@ public class DmStoreUploaderTest {
                 .respond("").code(500));
 
 
-        dmStoreUploader.uploadFile(
-                File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
-                createTemplateRenditionDto
+        assertThrows(DocumentUploaderException.class, () ->
+                dmStoreUploader.uploadFile(
+                        File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
+                        createTemplateRenditionDto
+                )
         );
-
     }
 }

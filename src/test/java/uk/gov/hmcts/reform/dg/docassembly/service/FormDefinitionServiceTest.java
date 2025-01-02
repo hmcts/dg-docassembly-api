@@ -2,22 +2,23 @@ package uk.gov.hmcts.reform.dg.docassembly.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(MockitoJUnitRunner.class)
-public class FormDefinitionServiceTest {
+
+class FormDefinitionServiceTest {
 
     @Mock
     TemplateManagementApiClient templateManagementApiClient;
@@ -31,8 +32,14 @@ public class FormDefinitionServiceTest {
     @InjectMocks
     FormDefinitionService formDefinitionService;
 
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
-    public void testGetFormDefinition() throws Exception {
+    void testGetFormDefinition() throws Exception {
 
         ObjectMapper testObjectMapper = new ObjectMapper();
 
@@ -53,20 +60,19 @@ public class FormDefinitionServiceTest {
 
         Optional<JsonNode> json = formDefinitionService.getFormDefinition(dto);
 
-        Assert.assertEquals(1, json.get().get("a").asInt());
+        assertEquals(1, json.get().get("a").asInt());
 
     }
 
-    @Test(expected = FormDefinitionRetrievalException.class)
-    public void testGetFormDefinitionException() throws Exception {
+    @Test
+    void testGetFormDefinitionException() throws Exception {
 
         TemplateIdDto dto =  Mockito.mock(TemplateIdDto.class);
 
         Mockito.when(templateManagementApiClient.getTemplate(Mockito.any(TemplateIdDto.class)))
                 .thenThrow(new IOException());
 
-        formDefinitionService.getFormDefinition(dto);
-
+        assertThrows(FormDefinitionRetrievalException.class, () -> formDefinitionService.getFormDefinition(dto));
     }
 
 }
