@@ -41,6 +41,10 @@ public class CreateTemplateRenditionDto extends TemplateIdDto {
     @Setter
     private List<String> errors = new ArrayList<>();
 
+    @Getter
+    @Setter
+    private boolean pdfTagged;
+
     public JsonNode getFormPayload() {
         return formPayload;
     }
