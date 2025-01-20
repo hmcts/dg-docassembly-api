@@ -42,9 +42,13 @@ class DocumentConversionScenarios extends BaseTest {
     void testPDFConversionWithWordDocument() {
         assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
-        Response response = createAndProcessRequest(newDocId);
-
-        assertEquals(200, response.getStatusCode());
+        UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
+        request
+                .post("/api/convert/" + docId)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .log().all();
     }
 
     @Test
