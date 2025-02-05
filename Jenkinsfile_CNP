@@ -69,46 +69,9 @@ withPipeline(type , product, component) {
     }
 
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
-    
 
-    afterAlways('functionalTest:preview') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
 
-    afterAlways('functionalTest:aat') {
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/functional",
-                reportFiles          : "index.html",
-                reportName           : "DG-DocAssembly API Functional Test Report"
-        ]
-
-       steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
-
-    afterAlways('pactconsumerVerification:preview') {
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/contract",
-                reportFiles          : "index.html",
-                reportName           : "DG-DocAssembly API Contract Test Report"
-        ]
-    }
-
-    afterAlways('pactconsumerVerification:aat') {
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/contract",
-                reportFiles          : "index.html",
-                reportName           : "DG-DocAssembly API Contract Test Report"
-        ]
-    }
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
