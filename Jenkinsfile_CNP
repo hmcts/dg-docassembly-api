@@ -167,11 +167,6 @@ withPipeline(type , product, component) {
         ]
     }
 
-    afterAlways('functionalTest:preview') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
-
     afterAlways('functionalTest:aat') {
         publishHTML target: [
                 allowMissing         : true,
