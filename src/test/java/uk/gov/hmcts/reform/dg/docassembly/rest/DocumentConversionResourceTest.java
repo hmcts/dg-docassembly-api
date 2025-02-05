@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +43,6 @@ class DocumentConversionResourceTest {
 
     @Test
     void shouldConvertDocument() {
-        fail();
         when(fileToPDFConverterService.convertFile(docId)).thenReturn(TEST_PDF_FILE);
 
         ResponseEntity<?> response = documentConversionResource.convert(request, docId);
