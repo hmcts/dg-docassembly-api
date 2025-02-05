@@ -69,9 +69,10 @@ withPipeline(type , product, component) {
     }
 
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
-
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-    steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    afterAlways('functionalTest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
 
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
