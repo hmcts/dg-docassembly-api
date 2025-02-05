@@ -179,14 +179,6 @@ withPipeline(type , product, component) {
     }
 
     afterAlways('functionalTest:preview') {
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/functional",
-                reportFiles          : "index.html",
-                reportName           : "DG-DocAssembly API Functional Test Report"
-        ]
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
