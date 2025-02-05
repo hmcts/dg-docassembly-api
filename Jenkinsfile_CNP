@@ -156,17 +156,6 @@ withPipeline(type , product, component) {
          ]
     }
 
-    afterAlways('smoketest:preview') {
-        publishHTML target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "build/reports/tests/smoke",
-                reportFiles          : "index.html",
-                reportName           : "DG-DocAssembly API Smoke Test Report"
-        ]
-    }
-
     afterAlways('functionalTest:aat') {
         publishHTML target: [
                 allowMissing         : true,
