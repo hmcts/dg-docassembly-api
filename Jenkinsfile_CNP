@@ -69,6 +69,13 @@ withPipeline(type , product, component) {
     }
 
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
+
+    afterAlways('test') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/pmd/**/*'
+    }
+
     afterAlways('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
