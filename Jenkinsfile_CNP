@@ -72,7 +72,7 @@ withPipeline(type , product, component) {
 
     afterAlways('test') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/checkstyle'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/pmd/**/*'
     }
 
