@@ -86,7 +86,7 @@ withPipeline(type , product, component) {
     }
 
 
-    afterAlways('contractTest:preview') {
+    afterAlways('pact-consumer-tests') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
     }
 
