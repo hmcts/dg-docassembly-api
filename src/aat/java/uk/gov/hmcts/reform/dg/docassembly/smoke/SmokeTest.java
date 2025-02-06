@@ -11,6 +11,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @TestPropertySource(value = "classpath:application.yml")
 @ExtendWith({SerenityJUnit5Extension.class, SpringExtension.class})
@@ -24,6 +25,7 @@ class SmokeTest {
 
     @Test
     void testHealthEndpoint() {
+        fail();
 
         SerenityRest.useRelaxedHTTPSValidation();
 
