@@ -85,5 +85,10 @@ withPipeline(type , product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
+
+    afterAlways('pactconsumerVerification:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
+
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
