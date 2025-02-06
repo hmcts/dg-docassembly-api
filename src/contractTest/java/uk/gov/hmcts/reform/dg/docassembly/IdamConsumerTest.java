@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @Slf4j
 @ExtendWith(PactConsumerTestExt.class)
@@ -37,7 +36,6 @@ public class IdamConsumerTest {
 
     @Pact(provider = "Idam_api", consumer = "docassembly_api")
     public RequestResponsePact executeGetIdamAccessTokenAndGet200(PactDslWithProvider builder) throws JSONException {
-        fail();
         Map<String, String> requestheaders = Maps.newHashMap();
         requestheaders.put("Content-Type", "application/x-www-form-urlencoded");
 

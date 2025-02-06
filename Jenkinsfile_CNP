@@ -76,18 +76,17 @@ withPipeline(type , product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
     }
 
-    afterAlways('smoketest:preview') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-    }
-
-    afterAlways('functionalTest:preview') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
-
-
     afterAlways('pact-consumer-tests') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
+
+    afterAlways('smoketest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
+
+    afterAlways('functionalTest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
