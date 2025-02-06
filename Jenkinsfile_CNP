@@ -71,9 +71,9 @@ withPipeline(type , product, component) {
     enablePactAs([AppPipelineDsl.PactRoles.CONSUMER])
 
     afterAlways('test') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/tests/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/checkstyle/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/tests/integration/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
     }
 
     afterAlways('smoketest:preview') {
