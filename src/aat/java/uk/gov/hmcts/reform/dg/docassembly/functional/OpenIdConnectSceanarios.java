@@ -13,7 +13,6 @@ class OpenIdConnectSceanarios extends BaseTest {
 
     @Test
     void testValidAuthenticationAndAuthorisation() {
-        fail();
         testUtil
                 .authRequest()
                 .contentType(APPLICATION_JSON_VALUE)
