@@ -76,6 +76,10 @@ withPipeline(type , product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/pmd/**/*'
     }
 
+    afterAlways('smoketest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
+
     afterAlways('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
