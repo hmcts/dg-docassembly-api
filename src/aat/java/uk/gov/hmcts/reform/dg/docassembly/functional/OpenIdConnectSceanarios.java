@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
