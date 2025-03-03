@@ -176,7 +176,7 @@ processAatResources {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.2') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.3') {
             entry 'jackson-core'
             entry 'jackson-databind'
             entry 'jackson-annotations'
