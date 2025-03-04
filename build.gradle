@@ -11,8 +11,8 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.17'
     id "info.solidsoft.pitest" version '1.15.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1592'
-    id "io.freefair.lombok" version "8.12.2"
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1604'
+    id "io.freefair.lombok" version "8.12.2.1"
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
 }
 
@@ -46,10 +46,10 @@ repositories {
 
 def versions = [
         serenity           : '4.2.16',
-        fasterXmlJackson   : '2.18.2',
+        fasterXmlJackson   : '2.18.3',
         pact_version       : '4.6.17',
         logging            : '6.1.8',
-        junit5             : '5.11.4',
+        junit5             : '5.12.0',
         springSecurity     : '6.4.3'
 ]
 sourceSets {
@@ -140,8 +140,8 @@ dependencies {
     testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.16'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.16'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.17'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.17'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.7', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
@@ -176,7 +176,7 @@ processAatResources {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.2') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.3') {
             entry 'jackson-core'
             entry 'jackson-databind'
             entry 'jackson-annotations'
@@ -187,8 +187,9 @@ dependencyManagement {
             entry 'commons-compress'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '1.11.4') {
+        dependencySet(group: 'org.junit.platform', version: '1.12.0') {
             entry 'junit-platform-commons'
+            entry 'junit-platform-engine'
         }
     }
 }
@@ -243,7 +244,7 @@ sonarqube {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.21.3'
+    toolVersion = '10.21.4'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
