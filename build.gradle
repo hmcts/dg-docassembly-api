@@ -49,7 +49,7 @@ def versions = [
         fasterXmlJackson   : '2.18.3',
         pact_version       : '4.6.17',
         logging            : '6.1.8',
-        junit5             : '5.12.0',
+        junit5             : '5.12.1',
         springSecurity     : '6.4.3'
 ]
 sourceSets {
@@ -187,7 +187,7 @@ dependencyManagement {
             entry 'commons-compress'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '1.12.0') {
+        dependencySet(group: 'org.junit.platform', version: '1.12.1') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
