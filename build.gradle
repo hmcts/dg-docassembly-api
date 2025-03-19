@@ -11,7 +11,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.17'
     id "info.solidsoft.pitest" version '1.15.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1611'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1618'
     id "io.freefair.lombok" version "8.13"
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
 }
@@ -49,8 +49,8 @@ def versions = [
         fasterXmlJackson   : '2.18.3',
         pact_version       : '4.6.17',
         logging            : '6.1.8',
-        junit5             : '5.12.0',
-        springSecurity     : '6.4.3'
+        junit5             : '5.12.1',
+        springSecurity     : '6.4.4'
 ]
 sourceSets {
     aat {
@@ -133,15 +133,15 @@ dependencies {
     implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.23'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
-    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.0.0'
+    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.1.0'
     
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
     testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.5'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.17'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.17'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.18'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.18'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.7', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
@@ -187,7 +187,7 @@ dependencyManagement {
             entry 'commons-compress'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '1.12.0') {
+        dependencySet(group: 'org.junit.platform', version: '1.12.1') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
