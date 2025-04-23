@@ -57,6 +57,7 @@ public class DocmosisApiClient {
                     .addFormDataPart(
                             "data",
                             String.valueOf(createTemplateRenditionDto.getFormPayload()))
+                    .addFormDataPart("pdfTagged",  String.valueOf(true))
                     .build();
 
             Request request = new Request.Builder()
