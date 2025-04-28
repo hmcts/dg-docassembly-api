@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -45,9 +46,11 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     private static final String AUTHORIZATION = "Authorization";
     private static final String ERROR_PATH = "$.errors";
 
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    private final TemplateRenditionResource templateRenditionResource;
+    @Autowired
+    private TemplateRenditionResource templateRenditionResource;
 
     @MockitoBean
     private TemplateRenditionService templateRenditionService;
@@ -60,11 +63,8 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     private static final String DUMMY_AUTH_TOKEN = "Bearer fake-jwt-token";
     private static final String DUMMY_SERVICE_AUTH_TOKEN = "Bearer fake-service-auth-token";
 
-    TemplateRenditionResourceIntTest(ObjectMapper objectMapper, TemplateRenditionResource templateRenditionResource,
-                                     WebApplicationContext webApplicationContext) {
+    TemplateRenditionResourceIntTest(WebApplicationContext webApplicationContext) {
         super(webApplicationContext);
-        this.objectMapper = objectMapper;
-        this.templateRenditionResource = templateRenditionResource;
     }
 
 
