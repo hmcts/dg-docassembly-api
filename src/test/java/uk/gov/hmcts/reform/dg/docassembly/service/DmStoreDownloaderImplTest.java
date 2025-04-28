@@ -114,13 +114,13 @@ class DmStoreDownloaderImplTest {
 
         assertNotNull(downloadedFile);
         assertTrue(downloadedFile.exists());
-        assertTrue(downloadedFile.getName().endsWith(".pdf")); // Check extension
-        assertEquals(BINARY_CONTENT, Files.readString(downloadedFile.toPath())); // Check content
+        assertTrue(downloadedFile.getName().endsWith(".pdf"));
+        assertEquals(BINARY_CONTENT, Files.readString(downloadedFile.toPath()));
 
-        verify(authTokenGenerator, times(2)).generate(); // Called for metadata and binary
+        verify(authTokenGenerator, times(2)).generate();
         verify(okHttpClient, times(2)).newCall(requestCaptor.capture());
         verify(mockCall, times(2)).execute();
-        verify(metadataResponse, times(1)).close(); // Verify finally block closed the *first* response
+        verify(metadataResponse, times(1)).close();
 
         Request metaRequest = requestCaptor.getAllValues().get(0);
         assertEquals(METADATA_URL, metaRequest.url().toString());
@@ -138,7 +138,7 @@ class DmStoreDownloaderImplTest {
     void shouldThrowExceptionWhenMetadataRequestFails() throws IOException {
 
         Response response = org.mockito.Mockito.mock(Response.class);
-        when(response.isSuccessful()).thenReturn(false); // Mark as unsuccessful
+        when(response.isSuccessful()).thenReturn(false);
         when(response.code()).thenReturn(404);
 
         when(mockCall.execute()).thenReturn(response);
@@ -152,7 +152,7 @@ class DmStoreDownloaderImplTest {
         verify(authTokenGenerator, times(1)).generate();
         verify(okHttpClient, times(1)).newCall(any());
         verify(mockCall, times(1)).execute();
-        verify(response, times(1)).close(); // Verify finally block
+        verify(response, times(1)).close();
     }
 
     @Test
@@ -169,7 +169,7 @@ class DmStoreDownloaderImplTest {
 
         assertThat(exception.getMessage()).contains("Could not access the binary:");
         assertThat(exception.getCause()).isInstanceOf(JsonProcessingException.class);
-        verify(metadataResponse, times(1)).close(); // Verify finally block
+        verify(metadataResponse, times(1)).close();
     }
 
     @Test
@@ -185,7 +185,7 @@ class DmStoreDownloaderImplTest {
 
         assertThat(exception.getMessage()).contains("Could not access the binary: Network Error");
         assertThat(exception.getCause()).isSameAs(ioException);
-        verify(authTokenGenerator, times(1)).generate(); // Called before execute
+        verify(authTokenGenerator, times(1)).generate();
         verify(okHttpClient, times(1)).newCall(any());
     }
 
@@ -206,7 +206,7 @@ class DmStoreDownloaderImplTest {
 
         assertThat(exception.getMessage()).contains("Could not access the binary: Binary Network Error");
         assertThat(exception.getCause()).isSameAs(ioException);
-        verify(metadataResponse, times(1)).close(); // Finally block still closes the first response
+        verify(metadataResponse, times(1)).close();
     }
 
     @Test
@@ -214,7 +214,7 @@ class DmStoreDownloaderImplTest {
 
         Response metadataResponse = createSuccessfulResponse(METADATA_JSON);
         Response binaryResponse = createSuccessfulResponse(BINARY_CONTENT);
-        ResponseBody mockBinaryBody = binaryResponse.body(); // Get the mocked body
+        ResponseBody mockBinaryBody = binaryResponse.body();
 
         InputStream errorStream = new InputStream() {
             @Override
@@ -222,7 +222,7 @@ class DmStoreDownloaderImplTest {
                 throw new IOException("Disk full error simulation");
             }
         };
-        when(mockBinaryBody.byteStream()).thenReturn(errorStream); // Override the stream
+        when(mockBinaryBody.byteStream()).thenReturn(errorStream);
 
         when(mockCall.execute())
             .thenReturn(metadataResponse)
@@ -237,7 +237,7 @@ class DmStoreDownloaderImplTest {
         assertThat(exception.getCause()).isInstanceOf(IOException.class);
         assertThat(exception.getCause().getMessage()).isEqualTo("Disk full error simulation");
 
-        verify(metadataResponse, times(1)).close(); // Finally block closes metadata response
+        verify(metadataResponse, times(1)).close();
     }
 
     @Test

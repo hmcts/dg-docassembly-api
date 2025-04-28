@@ -104,7 +104,7 @@ class CdamServiceTest {
 
         assertNotNull(downloadedFile);
         assertTrue(downloadedFile.exists());
-        assertTrue(downloadedFile.getName().endsWith(".pdf")); // Check extension from metadata
+        assertTrue(downloadedFile.getName().endsWith(".pdf"));
         assertEquals(TEST_FILE_CONTENT, FileUtils.readFileToString(downloadedFile, StandardCharsets.UTF_8));
 
         assertTrue(downloadedFile.getParentFile().exists());
@@ -140,7 +140,6 @@ class CdamServiceTest {
         when(caseDocumentClientApi.getDocumentBinary(AUTH_TOKEN, S2S_TOKEN, DOCUMENT_ID))
             .thenReturn(responseEntity);
 
-        // Act & Assert
         DocumentTaskProcessingException exception = assertThrows(DocumentTaskProcessingException.class, () -> {
             cdamService.downloadFile(AUTH_TOKEN, S2S_TOKEN, DOCUMENT_ID);
         });
@@ -231,15 +230,15 @@ class CdamServiceTest {
     @DisplayName("uploadDocuments should throw DocumentTaskProcessingException on file read IOException")
     void uploadDocumentsThrowsExceptionOnFileReadError() {
 
-        File nonExistentFile = new File(tempDir.toFile(), "non-existent-file.pdf"); // File doesn't exist
+        File nonExistentFile = new File(tempDir.toFile(), "non-existent-file.pdf");
 
         DocumentTaskProcessingException exception = assertThrows(DocumentTaskProcessingException.class, () -> {
             cdamService.uploadDocuments(nonExistentFile, createTemplateRenditionDto);
         });
 
-        assertTrue(exception.getMessage().contains("Could not download the file from CDAM")); // Message might need adjustment
+        assertTrue(exception.getMessage().contains("Could not download the file from CDAM"));
         assertInstanceOf(IOException.class, exception.getCause());
-        verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any()); // API not called
+        verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any());
     }
 
     @Test
@@ -248,15 +247,15 @@ class CdamServiceTest {
 
         RenditionOutputType mockOutputType = mock(RenditionOutputType.class);
         when(mockOutputType.getMediaType()).thenReturn("this is not a valid media type");
-        when(mockOutputType.getFileExtension()).thenReturn(".bad"); // Need extension for filename
-        createTemplateRenditionDto.setOutputType(mockOutputType); // Use the mock
+        when(mockOutputType.getFileExtension()).thenReturn(".bad");
+        createTemplateRenditionDto.setOutputType(mockOutputType);
 
         DocumentTaskProcessingException exception = assertThrows(DocumentTaskProcessingException.class, () -> {
             cdamService.uploadDocuments(testFile, createTemplateRenditionDto);
         });
 
         assertInstanceOf(IllegalArgumentException.class, exception.getCause());
-        verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any()); // API not called
+        verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any());
     }
 
 
@@ -272,7 +271,7 @@ class CdamServiceTest {
             cdamService.uploadDocuments(testFile, createTemplateRenditionDto);
         });
 
-        assertEquals(apiException, exception.getCause()); // Verify original exception is wrapped
+        assertEquals(apiException, exception.getCause());
         verify(caseDocumentClientApi).uploadDocuments(eq(AUTH_TOKEN), eq(S2S_TOKEN), any(DocumentUploadRequest.class));
     }
 
@@ -281,7 +280,7 @@ class CdamServiceTest {
     void uploadDocumentsThrowsExceptionWhenResponseDocumentsIsNull() {
 
         UploadResponse mockUploadResponse = mock(UploadResponse.class);
-        when(mockUploadResponse.getDocuments()).thenReturn(null); // Simulate null list
+        when(mockUploadResponse.getDocuments()).thenReturn(null);
 
         when(caseDocumentClientApi.uploadDocuments(eq(AUTH_TOKEN), eq(S2S_TOKEN), any(DocumentUploadRequest.class)))
             .thenReturn(mockUploadResponse);
@@ -298,7 +297,7 @@ class CdamServiceTest {
     @DisplayName("uploadDocuments should throw DocumentTaskProcessingException if upload response documents is empty")
     void uploadDocumentsThrowsExceptionWhenResponseDocumentsIsEmpty() {
 
-        UploadResponse uploadResponse = new UploadResponse(Collections.emptyList()); // Simulate empty list
+        UploadResponse uploadResponse = new UploadResponse(Collections.emptyList());
 
         when(caseDocumentClientApi.uploadDocuments(eq(AUTH_TOKEN), eq(S2S_TOKEN), any(DocumentUploadRequest.class)))
             .thenReturn(uploadResponse);

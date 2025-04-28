@@ -19,9 +19,14 @@ import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FormDefinitionResourceTest {
@@ -51,10 +56,6 @@ class FormDefinitionResourceTest {
         when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
             .thenReturn(Optional.of(mockFormDefinition));
 
-        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
-            TEST_TEMPLATE_ID,
-            TEST_JWT
-        );
 
         verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
 
@@ -62,6 +63,11 @@ class FormDefinitionResourceTest {
         assertNotNull(capturedDto);
         assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
         assertEquals(TEST_JWT, capturedDto.getJwt());
+
+        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
+            TEST_TEMPLATE_ID,
+            TEST_JWT
+        );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -76,18 +82,17 @@ class FormDefinitionResourceTest {
         when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
             .thenReturn(Optional.empty());
 
-
-        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
-            TEST_TEMPLATE_ID,
-            TEST_JWT
-        );
-
         verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
 
         TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
         assertNotNull(capturedDto);
         assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
         assertEquals(TEST_JWT, capturedDto.getJwt());
+
+        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
+            TEST_TEMPLATE_ID,
+            TEST_JWT
+        );
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 

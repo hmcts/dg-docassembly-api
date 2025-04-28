@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.dg.docassembly.rest; // Adjust package name as needed
+package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
