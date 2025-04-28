@@ -56,6 +56,12 @@ class FormDefinitionResourceTest {
         when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
             .thenReturn(Optional.of(mockFormDefinition));
 
+        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
+            TEST_TEMPLATE_ID,
+            TEST_JWT
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
         verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
 
@@ -63,13 +69,6 @@ class FormDefinitionResourceTest {
         assertNotNull(capturedDto);
         assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
         assertEquals(TEST_JWT, capturedDto.getJwt());
-
-        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
-            TEST_TEMPLATE_ID,
-            TEST_JWT
-        );
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
 
         assertNotNull(response.getBody());
         assertEquals(mockFormDefinition, response.getBody());
@@ -82,12 +81,6 @@ class FormDefinitionResourceTest {
         when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
             .thenReturn(Optional.empty());
 
-        verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
-
-        TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
-        assertNotNull(capturedDto);
-        assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
-        assertEquals(TEST_JWT, capturedDto.getJwt());
 
         ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
             TEST_TEMPLATE_ID,
@@ -95,6 +88,13 @@ class FormDefinitionResourceTest {
         );
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
+
+        TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
+        assertNotNull(capturedDto);
+        assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
+        assertEquals(TEST_JWT, capturedDto.getJwt());
 
         assertNull(response.getBody());
     }
