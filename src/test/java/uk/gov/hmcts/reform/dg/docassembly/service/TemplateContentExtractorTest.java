@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TemplateContentExtractorTest {
 
@@ -19,6 +20,15 @@ class TemplateContentExtractorTest {
 
         assertNotNull(extractTextBetweenTags);
         assertEquals("[]", extractTextBetweenTags.get().trim());
+    }
+
+    @Test
+    void testExtractionEmpty() throws Exception {
+        Optional<String> extractTextBetweenTags = templateContentExtractor.extractTextBetweenTags(
+            getClass().getClassLoader().getResourceAsStream("template1.docx"),
+            "<<cs_{displaycode=‘0’}>>", "<<es_>>");
+
+        assertTrue(extractTextBetweenTags.isEmpty());
     }
 
 }
