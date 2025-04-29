@@ -7,6 +7,10 @@ import org.mockito.Mockito;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
+import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -14,10 +18,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
-import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
-
-import java.util.Optional;
 
 @TestPropertySource(properties = "endpoint-toggles.form-definitions=false")
 class FormDefinitionResourceDisabledTest extends RestTestBase {
