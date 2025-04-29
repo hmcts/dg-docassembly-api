@@ -2,9 +2,8 @@ package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
@@ -22,15 +21,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith(MockitoExtension.class)
-class FormDefinitionResourceTest extends RestTestBase {
+@TestPropertySource(properties = "endpoint-toggles.form-definitions=true")
+class FormDefinitionResourceEnabledTest extends RestTestBase {
 
     private static final String URI_TEMPLATE = "/api/form-definitions/123";
     private static final String AUTHORIZATION = "Authorization";
     @MockitoBean
     FormDefinitionService formDefinitionService;
 
-    FormDefinitionResourceTest(WebApplicationContext context) {
+    FormDefinitionResourceEnabledTest(WebApplicationContext context) {
         super(context);
     }
 
