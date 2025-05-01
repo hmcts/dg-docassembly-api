@@ -401,7 +401,6 @@ def coverageExclusionList = [
         '**uk/gov/hmcts/reform/dg/docassembly/dto/*',
         '**uk/gov/hmcts/reform/dg/docassembly/config/**/*',
         '**uk/gov/hmcts/reform/dg/docassembly/info/*',
-        '**uk/gov/hmcts/reform/dg/docassembly/service/DocmosisApiClient*'
 ]
 
 project.tasks['sonarqube'].dependsOn test, jacocoTestReport

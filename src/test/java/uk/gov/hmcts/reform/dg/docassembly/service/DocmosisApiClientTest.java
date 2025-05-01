@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +35,7 @@ class DocmosisApiClientTest {
     private DocmosisApiClient docmosisApiClient;
 
     @BeforeEach
-    void sretup() {
+    void setup() {
         docmosisApiClient = new DocmosisApiClient(this.httpClient, docmosisUrl, docmosisAccessKey);
     }
 
@@ -62,6 +63,21 @@ class DocmosisApiClientTest {
         assertThatThrownBy(() -> docmosisApiClient.render(createTemplateRenditionDto))
                 .isInstanceOf(DocmosisTimeoutException.class)
                 .hasMessageContaining("Docmosis Socket Timeout");
+        verify(httpClient, times(1)).newCall(any());
+    }
+
+    @Test
+    void socketTimeoutShouldThrowDocmosisTimeoutException() throws Exception {
+        CreateTemplateRenditionDto createTemplateRenditionDto = getCreateTemplateRenditionDto();
+
+        var mockCall =  mock(Call.class);
+        when(httpClient.newCall(any()))
+            .thenReturn(mockCall);
+        when(mockCall.execute())
+            .thenThrow(new SocketTimeoutException("Docmosis socket timeout"));
+        assertThatThrownBy(() -> docmosisApiClient.render(createTemplateRenditionDto))
+            .isInstanceOf(DocmosisTimeoutException.class)
+            .hasMessageContaining("Docmosis Socket Timeout");
         verify(httpClient, times(1)).newCall(any());
     }
 
