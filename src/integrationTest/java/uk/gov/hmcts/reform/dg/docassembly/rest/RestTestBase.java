@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.reform.dg.docassembly.Application;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -21,10 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ActiveProfiles("integration-web-test")
-public class RestTestBase {
+@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
+class RestTestBase {
 
-    @Autowired
-    private WebApplicationContext context;
+    private final WebApplicationContext context;
 
     private static final String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm"
@@ -34,8 +35,12 @@ public class RestTestBase {
 
     protected MockMvc restLogoutMockMvc;
 
+    RestTestBase(WebApplicationContext context) {
+        this.context = context;
+    }
+
     @BeforeEach
-    public void setupMocks() {
+    void setupMocks() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", "ROLE_USER");
         claims.put("sub", 123);

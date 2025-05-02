@@ -59,6 +59,14 @@ sourceSets {
             runtimeClasspath += main.output
         }
     }
+
+    integrationTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
+
     contractTest {
         java {
             compileClasspath += main.output
@@ -156,6 +164,8 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
+    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.0.CR1'
+
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
 
@@ -165,12 +175,19 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
+    integrationTestImplementation sourceSets.main.runtimeClasspath
+    integrationTestImplementation sourceSets.test.runtimeClasspath
+
     aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: '2.1.1'
 
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
 
 processAatResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+processIntegrationTestResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -203,44 +220,6 @@ bootJar {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
 }
-
-def coverageExclusionList = [
-    '**uk/gov/hmcts/reform/dg/docassembly/Application*',
-    '**uk/gov/hmcts/reform/dg/docassembly/appinsights/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/dto/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/config/**/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/info/*',
-    '**uk/gov/hmcts/reform/dg/docassembly/service/DocmosisApiClient*'
-    ]
-
-jacocoTestReport {
-    executionData(test)
-
-    reports {
-        xml.required = true
-        csv.required = false
-        xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-    }
-
-}
-
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
-
-sonarqube {
-    properties {
-        property "sonar.projectName", "${rootProject.name}"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
-        property "sonar.exclusions", coverageExclusionList.join(", ")
-        property "sonar.test.exclusions", "**/test/**"
-        property "sonar.pitest.mode", "reuseReport"
-        property "sonar.pitest.reportsDirectory", "build/reports/pitest"
-
-        property "sonar.issue.ignore.multicriteria", "e1"
-        property "sonar.issue.ignore.multicriteria.e1.ruleKey", "java:S2629"
-        property "sonar.issue.ignore.multicriteria.e1.resourceKey", "src/main/java/uk/gov/hmcts/reform/dg/docassembly/**"
-    }
-}
-
 
 checkstyle {
     maxWarnings = 0
@@ -306,6 +285,15 @@ task smoke(type: Test) {
     include "uk/gov/hmcts/reform/dg/docassembly/smoke/**"
     useJUnitPlatform()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+tasks.register('integration', Test) {
+    failFast = true
+    useJUnitPlatform()
+    description = "Runs integration tests"
+    group = "Verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 task contract(type: Test) {
@@ -378,7 +366,7 @@ pitest {
     historyInputLocation = 'build/reports/pitest/fastermutationtesting'
     historyOutputLocation = 'build/reports/pitest/fastermutationtestingoutput'
     threads = 15
-    testSourceSets = [sourceSets.test]
+    testSourceSets = [sourceSets.test, sourceSets.integrationTest]
     mainSourceSets = [sourceSets.main]
     fileExtensionsToFilter.addAll('xml','json')
     outputFormats = ['XML', 'HTML','CSV']
@@ -393,6 +381,44 @@ pitest {
 }
 
 project.tasks['pitest'].group = "Verification"
+
+jacocoTestReport {
+
+    dependsOn test, integration
+    executionData(test, integration)
+
+    reports {
+        xml.required = true
+        csv.required = false
+        xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+    }
+
+}
+
+def coverageExclusionList = [
+        '**uk/gov/hmcts/reform/dg/docassembly/Application*',
+        '**uk/gov/hmcts/reform/dg/docassembly/appinsights/*',
+        '**uk/gov/hmcts/reform/dg/docassembly/dto/*',
+        '**uk/gov/hmcts/reform/dg/docassembly/config/**/*',
+        '**uk/gov/hmcts/reform/dg/docassembly/info/*',
+]
+
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "${rootProject.name}"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
+        property "sonar.exclusions", coverageExclusionList.join(", ")
+        property "sonar.test.exclusions", "**/test/**"
+        property "sonar.pitest.mode", "reuseReport"
+        property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+
+        property "sonar.issue.ignore.multicriteria", "e1"
+        property "sonar.issue.ignore.multicriteria.e1.ruleKey", "java:S2629"
+        property "sonar.issue.ignore.multicriteria.e1.resourceKey", "src/main/java/uk/gov/hmcts/reform/dg/docassembly/**"
+    }
+}
 
 task loadEnvSecrets() {
     doLast {

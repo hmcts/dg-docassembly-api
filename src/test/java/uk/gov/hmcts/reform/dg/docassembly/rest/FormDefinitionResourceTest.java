@@ -1,76 +1,123 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import uk.gov.hmcts.reform.dg.docassembly.Application;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.dg.docassembly.dto.TemplateIdDto;
-import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionRetrievalException;
 import uk.gov.hmcts.reform.dg.docassembly.service.FormDefinitionService;
-import uk.gov.hmcts.reform.dg.docassembly.service.TemplateNotFoundException;
 
+import java.io.IOException;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
 @ExtendWith(MockitoExtension.class)
-class FormDefinitionResourceTest extends RestTestBase {
+class FormDefinitionResourceTest {
 
-    @MockitoBean
-    FormDefinitionService formDefinitionService;
+    @Mock
+    private FormDefinitionService formDefinitionService;
 
-    @Test
-    void shouldCallFormDefinitionService() throws Exception {
+    @InjectMocks
+    private FormDefinitionResource formDefinitionResource;
 
+    @Captor
+    private ArgumentCaptor<TemplateIdDto> templateIdDtoCaptor;
+
+    private JsonNode mockFormDefinition;
+    private static final String TEST_TEMPLATE_ID = "template123";
+    private static final String TEST_JWT = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+
+    @BeforeEach
+    void setUp() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-
-        when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))
-                .thenReturn(Optional.of(objectMapper.readTree("{}")));
-
-        restLogoutMockMvc
-                .perform(get("/api/form-definitions/123")
-                        .header("Authorization", "xxx"))
-                .andDo(print()).andExpect(status().isOk());
+        mockFormDefinition = objectMapper.readTree("{\"fieldName\": \"fieldValue\", \"anotherField\": 123}");
     }
 
     @Test
-    void testTemplateNotFoundErrorCode() throws Exception {
+    @DisplayName("Should return OK with JsonNode when service finds the definition")
+    void getFormDefinition_shouldReturnOk_whenServiceReturnsDefinition() {
+        when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
+            .thenReturn(Optional.of(mockFormDefinition));
 
-        when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))
-                .thenThrow(new TemplateNotFoundException("xxx"));
+        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
+            TEST_TEMPLATE_ID,
+            TEST_JWT
+        );
 
-        restLogoutMockMvc
-                .perform(get("/api/form-definitions/123")
-                        .header("Authorization", "xxx"))
-                .andDo(print()).andExpect(status().is4xxClientError());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        verify(formDefinitionService, Mockito.times(1))
-                .getFormDefinition(Mockito.any(TemplateIdDto.class));
+        verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
+
+        TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
+        assertNotNull(capturedDto);
+        assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
+        assertEquals(TEST_JWT, capturedDto.getJwt());
+
+        assertNotNull(response.getBody());
+        assertEquals(mockFormDefinition, response.getBody());
     }
 
     @Test
-    void testTemplateRetrievalException() throws Exception {
+    @DisplayName("Should return Not Found when service does not find the definition")
+    void getFormDefinition_shouldReturnNotFound_whenServiceReturnsEmpty() {
 
-        when(formDefinitionService.getFormDefinition(Mockito.any(TemplateIdDto.class)))
-                .thenThrow(new FormDefinitionRetrievalException("xxx"));
+        when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
+            .thenReturn(Optional.empty());
 
-        restLogoutMockMvc
-                .perform(get("/api/form-definitions/123")
-                        .header("Authorization", "xxx"))
-                .andDo(print()).andExpect(status().is5xxServerError());
 
-        verify(formDefinitionService, Mockito.times(1))
-                .getFormDefinition(Mockito.any(TemplateIdDto.class));
+        ResponseEntity<JsonNode> response = formDefinitionResource.getFormDefinition(
+            TEST_TEMPLATE_ID,
+            TEST_JWT
+        );
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
+
+        TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
+        assertNotNull(capturedDto);
+        assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
+        assertEquals(TEST_JWT, capturedDto.getJwt());
+
+        assertNull(response.getBody());
     }
 
+    @Test
+    @DisplayName("Should propagate exception if service throws an error")
+    void getFormDefinition_shouldThrowException_whenServiceThrowsError() {
+
+        RuntimeException serviceException = new RuntimeException("Database connection failed");
+        when(formDefinitionService.getFormDefinition(any(TemplateIdDto.class)))
+            .thenThrow(serviceException);
+
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            formDefinitionResource.getFormDefinition(TEST_TEMPLATE_ID, TEST_JWT);
+        }, "Expected getFormDefinition to throw, but it didn't");
+
+        assertEquals(serviceException, thrown);
+
+        verify(formDefinitionService, times(1)).getFormDefinition(templateIdDtoCaptor.capture());
+
+        TemplateIdDto capturedDto = templateIdDtoCaptor.getValue();
+        assertNotNull(capturedDto);
+        assertEquals(TEST_TEMPLATE_ID, capturedDto.getTemplateId());
+        assertEquals(TEST_JWT, capturedDto.getJwt());
+    }
 }
