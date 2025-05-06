@@ -124,7 +124,7 @@ class TemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn500WhenMandatoryTemplateIdIsMissing() {
+    void shouldReturn400WhenMandatoryTemplateIdIsMissing() {
         assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
