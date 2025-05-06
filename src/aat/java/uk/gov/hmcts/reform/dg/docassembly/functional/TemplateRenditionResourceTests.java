@@ -132,7 +132,7 @@ class TemplateRenditionResourceTests extends BaseTest {
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
-                .statusCode(500)
+                .statusCode(400)
                 .log()
                 .all();
     }
