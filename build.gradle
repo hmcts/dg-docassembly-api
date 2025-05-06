@@ -193,7 +193,7 @@ processIntegrationTestResources {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.18.3') {
+        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.19.0') {
             entry 'jackson-core'
             entry 'jackson-databind'
             entry 'jackson-annotations'
