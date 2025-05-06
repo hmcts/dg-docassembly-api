@@ -127,7 +127,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn500WhenMandatoryTemplateIdIsMissing() throws JsonProcessingException {
+    void shouldReturn400WhenMandatoryTemplateIdIsMissing() throws JsonProcessingException {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setTemplateId(null);
@@ -138,7 +138,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
                 .post("/api/template-renditions")
                 .then()
                 .assertThat()
-                .statusCode(500)
+                .statusCode(400)
                 .log()
                 .all();
     }
