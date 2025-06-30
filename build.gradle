@@ -196,7 +196,7 @@ dependencyManagement {
             entry 'commons-compress'
         }
 
-        dependencySet(group: 'org.junit.platform', version: '1.13.1') {
+        dependencySet(group: 'org.junit.platform', version: '1.13.2') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
