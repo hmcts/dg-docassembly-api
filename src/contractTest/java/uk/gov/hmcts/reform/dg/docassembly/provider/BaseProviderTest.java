@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Objects;
+
 @Import(ContractTestProviderConfiguration.class)
 @IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
@@ -38,7 +40,7 @@ public abstract class BaseProviderTest {
         MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
         testTarget.setControllers(getControllersUnderTest());
 
-        if (context != null) {
+        if (Objects.nonNull(context)) {
             context.setTarget(testTarget);
         }
 
@@ -50,7 +52,7 @@ public abstract class BaseProviderTest {
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
-        if (context != null) {
+        if (Objects.nonNull(context)) {
             context.verifyInteraction();
         }
     }
