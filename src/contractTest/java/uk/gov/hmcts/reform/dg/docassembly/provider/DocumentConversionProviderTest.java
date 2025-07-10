@@ -53,5 +53,6 @@ class DocumentConversionProviderTest extends BaseProviderTest {
                 any(String.class),
                 any(String.class)))
             .thenReturn(tempPdfFile);
+        when(fileToPDFConverterService.convertFile(any(UUID.class))).thenReturn(tempPdfFile);
     }
 }
