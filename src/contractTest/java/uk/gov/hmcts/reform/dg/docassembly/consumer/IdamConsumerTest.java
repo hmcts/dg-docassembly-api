@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.dg.docassembly;
+package uk.gov.hmcts.reform.dg.docassembly.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
