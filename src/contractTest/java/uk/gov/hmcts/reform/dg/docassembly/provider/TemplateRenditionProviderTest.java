@@ -56,7 +56,7 @@ public class TemplateRenditionProviderTest extends BaseProviderTest {
         dto.setHashToken("Abcde12345");
         dto.setOutputType(RenditionOutputType.PDF);
         dto.setErrors(new ArrayList<>());
-        dto.setRenditionOutputLocation("http://dm-store:8080/documents/a1b2c3d4-e5f6-7890-g1h2-i3j4k5l6m7n8");
+        dto.setRenditionOutputLocation("http://dm-store:8080/documents/d9a74b1e-188e-4a6c-9f82-3e28e0b2e8b0");
 
         try {
             ObjectMapper localObjectMapper = new ObjectMapper();
