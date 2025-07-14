@@ -161,8 +161,15 @@ dependencies {
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
 
+    contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
+
+    contractTestImplementation group: 'org.springframework.data', name: 'spring-data-commons'
 
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
@@ -288,36 +295,97 @@ tasks.register('integration', Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-task contract(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Runs the consumer Pact tests'
-    useJUnitPlatform()
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-    include "uk/gov/hmcts/reform/dg/docassembly/**"
-    systemProperty 'pact.rootDir', "pacts"
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-}
-
-task runAndPublishConsumerPactTests(type: Test){
-    logger.lifecycle("Runs pact Tests")
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-
-}
-
 task fortifyScan(type: JavaExec)  {
     main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
 
-runAndPublishConsumerPactTests.dependsOn contract
-
-runAndPublishConsumerPactTests.finalizedBy pactPublish
 
 project.ext {
-    pactVersion = getCheckedOutGitCommitHash()
+    pacticipantVersion = getCheckedOutGitCommitHash()
+}
+
+task contract(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Runs the consumer Pact tests'
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    include '**/consumer/**'
+    systemProperty 'pact.rootDir', "pacts"
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+
+pact {
+    broker {
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+    }
+    publish {
+        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
+        pactDirectory = 'pacts'
+        tags = [System.getenv("PACT_BRANCH_NAME") ?: 'Dev']
+        consumerBranch = System.getenv("PACT_BRANCH_NAME") ?: 'Dev'
+        version = project.pacticipantVersion
+    }
+}
+
+pactPublish {
+    pactPublish = project.pact.publish
+}
+
+tasks.register('runAndPublishConsumerPactTests', Test) {
+    logger.lifecycle("Runs pact Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+}
+
+runAndPublishConsumerPactTests.dependsOn contract
+runAndPublishConsumerPactTests.finalizedBy pactPublish
+
+tasks.register('providerContractTests', Test) {
+    description = 'Runs ONLY the provider Pact verification tests.'
+    group = 'Verification'
+
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+
+    include '**/provider/**'
+
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+
+    if (project.hasProperty('pact.verifier.publishResults')) {
+        systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
+    }
+    if (project.hasProperty('pact.provider.version')) {
+        systemProperty 'pact.provider.version', project.property('pact.provider.version')
+    } else {
+        systemProperty 'pact.provider.version', project.pacticipantVersion
+    }
+
+    if (project.hasProperty('pact.provider.branch')) {
+        systemProperty 'pact.provider.branch', project.property('pact.provider.branch')
+    } else {
+        systemProperty 'pact.provider.branch', System.getenv("PACT_BRANCH_NAME") ?: "Dev"
+    }
+
+    doFirst {
+        println "--- Running 'providerContractTests' (including only **/provider/**) ---"
+        println "System properties for this run: ${systemProperties}"
+    }
+}
+
+tasks.register('runProviderPactVerification') {
+    description = 'Entry point for Jenkins to run provider contract tests.'
+    group = 'Verification'
+
+    dependsOn tasks.named('providerContractTests')
 }
 
 static def getCheckedOutGitCommitHash() {
@@ -326,18 +394,6 @@ static def getCheckedOutGitCommitHash() {
 
 serenity {
     reports = ["single-page-html"]
-}
-
-pact {
-    publish {
-        pactDirectory = 'pacts'
-        pactBrokerUrl = System.getenv("PACT_BROKER_FULL_URL") ?: 'http://localhost:80'
-        version = project.pactVersion
-    }
-}
-
-pactPublish {
-    pactPublish = project.pact.publish
 }
 
 compileJava.dependsOn processResources
