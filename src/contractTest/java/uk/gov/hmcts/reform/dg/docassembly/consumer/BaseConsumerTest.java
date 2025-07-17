@@ -22,7 +22,8 @@ public abstract class BaseConsumerTest {
     public Map<String, String> getHeaders() {
         return Map.of(
             SERVICE_AUTHORIZATION, SERVICE_AUTH_TOKEN,
-            AUTHORIZATION, AUTH_TOKEN
+            AUTHORIZATION, AUTH_TOKEN,
+            "Content-Type", "application/json"
         );
     }
 }
