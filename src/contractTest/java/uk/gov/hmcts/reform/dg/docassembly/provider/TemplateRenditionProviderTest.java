@@ -61,9 +61,7 @@ public class TemplateRenditionProviderTest extends BaseProviderTest {
         try {
             ObjectMapper localObjectMapper = new ObjectMapper();
             JsonNode formPayload = localObjectMapper.readTree(
-                "{\"caseReference\":\"1234-5678-9012-3456\","
-                + "\"applicantFirstName\":\"John\","
-                + "\"applicantLastName\":\"Smith\"}"
+                "{\"formKey1\":\"formValue1\"}"
             );
             dto.setFormPayload(formPayload);
         } catch (Exception e) {
