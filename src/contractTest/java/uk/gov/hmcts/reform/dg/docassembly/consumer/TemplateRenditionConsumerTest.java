@@ -62,7 +62,7 @@ class TemplateRenditionConsumerTest extends BaseConsumerTest {
             .stringType("caseTypeId", "FinancialRemedyContested")
             .stringType("jurisdictionId", "DIVORCE")
             .stringType("hashToken", "Abcde12345")
-            .stringMatcher("outputType", "(PDF|DOCX)", "PDF")
+            .stringMatcher("outputType", "(PDF|DOC|DOCX)", "PDF")
             .object("formPayload")
             .array("errors");
     }
