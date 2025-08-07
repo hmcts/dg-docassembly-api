@@ -1,5 +1,6 @@
 import uk.gov.hmcts.rse.AuthMode
 
+import javax.inject.Inject
 import java.nio.charset.StandardCharsets
 
 plugins {
@@ -459,11 +460,18 @@ sonarqube {
     }
 }
 
+interface ExecOperationsProvider {
+    @Inject
+    ExecOperations getExecOperations()
+}
+
 tasks.register('loadEnvSecrets') {
+    def execOps = project.objects.newInstance(ExecOperationsProvider).getExecOperations()
+
     doLast {
         if (!project.file('./.aat-env').exists()) {
             new ByteArrayOutputStream().withStream { os ->
-                exec {
+                execOps.exec {
                     commandLine 'az', 'keyvault', 'secret', 'show', '--vault-name', 'dg-docassembly-aat', '-o', 'tsv', '--query', 'value', '--name', 'dg-docassembly-dot-env'
                     standardOutput = os
                 }
@@ -518,9 +526,10 @@ bootWithCCD {
             def value = it.substring(index + 1)
             environment key, value
         }
+        def execOps = project.objects.newInstance(ExecOperationsProvider).getExecOperations()
 
-        exec {
-            commandLine 'docker', 'compose', '-f', 'src/cftlib/resources/docker-compose-local.yml', '-p', 'cftlib', 'up', '-d'
+        execOps.exec {
+            commandLine 'docker', 'compose', '-f', 'src/cftlib/resources/docker-compose-local.yml', '-p', 'cftlib-additional', 'up', '-d'
         }
 
     }
