@@ -1,3 +1,6 @@
+import uk.gov.hmcts.rse.AuthMode
+
+import java.nio.charset.StandardCharsets
 
 plugins {
     id 'application'
@@ -16,11 +19,8 @@ plugins {
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
-group 'uk.gov.hmcts.reform.dg.docassembly'
-version '1.0.0'
+group = 'uk.gov.hmcts.reform.dg.docassembly'
+version = '1.0.0'
 
 
 java {
@@ -29,11 +29,8 @@ java {
     }
 }
 
-mainClassName = 'uk.gov.hmcts.reform.dg.docassembly.Application'
-
-configurations {
-    aatImplementation.extendsFrom(testImplementation)
-    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
+application {
+    mainClass = 'uk.gov.hmcts.reform.dg.docassembly.Application'
 }
 
 def versions = [
@@ -67,7 +64,12 @@ sourceSets {
     }
 }
 
-configurations.all {
+configurations {
+    aatImplementation.extendsFrom(testImplementation)
+    aatRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
+configurations.configureEach {
     exclude group: 'com.vaadin.external.google',module: 'android-json'
     exclude group: 'org.glassfish', module: 'jakarta.el'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
@@ -244,15 +246,6 @@ dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
 
-idea {
-    module {
-        testSourceDirs += project.sourceSets.aat.java.srcDirs
-        testResourceDirs += project.sourceSets.aat.resources.srcDirs
-        testSourceDirs += project.sourceSets.contractTest.java.srcDirs
-        testResourceDirs += project.sourceSets.contractTest.resources.srcDirs
-    }
-}
-
 
 // https://github.com/gradle/gradle/issues/16791
 tasks.withType(JavaExec).configureEach {
@@ -263,7 +256,7 @@ test {
     useJUnitPlatform()
 }
 
-task functional(type: Test) {
+tasks.register('functional', Test) {
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
     setTestClassesDirs(sourceSets.aat.output.classesDirs)
@@ -276,7 +269,7 @@ task functional(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
-task smoke(type: Test) {
+tasks.register('smoke', Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
     setTestClassesDirs(sourceSets.aat.output.classesDirs)
@@ -295,8 +288,8 @@ tasks.register('integration', Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-task fortifyScan(type: JavaExec)  {
-    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+tasks.register('fortifyScan', JavaExec) {
+    mainClass = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
@@ -306,7 +299,7 @@ project.ext {
     pacticipantVersion = getCheckedOutGitCommitHash()
 }
 
-task contract(type: Test) {
+tasks.register('contract', Test) {
     group = 'Delivery pipeline'
     description = 'Runs the consumer Pact tests'
     useJUnitPlatform()
@@ -428,8 +421,6 @@ pitest {
     pitestVersion = '1.17.3'
 }
 
-project.tasks['pitest'].group = "Verification"
-
 jacocoTestReport {
 
     dependsOn test, integration
@@ -468,7 +459,7 @@ sonarqube {
     }
 }
 
-task loadEnvSecrets() {
+tasks.register('loadEnvSecrets') {
     doLast {
         if (!project.file('./.aat-env').exists()) {
             new ByteArrayOutputStream().withStream { os ->
@@ -476,13 +467,14 @@ task loadEnvSecrets() {
                     commandLine 'az', 'keyvault', 'secret', 'show', '--vault-name', 'dg-docassembly-aat', '-o', 'tsv', '--query', 'value', '--name', 'dg-docassembly-dot-env'
                     standardOutput = os
                 }
-                project.file('./.aat-env').write(new String(os.toString().replace('\n', '').decodeBase64(), java.nio.charset.StandardCharsets.UTF_8))
+                project.file('./.aat-env').write(new String(os.toString().replace('\n', '').decodeBase64(), StandardCharsets.UTF_8))
             }
         }
     }
 }
 
-task reloadEnvSecrets(group: 'ccd tasks', dependsOn: [loadEnvSecrets]) {
+tasks.register('reloadEnvSecrets') {
+    dependsOn(loadEnvSecrets)
     doFirst {
         if (project.file('./.aat-env').exists()) {
             project.file('./.aat-env').delete()
@@ -539,7 +531,7 @@ bootWithCCD {
     environment 'CASE_DOCUMENT_S2S_AUTHORISED_SERVICES', 'em_gw,dg_docassembly_api,ccd_case_document_am_api,ccd_gw,xui_webapp,ccd_data'
     environment 'S2S_URL', 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
     environment 'CASE_DOCUMENT_AM_API_S2S_SECRET','${CASE_DOCUMENT_AM_API_S2S_SECRET}'
-    authMode = uk.gov.hmcts.rse.AuthMode.Local
+    authMode = AuthMode.Local
 }
 
 // exclude the logback binding is coming in via cftlib
