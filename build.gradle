@@ -180,7 +180,7 @@ dependencies {
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
 
-    aatImplementation group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version:'2.2.0'
+    aatImplementation group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version:'2.2.1'
 
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
