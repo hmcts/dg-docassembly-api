@@ -195,12 +195,6 @@ processIntegrationTestResources {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'com.fasterxml.jackson.core', version: '2.20.0') {
-            entry 'jackson-core'
-            entry 'jackson-databind'
-            entry 'jackson-annotations'
-        }
-
         //CVE-2024-26308, CVE-2024-25710
         dependencySet(group: 'org.apache.commons', version: '1.28.0') {
             entry 'commons-compress'
