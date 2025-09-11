@@ -7,8 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class ToggleProperties {
 
-    private boolean enableFormDefinitionEndpoint;
-
     private boolean enableTemplateRenditionEndpoint;
 
     private boolean enableDocumentConversionEndpoint;
