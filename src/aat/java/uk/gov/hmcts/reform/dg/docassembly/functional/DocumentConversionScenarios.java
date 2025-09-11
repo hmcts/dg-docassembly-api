@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 class DocumentConversionScenarios extends BaseTest {
@@ -40,7 +39,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithWordDocument() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -49,7 +47,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithDocx() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadDocxDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -59,7 +56,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithPptx() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadPptxDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -68,7 +64,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithPPT() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadPptDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -77,7 +72,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithXlsx() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadXlsxDocumentAndReturnUrl();
 
         Response response = createAndProcessRequest(newDocId);
@@ -87,7 +81,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithXLS() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadXLSDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -96,7 +89,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithRTF() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadRTFDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -105,7 +97,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testPDFConversionWithTXT() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadTXTDocumentAndReturnUrl();
         Response response = createAndProcessRequest(newDocId);
 
@@ -114,7 +105,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void testFailedConversion() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         String newDocId = testUtil.uploadTXTDocumentAndReturnUrl();
         Response response = createAndProcessRequestFailure(newDocId + "567");
 
@@ -123,7 +113,6 @@ class DocumentConversionScenarios extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAuthenticateUserConvertWordDocumentToPDF() {
-        assumeTrue(toggleProperties.isEnableDocumentConversionEndpoint());
         final String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
         final UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
         unAuthenticatedRequest

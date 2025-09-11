@@ -9,8 +9,6 @@ public class ToggleProperties {
 
     private boolean enableTemplateRenditionEndpoint;
 
-    private boolean enableDocumentConversionEndpoint;
-
     private boolean enableSecureDocumentConversionEndpoint;
 
     private boolean enableSecureDocumentTemplRendEndpoint;
