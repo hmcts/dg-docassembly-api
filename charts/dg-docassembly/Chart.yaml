@@ -1,7 +1,7 @@
 name: dg-docassembly
 apiVersion: v2
 home: https://github.com/hmcts/dg-docassembly-api
-version: 2.1.1
+version: 2.1.2
 description: HMCTS Document Assembly API
 maintainers:
   - name: HMCTS EM Team

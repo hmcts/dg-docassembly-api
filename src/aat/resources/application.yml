@@ -63,7 +63,6 @@ core_case_data:
     url: ${CCD_DATA_API:http://localhost:4452}
 
 toggle:
-  enable_form_definition_endpoint: ${ENABLE_FORM_DEFINITION_ENDPOINT:false}
   enable_template_rendition_endpoint: ${ENABLE_TEMPLATE_RENDITION_ENDPOINT:true}
   enable_secure_document_conversion_endpoint: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:false}
   enable-secure-document-templ-rend-endpoint: ${ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT:false}

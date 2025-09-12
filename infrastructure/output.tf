@@ -27,10 +27,6 @@ output "enable_idam_healthcheck" {
   value = var.enable_idam_healthcheck
 }
 
-output "enable_form_definition_endpoint" {
-  value = var.enable_form_definition_endpoint
-}
-
 output "enable_template_rendition_endpoint" {
   value = var.enable_template_rendition_endpoint
 }

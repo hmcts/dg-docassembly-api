@@ -43,7 +43,6 @@ java:
     CASE_WORKER_ROLES: caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce
     ENABLE_IDAM_HEALTH_CHECK: false
     ENABLE_S2S_HEALTH_CHECK: false
-    ENABLE_FORM_DEFINITION_ENDPOINT: false
     SERVER_PORT: 8080
     HTTPCLIENT_CALL_TIMEOUT: 30
     ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT: false
