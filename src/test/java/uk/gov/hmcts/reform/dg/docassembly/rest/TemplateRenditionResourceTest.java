@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
-import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
 
 import java.io.IOException;
 

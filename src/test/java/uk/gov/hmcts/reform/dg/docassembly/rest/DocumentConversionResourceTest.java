@@ -8,9 +8,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
-import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.exception.FileTypeException;
+import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 
 import java.io.File;
 import java.util.UUID;
