@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.service.DmStoreDownloader;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 
 import java.io.File;
 import java.io.IOException;

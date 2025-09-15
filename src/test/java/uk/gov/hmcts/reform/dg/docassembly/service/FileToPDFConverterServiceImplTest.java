@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import uk.gov.hmcts.reform.dg.docassembly.conversion.DocmosisConverter;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.FileTypeException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.FileTypeException;
 import uk.gov.hmcts.reform.dg.docassembly.service.impl.FileToPDFConverterServiceImpl;
 
 import java.io.File;

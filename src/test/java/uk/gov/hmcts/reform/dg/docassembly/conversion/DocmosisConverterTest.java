@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;

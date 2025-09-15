@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocmosisTimeoutException;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;

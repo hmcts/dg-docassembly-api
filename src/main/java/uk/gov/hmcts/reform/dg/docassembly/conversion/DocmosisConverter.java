@@ -8,7 +8,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentProcessingException;
 
 import java.io.File;
 import java.io.IOException;

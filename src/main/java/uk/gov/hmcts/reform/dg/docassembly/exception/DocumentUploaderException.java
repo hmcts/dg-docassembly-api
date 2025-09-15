@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.dg.docassembly.service;
+package uk.gov.hmcts.reform.dg.docassembly.exception;
 
 public class DocumentUploaderException extends RuntimeException {
 
