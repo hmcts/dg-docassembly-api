@@ -104,7 +104,6 @@ document_management:
   docker_url: http://dm-store:8080
 
 endpoint-toggles:
-  form-definitions: ${ENABLE_FORM_DEFINITION_ENDPOINT:true}
   enable-secure-document-conversion-endpoint: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:false}
   enable-secure-document-templ-rend-endpoint: ${ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT:false}
 
