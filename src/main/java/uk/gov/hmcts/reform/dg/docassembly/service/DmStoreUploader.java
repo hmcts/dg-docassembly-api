@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.auth.checker.core.user.User;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.appinsights.DependencyProfiler;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentUploaderException;
 
 import java.io.File;
 import java.io.IOException;

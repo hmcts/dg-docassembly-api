@@ -23,7 +23,7 @@ import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
 import uk.gov.hmcts.reform.dg.docassembly.dto.ByteArrayMultipartFile;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 
 import java.io.File;
 import java.io.IOException;

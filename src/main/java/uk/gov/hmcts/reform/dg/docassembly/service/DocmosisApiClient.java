@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.dg.docassembly.appinsights.DependencyProfiler;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocmosisTimeoutException;
 
 import java.io.IOException;
 import java.net.SocketException;

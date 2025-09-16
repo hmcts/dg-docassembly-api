@@ -20,7 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.dg.docassembly.service.exception.DocumentTaskProcessingException;
+import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.impl.DmStoreDownloaderImpl;
 
 import java.io.ByteArrayInputStream;

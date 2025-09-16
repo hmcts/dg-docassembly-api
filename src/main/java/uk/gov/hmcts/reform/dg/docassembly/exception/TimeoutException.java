@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.dg.docassembly.service;
+package uk.gov.hmcts.reform.dg.docassembly.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
