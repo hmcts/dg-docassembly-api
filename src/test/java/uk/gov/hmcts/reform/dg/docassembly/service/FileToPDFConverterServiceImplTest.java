@@ -40,7 +40,7 @@ class FileToPDFConverterServiceImplTest {
     private static final UUID docStoreUUID = UUID.randomUUID();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         fileToPDFConverterServiceImpl.fileExtensionsList =
                 Arrays.asList("doc", "docx","pptx", "ppt", "rtf", "txt", "xlsx", "xls","jpeg");
