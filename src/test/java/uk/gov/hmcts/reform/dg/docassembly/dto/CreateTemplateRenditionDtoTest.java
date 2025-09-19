@@ -12,7 +12,7 @@ class CreateTemplateRenditionDtoTest {
     CreateTemplateRenditionDto dto;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         dto = new CreateTemplateRenditionDto();
         dto.setOutputType(RenditionOutputType.PDF);
     }
