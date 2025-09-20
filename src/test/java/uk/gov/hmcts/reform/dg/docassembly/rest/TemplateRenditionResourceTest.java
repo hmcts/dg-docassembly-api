@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -21,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.dg.docassembly.rest.TemplateRenditionResource.CDAM_VALIDATION_MSG;
 
 class TemplateRenditionResourceTest {
 
@@ -94,7 +94,7 @@ class TemplateRenditionResourceTest {
                         AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
-        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+        assertEquals(CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
     }
 
     @Test
@@ -110,7 +110,7 @@ class TemplateRenditionResourceTest {
                         AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
-        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+        assertEquals(CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ class TemplateRenditionResourceTest {
                         AUTH, SERVICE_AUTH);
 
         assertEquals(1, renditionDtoResponseEntity.getBody().getErrors().size());
-        assertEquals(Constants.CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
+        assertEquals(CDAM_VALIDATION_MSG, renditionDtoResponseEntity.getBody().getErrors().get(0));
     }
 }

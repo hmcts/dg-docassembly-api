@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.dg.docassembly.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 public class CreateTemplateRenditionDto extends TemplateIdDto {
 
     private JsonNode formPayload;
@@ -87,5 +89,7 @@ public class CreateTemplateRenditionDto extends TemplateIdDto {
 
         return this.getOutputFilename() + this.outputType.getFileExtension();
     }
+
+
 
 }

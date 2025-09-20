@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -32,6 +31,8 @@ import java.io.IOException;
 @Tag(name = "Template Rendition Service", description = "Endpoint for Template Rendition.")
 public class TemplateRenditionResource {
 
+    public static final String IS_ADMIN = "isAdmin";
+    public static final String CDAM_VALIDATION_MSG = "caseTypeId and jurisdictionId are required attributes.";
     private final TemplateRenditionService templateRenditionService;
 
     private final Logger logger = LoggerFactory.getLogger(TemplateRenditionResource.class);
@@ -41,7 +42,7 @@ public class TemplateRenditionResource {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setDisallowedFields(Constants.IS_ADMIN);
+        binder.setDisallowedFields(IS_ADMIN);
     }
 
     @Autowired
@@ -73,7 +74,7 @@ public class TemplateRenditionResource {
         );
         if (cdamEnabled && (StringUtils.isBlank(createTemplateRenditionDto.getCaseTypeId())
                 || StringUtils.isBlank(createTemplateRenditionDto.getJurisdictionId()))) {
-            createTemplateRenditionDto.getErrors().add(Constants.CDAM_VALIDATION_MSG);
+            createTemplateRenditionDto.getErrors().add(CDAM_VALIDATION_MSG);
             return ResponseEntity
                 .badRequest()
                 .body(createTemplateRenditionDto);
