@@ -46,10 +46,13 @@ public class TemplateRenditionService {
             response = this.docmosisApiClient.render(createTemplateRenditionDto);
 
             if (!response.isSuccessful()) {
-                TemplateRenditionException exceptionToThrow = new TemplateRenditionException(
-                        String.format("Could not render a template %s. HTTP response and message %d, %s",
-                                createTemplateRenditionDto.getTemplateId(), response.code(), response.body().string()));
-                log.error(exceptionToThrow.toString(), exceptionToThrow);
+                String errorMessage = String.format("Could not render a template %s. HTTP response: %d %s",
+                    createTemplateRenditionDto.getTemplateId(), response.code(), response.body().string());
+
+                TemplateRenditionException exceptionToThrow = new TemplateRenditionException(errorMessage);
+
+                log.error(errorMessage, exceptionToThrow);
+
                 throw exceptionToThrow;
             }
 
