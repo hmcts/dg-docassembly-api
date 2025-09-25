@@ -15,7 +15,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
-import uk.gov.hmcts.reform.dg.docassembly.config.Constants;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -171,7 +170,7 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
 
             response.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(ERROR_PATH, hasItem(Constants.CDAM_VALIDATION_MSG)));
+                .andExpect(jsonPath(ERROR_PATH, hasItem(TemplateRenditionResource.CDAM_VALIDATION_MSG)));
 
             verify(templateRenditionService, never()).renderTemplate(any(CreateTemplateRenditionDto.class));
         }
@@ -189,7 +188,7 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
 
             response.andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(ERROR_PATH, hasItem(Constants.CDAM_VALIDATION_MSG)));
+                .andExpect(jsonPath(ERROR_PATH, hasItem(TemplateRenditionResource.CDAM_VALIDATION_MSG)));
 
             verify(templateRenditionService, never()).renderTemplate(any(CreateTemplateRenditionDto.class));
         }

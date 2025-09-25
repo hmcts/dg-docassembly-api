@@ -12,8 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DependencyProfilerAspect {
 
+    private final TelemetryClient telemetryClient;
+
     @Autowired
-    private TelemetryClient telemetryClient;
+    public DependencyProfilerAspect(TelemetryClient telemetryClient) {
+        this.telemetryClient = telemetryClient;
+    }
 
     @Around(value = "@annotation(annotation)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint, DependencyProfiler annotation) throws Throwable {
