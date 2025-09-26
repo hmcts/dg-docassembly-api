@@ -35,7 +35,7 @@ class TemplateRenditionResourceTest {
     ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
         this.templateRenditionResource = new TemplateRenditionResource(templateRenditionService);
     }

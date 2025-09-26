@@ -33,7 +33,7 @@ class DmStoreUploaderTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
 
         interceptor = new MockInterceptor();
 
@@ -100,11 +100,9 @@ class DmStoreUploaderTest {
                 .post()
                 .respond("").code(404));
 
+        File tempFile = File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b");
         assertThrows(DocumentUploaderException.class, () ->
-            dmStoreUploader.uploadFile(
-                    File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
-                    createTemplateRenditionDto
-            )
+            dmStoreUploader.uploadFile(tempFile, createTemplateRenditionDto)
         );
 
     }
@@ -162,11 +160,9 @@ class DmStoreUploaderTest {
                 .respond("").code(500));
 
 
+        File tempFile = File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b");
         assertThrows(DocumentUploaderException.class, () ->
-                dmStoreUploader.uploadFile(
-                        File.createTempFile("testing_doc_assembly_a", "testing_doc_assembly_b"),
-                        createTemplateRenditionDto
-                )
+            dmStoreUploader.uploadFile(tempFile, createTemplateRenditionDto)
         );
     }
 }
