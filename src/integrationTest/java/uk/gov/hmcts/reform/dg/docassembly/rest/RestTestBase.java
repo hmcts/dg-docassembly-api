@@ -27,7 +27,7 @@ class RestTestBase {
 
     private final WebApplicationContext context;
 
-    private static final String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
+    private static final String DUMMY_ID_JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
             + ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm"
             + "p0aSI6ImQzNWRmMTRkLTA5ZjYtNDhmZi04YTkzLTdjNmYwMzM5MzE1OSIsImlhdCI6MTU0M"
             + "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr"
@@ -45,7 +45,7 @@ class RestTestBase {
         claims.put("groups", "ROLE_USER");
         claims.put("sub", 123);
 
-        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
+        OidcIdToken idToken = new OidcIdToken(DUMMY_ID_JWT, Instant.now(),
                 Instant.now().plusSeconds(60), claims);
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
