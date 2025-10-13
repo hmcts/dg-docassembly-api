@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
@@ -26,6 +27,7 @@ class TemplateRenditionResourceTests extends BaseTest {
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
 
+    @Autowired
     public TemplateRenditionResourceTests(
             TestUtil testUtil,
             ToggleProperties toggleProperties,

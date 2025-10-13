@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
@@ -25,6 +26,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
 
+    @Autowired
     public SecureDocumentConversionScenarios(
             TestUtil testUtil,
             ToggleProperties toggleProperties,

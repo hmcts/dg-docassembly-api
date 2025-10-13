@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
@@ -13,6 +14,7 @@ class OpenIdConnectSceanarios extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS_URL = "/api/template-renditions";
 
+    @Autowired
     public OpenIdConnectSceanarios(
             TestUtil testUtil,
             ToggleProperties toggleProperties,

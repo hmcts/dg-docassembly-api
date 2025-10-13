@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
@@ -27,6 +28,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
+    @Autowired
     public SecureTemplateRenditionResourceTests(
             TestUtil testUtil,
             ToggleProperties toggleProperties,
