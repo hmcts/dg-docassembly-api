@@ -5,7 +5,6 @@ import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,15 +24,20 @@ import uk.gov.hmcts.reform.em.test.retry.RetryExtension;
 @WithTags({@WithTag("testType:Functional")})
 public abstract class BaseTest {
 
-    @Autowired
-    TestUtil testUtil;
+    protected final TestUtil testUtil;
 
-    @Autowired
-    ToggleProperties toggleProperties;
+    protected final ToggleProperties toggleProperties;
 
-    @Autowired
-    ExtendedCcdHelper extendedCcdHelper;
+    protected final ExtendedCcdHelper extendedCcdHelper;
+
+    public static final String API_CONVERT = "/api/convert/";
 
     @RegisterExtension
     RetryExtension retryExtension = new RetryExtension(3);
+
+    protected BaseTest(TestUtil testUtil, ToggleProperties toggleProperties, ExtendedCcdHelper extendedCcdHelper) {
+        this.testUtil = testUtil;
+        this.toggleProperties = toggleProperties;
+        this.extendedCcdHelper = extendedCcdHelper;
+    }
 }

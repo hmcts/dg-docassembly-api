@@ -7,10 +7,11 @@ import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 import uk.gov.hmcts.reform.document.domain.Document;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,14 +20,20 @@ import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 class SecureTemplateRenditionResourceTests extends BaseTest {
 
+    public static final String API_TEMPLATE_RENDITIONS = "/api/template-renditions";
     //The calling service has enabled CDAM via a feature flag in the request payload in all instances in this test.
-    @Autowired
-    private TestUtil testUtil;
-
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
 
     ObjectMapper mapper = new ObjectMapper();
+
+    public SecureTemplateRenditionResourceTests(
+            TestUtil testUtil,
+            ToggleProperties toggleProperties,
+            ExtendedCcdHelper extendedCcdHelper
+    ) {
+        super(testUtil, toggleProperties, extendedCcdHelper);
+    }
 
     @BeforeEach
     public void setupRequestSpecification() {
@@ -48,7 +55,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(200)
@@ -64,7 +71,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions").then()
+                .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -79,7 +86,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions").then()
+                .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -96,7 +103,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto response =
                 cdamRequest
                         .body(jsonObject.toString())
-                        .post("/api/template-renditions")
+                        .post(API_TEMPLATE_RENDITIONS)
                         .then()
                         .statusCode(200)
                         .extract()
@@ -118,7 +125,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(400)
@@ -135,7 +142,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(400)
@@ -150,7 +157,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         unAuthenticatedRequest
                 .body(jsonObject.toString())
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(401)
@@ -166,7 +173,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
             .body(jsonObject.toString())
-            .post("/api/template-renditions")
+            .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
             .statusCode(400)
@@ -182,7 +189,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
         cdamRequest
             .body(jsonObject.toString())
-            .post("/api/template-renditions")
+            .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
             .statusCode(400)

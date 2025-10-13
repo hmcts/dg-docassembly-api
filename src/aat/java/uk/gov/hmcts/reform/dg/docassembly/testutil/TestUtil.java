@@ -11,16 +11,17 @@ import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class TestUtil {
 
+    public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
+    public static final String AUTHORIZATION = "Authorization";
     private String idamAuth;
     private String s2sAuth;
-    private final String invalidAuthToken = "238beab2-b563-4fee-80fa-63f224bc56f6";
-    private final String invalidServiceAuthToken = "438bexy2-b545-4fef-80ab-63f234ae57f58f6";
+    private static final String INVALID_IDAM = "238beab2-b563-4fee-80fa-63f224bc56f6";
+    private static final String INVALID_SERVICE = "438bexy2-b545-4fef-80ab-63f234ae57f58f6";
 
     private final IdamHelper idamHelper;
     private final S2sHelper s2sHelper;
@@ -55,7 +56,7 @@ public class TestUtil {
 
     private void init() {
         idamHelper.createUser("docassemblyTestUser@docassemblyTest.com",
-                Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").collect(Collectors.toList()));
+                Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").toList());
         RestAssured.useRelaxedHTTPSValidation();
         idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com");
         s2sAuth = s2sHelper.getS2sToken();
@@ -64,17 +65,17 @@ public class TestUtil {
     public RequestSpecification authRequest() {
         return RestAssured
                 .given()
-                .header("Authorization", idamAuth)
-                .header("ServiceAuthorization", s2sAuth)
+                .header(AUTHORIZATION, idamAuth)
+                .header(SERVICE_AUTHORIZATION, s2sAuth)
                 .header("Content-Type", "application/json");
     }
 
     public RequestSpecification cdamAuthRequest() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", cdamS2sHelper.getS2sToken())
+                .header(SERVICE_AUTHORIZATION, cdamS2sHelper.getS2sToken())
                 .header("Content-Type", "application/json")
-                .header("Authorization", idamAuth);
+                .header(AUTHORIZATION, idamAuth);
     }
 
     public String getTestUrl() {
@@ -88,25 +89,25 @@ public class TestUtil {
     private RequestSpecification s2sAuthRequest() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", s2sAuth);
+                .header(SERVICE_AUTHORIZATION, s2sAuth);
     }
 
     public RequestSpecification cdamS2sAuthRequest() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", cdamS2sHelper.getS2sToken());
+                .header(SERVICE_AUTHORIZATION, cdamS2sHelper.getS2sToken());
     }
 
     public RequestSpecification emptyIdamAuthRequest() {
         return s2sAuthRequest()
-                .header("Authorization", null);
+                .header(AUTHORIZATION, null);
     }
 
     public RequestSpecification emptyIdamAuthAndEmptyS2SAuth() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", null)
-                .header("Authorization", null);
+                .header(SERVICE_AUTHORIZATION, null)
+                .header(AUTHORIZATION, null);
     }
 
     public RequestSpecification randomHeadersInRequest() {
@@ -118,23 +119,23 @@ public class TestUtil {
 
     public RequestSpecification validAuthRequestWithEmptyS2SAuth() {
         return emptyS2sAuthRequest()
-                .header("Authorization", idamAuth);
+                .header(AUTHORIZATION, idamAuth);
     }
 
     public RequestSpecification validS2SAuthWithEmptyIdamAuth() {
         return s2sAuthRequest()
-                .header("Authorization", null);
+                .header(AUTHORIZATION, null);
     }
 
     private RequestSpecification emptyS2sAuthRequest() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", null);
+                .header(SERVICE_AUTHORIZATION, null);
     }
 
     public RequestSpecification invalidIdamAuthrequest() {
         return s2sAuthRequest()
-                .header("Authorization", invalidAuthToken);
+                .header(AUTHORIZATION, INVALID_IDAM);
     }
 
     public RequestSpecification noHeadersInRequest() {
@@ -143,13 +144,13 @@ public class TestUtil {
 
     public RequestSpecification invalidS2SAuth() {
         return invalidS2sAuthRequest()
-                .header("Authorization", idamAuth);
+                .header(AUTHORIZATION, idamAuth);
     }
 
     private RequestSpecification invalidS2sAuthRequest() {
         return RestAssured
                 .given()
-                .header("ServiceAuthorization", invalidServiceAuthToken);
+                .header(SERVICE_AUTHORIZATION, INVALID_SERVICE);
     }
 
     public String getDmApiUrl() {
@@ -213,7 +214,7 @@ public class TestUtil {
                     ? url.replaceAll(getDmApiUrl(), getDmDocumentApiUrl())
                     : url;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DocumentUploadException("Failed to upload document: " + fileName, e);
         }
     }
 

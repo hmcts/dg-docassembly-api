@@ -3,10 +3,11 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 import uk.gov.hmcts.reform.document.domain.Document;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,14 +18,21 @@ import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
 class TemplateRenditionResourceTests extends BaseTest {
 
-    @Autowired
-    private TestUtil testUtil;
-
+    public static final String FL_FRM_APP_ENG_00002_DOCX = "FL-FRM-APP-ENG-00002.docx";
+    public static final String API_TEMPLATE_RENDITIONS = "/api/template-renditions";
     @Value("${test.url}")
     private String testUrl;
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
+
+    public TemplateRenditionResourceTests(
+            TestUtil testUtil,
+            ToggleProperties toggleProperties,
+            ExtendedCcdHelper extendedCcdHelper
+    ) {
+        super(testUtil, toggleProperties, extendedCcdHelper);
+    }
 
     @BeforeEach
     public void setupRequestSpecification() {
@@ -45,9 +53,9 @@ class TemplateRenditionResourceTests extends BaseTest {
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
-                        + base64("FL-FRM-APP-ENG-00002.docx")
+                        + base64(FL_FRM_APP_ENG_00002_DOCX)
                         + "\"}")
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(200)
@@ -61,9 +69,9 @@ class TemplateRenditionResourceTests extends BaseTest {
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOC\", \"templateId\":\""
-                        + base64("FL-FRM-APP-ENG-00002.docx")
+                        + base64(FL_FRM_APP_ENG_00002_DOCX)
                         + "\"}")
-                .post("/api/template-renditions").then()
+                .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -76,9 +84,9 @@ class TemplateRenditionResourceTests extends BaseTest {
 
         request
                 .body("{\"formPayload\":{\"a\":1}, \"outputType\":\"DOCX\", \"templateId\":\""
-                        + base64("FL-FRM-APP-ENG-00002.docx")
+                        + base64(FL_FRM_APP_ENG_00002_DOCX)
                         + "\"}")
-                .post("/api/template-renditions").then()
+                .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -94,9 +102,9 @@ class TemplateRenditionResourceTests extends BaseTest {
                         .body("{\"formPayload\":{\"a\":1},"
                                 + " \"outputType\":\"DOCX\", "
                                 + "\"outputFilename\":\"test-output-name\","
-                                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                                + " \"templateId\":\"" + base64(FL_FRM_APP_ENG_00002_DOCX)
                                 + "\"}")
-                        .post("/api/template-renditions")
+                        .post(API_TEMPLATE_RENDITIONS)
                         .then()
                         .statusCode(200)
                         .extract()
@@ -114,8 +122,8 @@ class TemplateRenditionResourceTests extends BaseTest {
         assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
 
         request
-                .body("{\"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx") + "\"}")
-                .post("/api/template-renditions")
+                .body("{\"templateId\":\"" + base64(FL_FRM_APP_ENG_00002_DOCX) + "\"}")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(400)
@@ -129,7 +137,7 @@ class TemplateRenditionResourceTests extends BaseTest {
 
         request
                 .body("{\"formPayload\":{\"a\":1}}")
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(400)
@@ -143,9 +151,9 @@ class TemplateRenditionResourceTests extends BaseTest {
 
         unAuthenticatedRequest
                 .body("{\"formPayload\":{\"a\":1}, \"templateId\":\""
-                        + base64("FL-FRM-APP-ENG-00002.docx")
+                        + base64(FL_FRM_APP_ENG_00002_DOCX)
                         + "\"}")
-                .post("/api/template-renditions")
+                .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
                 .statusCode(401)
@@ -161,9 +169,9 @@ class TemplateRenditionResourceTests extends BaseTest {
                 + " \"outputType\":\"DOCX\", "
                 + "\"outputFilename\":\"test-output-name\","
                 + "\"jurisdictionId\":\"dummyJurisdictionId\","
-                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + " \"templateId\":\"" + base64(FL_FRM_APP_ENG_00002_DOCX)
                 + "\"}")
-            .post("/api/template-renditions")
+            .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
             .statusCode(400)
@@ -179,9 +187,9 @@ class TemplateRenditionResourceTests extends BaseTest {
                 + " \"outputType\":\"DOCX\", "
                 + "\"outputFilename\":\"test-output-name\","
                 + "\"caseTypeId\":\"dummyCaseTypeId\","
-                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + " \"templateId\":\"" + base64(FL_FRM_APP_ENG_00002_DOCX)
                 + "\"}")
-            .post("/api/template-renditions")
+            .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
             .statusCode(400)
@@ -196,9 +204,9 @@ class TemplateRenditionResourceTests extends BaseTest {
             .body("{\"formPayload\":{\"a\":1},"
                 + " \"outputType\":\"DOCX\", "
                 + "\"outputFilename\":\"test-output-name\","
-                + " \"templateId\":\"" + base64("FL-FRM-APP-ENG-00002.docx")
+                + " \"templateId\":\"" + base64(FL_FRM_APP_ENG_00002_DOCX)
                 + "\"}")
-            .post("/api/template-renditions")
+            .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
             .statusCode(400)

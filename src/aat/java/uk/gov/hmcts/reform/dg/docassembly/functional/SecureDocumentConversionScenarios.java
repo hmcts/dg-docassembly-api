@@ -4,10 +4,12 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,15 +18,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 class SecureDocumentConversionScenarios extends BaseTest {
 
-    @Autowired
-    private TestUtil testUtil;
-
     @Value("${test.url}")
     private String testUrl;
 
     private RequestSpecification request;
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
+
+    public SecureDocumentConversionScenarios(
+            TestUtil testUtil,
+            ToggleProperties toggleProperties,
+            ExtendedCcdHelper extendedCcdHelper
+    ) {
+        super(testUtil, toggleProperties, extendedCcdHelper);
+    }
 
     @BeforeEach
     void setupRequestSpecification() {
@@ -45,7 +52,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithWordDocument() throws Exception {
+    void testPDFConversionWithWordDocument() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureDOCDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -54,7 +61,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithDocx() throws Exception {
+    void testPDFConversionWithDocx() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureDocxDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -63,7 +70,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithPptx() throws Exception {
+    void testPDFConversionWithPptx() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecurePptxDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -72,7 +79,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithPPT() throws Exception {
+    void testPDFConversionWithPPT() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecurePptDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -81,7 +88,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithXlsx() throws Exception {
+    void testPDFConversionWithXlsx() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureXlsxDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -90,7 +97,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithXLS() throws Exception {
+    void testPDFConversionWithXLS() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureXLSDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -99,7 +106,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithRTF() throws Exception {
+    void testPDFConversionWithRTF() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureRTFDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -108,7 +115,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void testPDFConversionWithTXT() throws Exception {
+    void testPDFConversionWithTXT() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureTXTDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequest(newDocId);
@@ -127,7 +134,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     void shouldReturn401WhenUnAuthenticateUserConvertWordDocumentToPDF() {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         unAuthenticatedRequest
-            .post("/api/convert/" + UUID.randomUUID())
+            .post(API_CONVERT + UUID.randomUUID())
             .then()
             .assertThat()
             .statusCode(401)
@@ -135,7 +142,7 @@ class SecureDocumentConversionScenarios extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenUnAuthorisedUserConvertWordDocumentToPDF() throws Exception {
+    void shouldReturn400WhenUnAuthorisedUserConvertWordDocumentToPDF() throws IOException {
         assumeTrue(toggleProperties.isEnableSecureDocumentConversionEndpoint());
         String newDocId = extendedCcdHelper.uploadSecureDocxDocumentAndReturnUrl();
         Response response = createAndProcessSecureDocRequestFailure(newDocId);

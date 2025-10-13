@@ -4,9 +4,10 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 
 import java.util.UUID;
 
@@ -15,14 +16,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 class DocumentConversionScenarios extends BaseTest {
 
-    @Autowired
-    private TestUtil testUtil;
-
     @Value("${test.url}")
     private String testUrl;
 
     private RequestSpecification request;
     private RequestSpecification unAuthenticatedRequest;
+
+    public DocumentConversionScenarios(
+            TestUtil testUtil,
+            ToggleProperties toggleProperties,
+            ExtendedCcdHelper extendedCcdHelper
+    ) {
+        super(testUtil, toggleProperties, extendedCcdHelper);
+    }
 
     @BeforeEach
     public void setupRequestSpecification() {
@@ -116,7 +122,7 @@ class DocumentConversionScenarios extends BaseTest {
         final String newDocId = testUtil.uploadDOCDocumentAndReturnUrl();
         final UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
         unAuthenticatedRequest
-                .post("/api/convert/" + docId)
+                .post(API_CONVERT + docId)
                 .then()
                 .assertThat()
                 .statusCode(401)
@@ -125,12 +131,12 @@ class DocumentConversionScenarios extends BaseTest {
 
     private Response createAndProcessRequest(String newDocId) {
         UUID docId = UUID.fromString(newDocId.substring(newDocId.lastIndexOf('/') + 1));
-        return request.post("/api/convert/" + docId);
+        return request.post(API_CONVERT + docId);
     }
 
     private Response createAndProcessRequestFailure(String newDocId) {
         String docId = newDocId.substring(newDocId.lastIndexOf('/') + 1);
-        return request.post("/api/convert/" + docId);
+        return request.post(API_CONVERT + docId);
     }
 
 }
