@@ -2,6 +2,10 @@ package uk.gov.hmcts.reform.dg.docassembly.functional;
 
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
+import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
@@ -9,6 +13,15 @@ import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 class OpenIdConnectSceanarios extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS_URL = "/api/template-renditions";
+
+    @Autowired
+    public OpenIdConnectSceanarios(
+            TestUtil testUtil,
+            ToggleProperties toggleProperties,
+            ExtendedCcdHelper extendedCcdHelper
+    ) {
+        super(testUtil, toggleProperties, extendedCcdHelper);
+    }
 
     @Test
     void testValidAuthenticationAndAuthorisation() {

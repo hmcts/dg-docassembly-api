@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,26 +13,19 @@ import uk.gov.hmcts.reform.em.test.s2s.S2sHelper;
 @Configuration
 public class TestConfig {
 
-    @Autowired
-    private CaseDocumentClientApi caseDocumentClientApi;
-
-    @Autowired
-    private CoreCaseDataApi coreCaseDataApi;
-
-    @Autowired
-    @Qualifier("xuiS2sHelper")
-    private S2sHelper xuiS2sHelper;
-
-    @Autowired
-    private IdamHelper idamHelper;
-
     @Bean
-    public CdamHelper cdamHelper() {
+    public CdamHelper cdamHelper(
+            CaseDocumentClientApi caseDocumentClientApi,
+            @Qualifier("xuiS2sHelper") S2sHelper xuiS2sHelper,
+            IdamHelper idamHelper) {
         return new CdamHelper(caseDocumentClientApi, xuiS2sHelper, idamHelper);
     }
 
     @Bean
-    public CcdDataHelper ccdDataHelper() {
+    public CcdDataHelper ccdDataHelper(
+            IdamHelper idamHelper,
+            @Qualifier("xuiS2sHelper") S2sHelper xuiS2sHelper,
+            CoreCaseDataApi coreCaseDataApi) {
         return new CcdDataHelper(idamHelper, xuiS2sHelper, coreCaseDataApi);
     }
 }
