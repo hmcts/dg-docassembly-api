@@ -19,7 +19,7 @@ import java.util.UUID;
 class DocumentConversionConsumerTest extends BaseConsumerTest {
 
     private static final String DOCUMENT_CONVERSION_PROVIDER_NAME = "doc_assembly_document_conversion_provider";
-    private static final String DOCUMENT_CONVERSION_API_PATH = "/api/convert/";
+    private static final String DOCUMENT_CONVERSION_API_URI = "/api/convert/";
     private static final UUID EXAMPLE_DOCUMENT_ID = UUID.fromString("f401727b-5a50-40bb-ac4d-87dc34910b6e");
 
     @Pact(provider = DOCUMENT_CONVERSION_PROVIDER_NAME, consumer = DOC_ASSEMBLY_CONSUMER)
@@ -27,7 +27,7 @@ class DocumentConversionConsumerTest extends BaseConsumerTest {
         return builder
             .given("a document exists for conversion")
             .uponReceiving("A request to convert a document to PDF")
-            .path(DOCUMENT_CONVERSION_API_PATH + EXAMPLE_DOCUMENT_ID)
+            .path(DOCUMENT_CONVERSION_API_URI + EXAMPLE_DOCUMENT_ID)
             .method(HttpMethod.POST.toString())
             .headers(getHeaders())
             .willRespondWith()
@@ -45,7 +45,7 @@ class DocumentConversionConsumerTest extends BaseConsumerTest {
         SerenityRest
             .given()
             .headers(getHeaders())
-            .post(mockServer.getUrl() + DOCUMENT_CONVERSION_API_PATH + EXAMPLE_DOCUMENT_ID)
+            .post(mockServer.getUrl() + DOCUMENT_CONVERSION_API_URI + EXAMPLE_DOCUMENT_ID)
             .then()
             .statusCode(HttpStatus.OK.value());
     }

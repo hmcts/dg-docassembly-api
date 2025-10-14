@@ -2,12 +2,14 @@ package uk.gov.hmcts.reform.dg.docassembly.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource;
 import uk.gov.hmcts.reform.dg.docassembly.service.FileToPDFConverterService;
 
@@ -26,13 +28,21 @@ import static org.mockito.Mockito.when;
 })
 class DocumentConversionProviderTest extends BaseProviderTest {
 
-    @Autowired
     private DocumentConversionResource documentConversionResource;
 
     @MockitoBean
     private FileToPDFConverterService fileToPDFConverterService;
 
     private File tempPdfFile;
+
+    @Autowired
+    public DocumentConversionProviderTest(
+            MockMvc mockMvc,
+            ObjectMapper objectMapper,
+            DocumentConversionResource documentConversionResource) {
+        super(mockMvc, objectMapper);
+        this.documentConversionResource = documentConversionResource;
+    }
 
     @Override
     protected Object[] getControllersUnderTest() {
@@ -41,7 +51,8 @@ class DocumentConversionProviderTest extends BaseProviderTest {
 
     @BeforeEach
     void setup() throws IOException {
-        tempPdfFile = File.createTempFile("test", ".pdf");
+        tempPdfFile = File.createTempFile("test", ".pdf", new File("/contractTestFiles"));
+
         tempPdfFile.deleteOnExit();
         Files.writeString(tempPdfFile.toPath(), "%PDF-1.4 sample content");
     }
