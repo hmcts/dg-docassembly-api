@@ -29,11 +29,15 @@ import java.util.Objects;
 )
 public abstract class BaseProviderTest {
 
-    @Autowired
     protected MockMvc mockMvc;
 
-    @Autowired
     protected ObjectMapper objectMapper;
+
+    @Autowired
+    protected BaseProviderTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
     @BeforeEach
     void setupPactVerification(PactVerificationContext context) {
