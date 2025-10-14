@@ -50,6 +50,7 @@ class DocumentConversionProviderTest extends BaseProviderTest {
     }
 
     @BeforeEach
+    @SuppressWarnings("java:S5443") // Safe: only used in tests
     void setup() throws IOException {
         tempPdfFile = File.createTempFile("test", ".pdf");
         tempPdfFile.deleteOnExit();
