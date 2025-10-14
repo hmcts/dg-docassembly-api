@@ -51,8 +51,7 @@ class DocumentConversionProviderTest extends BaseProviderTest {
 
     @BeforeEach
     void setup() throws IOException {
-        tempPdfFile = File.createTempFile("test", ".pdf", new File("/contractTestFiles"));
-
+        tempPdfFile = File.createTempFile("test", ".pdf");
         tempPdfFile.deleteOnExit();
         Files.writeString(tempPdfFile.toPath(), "%PDF-1.4 sample content");
     }
