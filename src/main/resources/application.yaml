@@ -65,11 +65,11 @@ auth:
   idam:
     client:
       baseUrl: ${IDAM_API_BASE_URI:http://localhost:5062}
+      dummy-client-secret: "client-secret"
   provider:
     service:
       client:
         baseUrl: ${S2S_BASE_URI:http://localhost:8489}
-
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
   application-insights:

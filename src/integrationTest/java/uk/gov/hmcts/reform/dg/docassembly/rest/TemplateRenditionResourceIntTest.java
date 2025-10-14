@@ -45,10 +45,8 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     private static final String AUTHORIZATION = "Authorization";
     private static final String ERROR_PATH = "$.errors";
 
-    @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
     private TemplateRenditionResource templateRenditionResource;
 
     @MockitoBean
@@ -62,8 +60,15 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     private static final String DUMMY_AUTH_TOKEN = "Bearer fake-jwt-token";
     private static final String DUMMY_SERVICE_AUTH_TOKEN = "Bearer fake-service-auth-token";
 
-    TemplateRenditionResourceIntTest(WebApplicationContext webApplicationContext) {
-        super(webApplicationContext);
+    @Autowired
+    public TemplateRenditionResourceIntTest(
+            WebApplicationContext context,
+            ObjectMapper objectMapper,
+            TemplateRenditionResource templateRenditionResource
+    ) {
+        super(context);
+        this.objectMapper = objectMapper;
+        this.templateRenditionResource = templateRenditionResource;
     }
 
 

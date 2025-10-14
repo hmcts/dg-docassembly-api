@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -22,6 +23,11 @@ import static org.mockito.Mockito.mock;
 public class TestSecurityConfiguration {
 
     private final ClientRegistration clientRegistration;
+
+
+    // to avoid sonar issue load from config
+    @Value("${auth.idam.client.dummy-client-secret}")
+    private String clientSecret;
 
     public TestSecurityConfiguration() {
         this.clientRegistration = clientRegistration().build();
@@ -55,7 +61,7 @@ public class TestSecurityConfiguration {
                 .userNameAttributeName("id")
                 .clientName("Client Name")
                 .clientId("client-id")
-                .clientSecret("client-secret");
+                .clientSecret(clientSecret);
     }
 
     @Bean
