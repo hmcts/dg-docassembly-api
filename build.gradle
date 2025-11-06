@@ -15,7 +15,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.6.17'
     id 'info.solidsoft.pitest' version '1.19.0-rc.2'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.1907'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.1914'
     id "io.freefair.lombok" version "9.0.0"
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
 }
@@ -97,7 +97,7 @@ dependencies {
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.3.0'
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
     implementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.10.0'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.13'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.14'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
