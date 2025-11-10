@@ -159,7 +159,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
-    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.1.Final'
+    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.0.Final'
 
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
