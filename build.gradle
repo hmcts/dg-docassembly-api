@@ -115,7 +115,7 @@ dependencies {
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.4.1'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.10.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '20030211.134440'
-    implementation group: 'commons-io', name: 'commons-io', version: '2.20.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.21.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.59.2'
@@ -159,7 +159,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
-    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.0.1.Final'
+    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.0.Final'
 
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
