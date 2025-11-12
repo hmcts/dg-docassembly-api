@@ -57,3 +57,7 @@ To view our REST API go to http://{HOST}/swagger-ui/index.html
 On local machine with server up and running, link to swagger is as below
 > http://localhost:8080/swagger-ui/index.html
 > if running on AAT, replace localhost with ingressHost data inside values.yaml class in the necessary component, making sure port number is also removed.
+
+## API Endpoints
+A list of our endpoints can be found here
+> https://hmcts.github.io/cnp-api-docs/swagger.html?url=https://hmcts.github.io/cnp-api-docs/specs/rpa-dg-docassembly-api.json
