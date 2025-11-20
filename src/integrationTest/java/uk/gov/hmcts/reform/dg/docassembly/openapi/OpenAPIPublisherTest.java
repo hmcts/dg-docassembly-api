@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @EnableAutoConfiguration(exclude = {
     FlywayAutoConfiguration.class
 })
-@ActiveProfiles("openapi")
+@ActiveProfiles("integration-web-test")
 class OpenAPIPublisherTest {
 
     private final MockMvc mockMvc;
