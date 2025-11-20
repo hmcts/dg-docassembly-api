@@ -25,7 +25,7 @@ import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-@Profile({"!integration-web-test"})
+@Profile({"!integration-web-test & !openapi"})
 public class SecurityConfiguration {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
