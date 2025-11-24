@@ -13,8 +13,8 @@ public class SwaggerConfiguration {
         return new OpenAPI()
                 .info(
                         new Info().title("Document Assembly API")
-                                .description("API to retrieve UI definitions from templates and "
-                                        + "generate documents based those definitions")
+                                .description("API to generate documents from given templates and metadata, "
+                                        + "and convert documents to PDF")
                                 .version("v0.0.1")
                 );
     }
