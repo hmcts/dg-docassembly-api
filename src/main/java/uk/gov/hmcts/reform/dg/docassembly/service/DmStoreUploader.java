@@ -9,12 +9,11 @@ import okhttp3.Response;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
-import uk.gov.hmcts.reform.auth.checker.core.user.User;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.appinsights.DependencyProfiler;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentUploaderException;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class DmStoreUploader {
 
     private final AuthTokenGenerator authTokenGenerator;
 
-    private final SubjectResolver<User> userResolver;
+    private final IdamClient idamClient;
 
     private final String dmStoreAppBaseUrl;
 
@@ -37,13 +36,13 @@ public class DmStoreUploader {
     public DmStoreUploader(
             OkHttpClient okHttpClient,
             AuthTokenGenerator authTokenGenerator,
-            @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
-            SubjectResolver<User> userResolver
+            IdamClient idamClient,
+            @Value("${document_management.base-url}") String dmStoreAppBaseUrl
     ) {
         this.okHttpClient = okHttpClient;
         this.authTokenGenerator = authTokenGenerator;
+        this.idamClient = idamClient;
         this.dmStoreAppBaseUrl = dmStoreAppBaseUrl;
-        this.userResolver = userResolver;
     }
 
     @DependencyProfiler(name = "dm-store", action = "upload")
@@ -145,8 +144,7 @@ public class DmStoreUploader {
     }
 
     private String getUserId(CreateTemplateRenditionDto createTemplateRenditionDto) {
-        User user = userResolver.getTokenDetails(createTemplateRenditionDto.getJwt());
-        return user.getPrincipal();
+        return idamClient.getUserInfo(createTemplateRenditionDto.getJwt()).getUid();
     }
 
 }

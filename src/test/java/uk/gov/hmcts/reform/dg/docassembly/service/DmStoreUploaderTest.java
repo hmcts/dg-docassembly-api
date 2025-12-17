@@ -7,12 +7,12 @@ import okhttp3.mock.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import uk.gov.hmcts.reform.auth.checker.core.user.User;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserResolver;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentUploaderException;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.File;
 import java.util.Base64;
@@ -26,7 +26,7 @@ class DmStoreUploaderTest {
 
     MockInterceptor interceptor;
 
-    UserResolver userResolver;
+    IdamClient idamClient;
 
     DmStoreUploader dmStoreUploader;
 
@@ -46,9 +46,9 @@ class DmStoreUploaderTest {
         dmStoreUploader = new DmStoreUploader(
                 client,
                 authTokenGenerator,
-                "http://dmstore",
-                userResolver = Mockito.mock(UserResolver.class));
-
+                idamClient = Mockito.mock(IdamClient.class),
+                "http://dmstore"
+        );
     }
 
     @Test
@@ -60,9 +60,9 @@ class DmStoreUploaderTest {
         createTemplateRenditionDto.setFormPayload(objectMapper.readTree("{}"));
         Mockito.when(authTokenGenerator.generate()).thenReturn("x");
 
-        User mockedUser = Mockito.mock(User.class);
-        Mockito.when(mockedUser.getPrincipal()).thenReturn("p1");
-        Mockito.when(userResolver.getTokenDetails("x")).thenReturn(mockedUser);
+        UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
+        Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(
                 new Rule.Builder()
@@ -92,9 +92,9 @@ class DmStoreUploaderTest {
         createTemplateRenditionDto.setFormPayload(objectMapper.readTree("{}"));
         Mockito.when(authTokenGenerator.generate()).thenReturn("x");
 
-        User mockedUser = Mockito.mock(User.class);
-        Mockito.when(mockedUser.getPrincipal()).thenReturn("p1");
-        Mockito.when(userResolver.getTokenDetails("x")).thenReturn(mockedUser);
+        UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
+        Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(new Rule.Builder()
                 .post()
@@ -117,9 +117,9 @@ class DmStoreUploaderTest {
         createTemplateRenditionDto.setRenditionOutputLocation("http://success.com/1");
         Mockito.when(authTokenGenerator.generate()).thenReturn("x");
 
-        User mockedUser = Mockito.mock(User.class);
-        Mockito.when(mockedUser.getPrincipal()).thenReturn("p1");
-        Mockito.when(userResolver.getTokenDetails("x")).thenReturn(mockedUser);
+        UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
+        Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(new Rule.Builder()
                 .post()
@@ -150,9 +150,9 @@ class DmStoreUploaderTest {
         createTemplateRenditionDto.setRenditionOutputLocation("http://success.com/1");
         Mockito.when(authTokenGenerator.generate()).thenReturn("x");
 
-        User mockedUser = Mockito.mock(User.class);
-        Mockito.when(mockedUser.getPrincipal()).thenReturn("p1");
-        Mockito.when(userResolver.getTokenDetails("x")).thenReturn(mockedUser);
+        UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
+        Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(new Rule.Builder()
                 .post()
