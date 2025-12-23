@@ -17,7 +17,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.19.0-rc.2'
     id 'com.github.hmcts.rse-cft-lib' version '0.19.1956'
     id "io.freefair.lombok" version "9.1.0"
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.0.1-FINAL'
 }
 
 group = 'uk.gov.hmcts.reform.dg.docassembly'
