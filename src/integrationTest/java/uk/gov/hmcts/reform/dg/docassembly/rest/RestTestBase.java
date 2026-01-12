@@ -10,10 +10,12 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ class RestTestBase {
             + "oqqUrg";
 
     protected MockMvc restLogoutMockMvc;
+
+    @MockitoBean
+    private IdamClient idamClient;
 
     RestTestBase(WebApplicationContext context) {
         this.context = context;

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepo
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import uk.gov.hmcts.reform.idam.client.IdamApi;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,11 @@ public class TestSecurityConfiguration {
     @Bean
     public JwtDecoder jwtDecoder() {
         return mock(JwtDecoder.class);
+    }
+
+    @Bean
+    public IdamApi idamApi() {
+        return mock(IdamApi.class);
     }
 
     @Bean
