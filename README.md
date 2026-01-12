@@ -9,6 +9,7 @@ git clone https://github.com/hmcts/dg-docassembly-api.git
 cd dg-docassembly-api/
 ```
 
+
 #### Clean and build the application:
 ```
 ./gradlew clean
