@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
-import uk.gov.hmcts.reform.idam.client.IdamApi;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.time.Instant;
@@ -40,9 +39,6 @@ public abstract class RestTestBase {
 
     @MockitoBean
     private IdamClient idamClient;
-
-    @MockitoBean
-    private IdamApi idamApi;
 
     RestTestBase(WebApplicationContext context) {
         this.context = context;
