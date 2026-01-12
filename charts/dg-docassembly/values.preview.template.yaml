@@ -12,6 +12,10 @@ java:
           alias: DOCMOSIS_TEMPLATES_ENDPOINT_AUTH
         - name: docmosis-access-key
           alias: DOCMOSIS_ACCESS_KEY
+  environment:
+    # Endpoints
+    IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
+    IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
 xui-webapp:
   enabled: true
   nodejs:
