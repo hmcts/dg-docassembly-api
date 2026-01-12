@@ -2,12 +2,19 @@ package uk.gov.hmcts.reform.dg.docassembly;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(
     scanBasePackages = {
         "uk.gov.hmcts.reform.ccd.document.am",
         "uk.gov.hmcts.reform.dg.docassembly",
         "uk.gov.hmcts.reform.auth"}
+)
+@EnableFeignClients(
+    basePackages = {
+        "uk.gov.hmcts.reform.idam.client",
+        "uk.gov.hmcts.reform.dg.docassembly"
+    }
 )
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
 public class Application {
