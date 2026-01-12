@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.dg.docassembly.Application;
+import uk.gov.hmcts.reform.idam.client.IdamApi;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.time.Instant;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 @ActiveProfiles("integration-web-test")
 @SpringBootTest(classes = {Application.class, TestSecurityConfiguration.class})
-class RestTestBase {
+public abstract class RestTestBase {
 
     private final WebApplicationContext context;
 
@@ -39,6 +40,9 @@ class RestTestBase {
 
     @MockitoBean
     private IdamClient idamClient;
+
+    @MockitoBean
+    private IdamApi idamApi;
 
     RestTestBase(WebApplicationContext context) {
         this.context = context;
