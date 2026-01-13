@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -35,6 +36,9 @@ class OpenAPIPublisherTest {
 
     @MockitoBean
     private ClientRegistrationRepository clientRegistrationRepository;
+
+    @MockitoBean
+    private IdamClient idamClient;
 
     @Autowired
     OpenAPIPublisherTest(MockMvc mockMvc) {
