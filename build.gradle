@@ -38,7 +38,7 @@ def versions = [
         serenity           : '5.2.2',
         fasterXmlJackson   : '2.21.0',
         pact_version       : '4.6.20',
-        logging            : '6.1.9',
+        logging            : '8.0.0',
         junit5             : '6.0.3',
         springSecurity     : '6.5.8'
 ]
@@ -122,8 +122,9 @@ dependencies {
 
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.logging
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
+
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.7'
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.3'
 
