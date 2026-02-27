@@ -92,7 +92,7 @@ dependencies {
 
     implementation group: 'org.json', name: 'json', version: '20250517'
     
-    implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '13.9'
+    implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '13.9.1'
     implementation group: 'com.google.guava', name: 'guava', version: '33.5.0-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.3.2'
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
