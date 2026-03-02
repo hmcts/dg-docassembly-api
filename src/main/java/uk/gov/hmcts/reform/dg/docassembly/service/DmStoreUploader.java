@@ -51,12 +51,7 @@ public class DmStoreUploader {
 
     @DependencyProfiler(name = "dm-store", action = "upload")
     public CreateTemplateRenditionDto uploadFile(File file, CreateTemplateRenditionDto createTemplateRenditionDto) {
-        if (createTemplateRenditionDto.getRenditionOutputLocation() != null) {
-            logger.info("RenditionOutputLocation is {}", createTemplateRenditionDto.getRenditionOutputLocation());
-            uploadNewDocumentVersion(file, createTemplateRenditionDto);
-        } else {
-            uploadNewDocument(file, createTemplateRenditionDto);
-        }
+        uploadNewDocument(file, createTemplateRenditionDto);
         return createTemplateRenditionDto;
     }
 
@@ -107,42 +102,6 @@ public class DmStoreUploader {
 
         } catch (RuntimeException | IOException e) {
             throw new DocumentUploaderException(String.format("Couldn't upload the file:  %s", e.getMessage()), e);
-        } finally {
-            closeResponse(response);
-        }
-    }
-
-    private void uploadNewDocumentVersion(File file, CreateTemplateRenditionDto createTemplateRenditionDto) {
-        Response response =  null;
-        try {
-            MultipartBody requestBody = new MultipartBody
-                    .Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", createTemplateRenditionDto.getFullOutputFilename(),
-                            RequestBody.create(
-                                    file,
-                                    MediaType.get(createTemplateRenditionDto.getOutputType().getMediaType())))
-                    .build();
-
-            Request request = new Request.Builder()
-                    .addHeader("user-id", getUserId(createTemplateRenditionDto))
-                    .addHeader("user-roles", "caseworker")
-                    .addHeader("ServiceAuthorization", authTokenGenerator.generate())
-                    .url(createTemplateRenditionDto.getRenditionOutputLocation())
-                    .method("POST", requestBody)
-                    .build();
-
-            response = okHttpClient.newCall(request).execute();
-
-            if (!response.isSuccessful()) {
-                throw new DocumentUploaderException(
-                        "Couldn't upload the file. HTTP Response code from Document Store: " + response.code(),
-                        null
-                );
-            }
-
-        } catch (RuntimeException | IOException e) {
-            throw new DocumentUploaderException("Couldn't upload the file", e);
         } finally {
             closeResponse(response);
         }
