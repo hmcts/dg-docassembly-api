@@ -71,13 +71,13 @@ public class DocumentConversionResource {
         try {
             File convertedFile;
             log.info("cdamEnabled is : {} for documentId : {} ", cdamEnabled, documentId);
+            String auth = request.getHeader("Authorization");
             if (cdamEnabled) {
-                String auth = request.getHeader("Authorization");
                 String serviceAuth = request.getHeader("ServiceAuthorization");
                 log.debug("REST request to get secure Document Conversion To PDF : {}", documentId);
                 convertedFile = fileToPDFConverterService.convertFile(documentId, auth, serviceAuth);
             } else {
-                convertedFile = fileToPDFConverterService.convertFile(documentId);
+                convertedFile = fileToPDFConverterService.convertFile(documentId, auth);
             }
 
             Tika tika = new Tika();
