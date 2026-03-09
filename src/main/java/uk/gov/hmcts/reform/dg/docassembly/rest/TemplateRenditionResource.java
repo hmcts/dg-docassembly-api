@@ -65,12 +65,16 @@ public class TemplateRenditionResource {
             @RequestHeader("Authorization") String jwt, @RequestHeader("ServiceAuthorization") String serviceAuth)
         throws IOException, DocumentTaskProcessingException {
         logger.info(
-                "template-renditions request document name : {}  "
-                        + "with JurisdictionId : {} and caseTypeId :{}, isSecureDocStoreEnabled {}",
+                """ 
+                    template-renditions request document name : {}  
+                    with JurisdictionId : {} and caseTypeId :{}, isSecureDocStoreEnabled {}, 
+                    renditionOutputLocation {}
+                    """,
                 createTemplateRenditionDto.getFullOutputFilename(),
                 createTemplateRenditionDto.getJurisdictionId(),
                 createTemplateRenditionDto.getCaseTypeId(),
-                createTemplateRenditionDto.isSecureDocStoreEnabled()
+                createTemplateRenditionDto.isSecureDocStoreEnabled(),
+                createTemplateRenditionDto.getRenditionOutputLocation()
         );
         if (cdamEnabled && (StringUtils.isBlank(createTemplateRenditionDto.getCaseTypeId())
                 || StringUtils.isBlank(createTemplateRenditionDto.getJurisdictionId()))) {

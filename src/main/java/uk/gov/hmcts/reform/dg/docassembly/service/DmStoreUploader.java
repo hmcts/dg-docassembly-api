@@ -7,6 +7,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
@@ -22,6 +24,8 @@ import static uk.gov.hmcts.reform.dg.docassembly.service.HttpOkResponseCloser.cl
 
 @Service
 public class DmStoreUploader {
+
+    private final Logger logger = LoggerFactory.getLogger(DmStoreUploader.class);
 
     private final OkHttpClient okHttpClient;
 
@@ -48,6 +52,7 @@ public class DmStoreUploader {
     @DependencyProfiler(name = "dm-store", action = "upload")
     public CreateTemplateRenditionDto uploadFile(File file, CreateTemplateRenditionDto createTemplateRenditionDto) {
         if (createTemplateRenditionDto.getRenditionOutputLocation() != null) {
+            logger.info("RenditionOutputLocation is {}", createTemplateRenditionDto.getRenditionOutputLocation());
             uploadNewDocumentVersion(file, createTemplateRenditionDto);
         } else {
             uploadNewDocument(file, createTemplateRenditionDto);
