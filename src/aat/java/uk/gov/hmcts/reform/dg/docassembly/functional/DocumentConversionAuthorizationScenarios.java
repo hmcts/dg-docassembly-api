@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.em.test.idam.IdamHelper;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 class DocumentConversionAuthorizationScenarios extends BaseTest {
@@ -60,12 +60,9 @@ class DocumentConversionAuthorizationScenarios extends BaseTest {
         UUID docId = UUID.fromString(docUrl.substring(docUrl.lastIndexOf('/') + 1));
         
         Response response = nonCaseworkerRequest.post(API_CONVERT + docId);
-        
-        int statusCode = response.getStatusCode();
-        boolean isDenied = (statusCode == 400 || statusCode == 403);
-        
-        assertTrue(isDenied,
+
+        assertEquals(403,
             String.format("Non-caseworker user should be denied. Expected 400/403, got: %d. "
-                + "If 200, hardcoded 'caseworker' role is still being sent!", statusCode));
+                + "If 200, hardcoded 'caseworker' role is still being sent!", response.getStatusCode()));
     }
 }
