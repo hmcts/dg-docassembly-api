@@ -82,6 +82,10 @@ public class TestUtil {
         return testUrl;
     }
 
+    public String getS2sAuth() {
+        return s2sAuth;
+    }
+
     public RequestSpecification unAuthenticatedRequest() {
         return RestAssured.given();
     }
