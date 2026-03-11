@@ -61,8 +61,8 @@ class DocumentConversionAuthorizationScenarios extends BaseTest {
         
         Response response = nonCaseworkerRequest.post(API_CONVERT + docId);
 
-        assertEquals(403,
-            String.format("Non-caseworker user should be denied. Expected 400/403, got: %d. "
+        assertEquals(400, response.getStatusCode(),
+            String.format("Non-caseworker user should be denied. Expected 400, got: %d. "
                 + "If 200, hardcoded 'caseworker' role is still being sent!", response.getStatusCode()));
     }
 }
