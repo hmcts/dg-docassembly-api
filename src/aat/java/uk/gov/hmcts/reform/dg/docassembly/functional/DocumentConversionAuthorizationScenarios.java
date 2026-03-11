@@ -28,8 +28,8 @@ class DocumentConversionAuthorizationScenarios extends BaseTest {
 
     private RequestSpecification nonCaseworkerRequest;
     
-    private static final String NON_CASEWORKER_EMAIL = "docassembly.citizen@test.com";
-    private static final List<String> NON_CASEWORKER_ROLES = List.of("citizen", "letter-holder");
+    private final String nonCaseworkerEmail = "docassembly.citizen." + UUID.randomUUID() + "@test.com";
+    private static final List<String> NON_CASEWORKER_ROLES = List.of("ccd-import");
 
     @Autowired
     public DocumentConversionAuthorizationScenarios(
@@ -42,8 +42,8 @@ class DocumentConversionAuthorizationScenarios extends BaseTest {
 
     @BeforeEach
     public void setupNonCaseworkerUser() {
-        idamHelper.createUser(NON_CASEWORKER_EMAIL, NON_CASEWORKER_ROLES);
-        String nonCaseworkerAuth = idamHelper.authenticateUser(NON_CASEWORKER_EMAIL);
+        idamHelper.createUser(nonCaseworkerEmail, NON_CASEWORKER_ROLES);
+        String nonCaseworkerAuth = idamHelper.authenticateUser(nonCaseworkerEmail);
         String s2sAuth = testUtil.getS2sAuth();
         
         nonCaseworkerRequest = RestAssured
