@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.DmStoreDownloader;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,8 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
 
     private final AuthTokenGenerator authTokenGenerator;
 
+    private final IdamClient idamClient;
+
     private String dmStoreAppBaseUrl;
 
     private static final  String DM_STORE_DOWNLOAD_ENDPOINT = "/documents/";
@@ -40,22 +44,28 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
     public DmStoreDownloaderImpl(
             OkHttpClient okHttpClient,
             AuthTokenGenerator authTokenGenerator,
+            IdamClient idamClient,
             @Value("${document_management.base-url}") String dmStoreAppBaseUrl,
             ObjectMapper objectMapper
     ) {
         this.okHttpClient = okHttpClient;
         this.authTokenGenerator = authTokenGenerator;
+        this.idamClient = idamClient;
         this.dmStoreAppBaseUrl = dmStoreAppBaseUrl;
         this.objectMapper = objectMapper;
     }
 
 
     @Override
-    public File downloadFile(String id) throws DocumentTaskProcessingException {
+    public File downloadFile(String id, String userToken) throws DocumentTaskProcessingException {
         Response response = null;
         try {
+            UserInfo userInfo = idamClient.getUserInfo(userToken);
+            String userId = userInfo.getUid();
+            String userRoles = String.join(",", userInfo.getRoles());
 
-            response = getDocumentStoreResponse(dmStoreAppBaseUrl + DM_STORE_DOWNLOAD_ENDPOINT + id);
+            response = getDocumentStoreResponse(
+                dmStoreAppBaseUrl + DM_STORE_DOWNLOAD_ENDPOINT + id, userId, userRoles);
 
             if (response.isSuccessful()) {
                 JsonNode documentMetaData = objectMapper.readTree(response.body().byteStream());
@@ -78,7 +88,7 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
                 if (log.isDebugEnabled()) {
                     log.info("Accessing documentBinaryUrl: {}", documentBinaryUrl);
                 }
-                Response binaryResponse = getDocumentStoreResponse(documentBinaryUrl);
+                Response binaryResponse = getDocumentStoreResponse(documentBinaryUrl, userId, userRoles);
 
                 return copyResponseToFile(binaryResponse, fileType);
 
@@ -98,13 +108,15 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
         }
     }
 
-    private Response getDocumentStoreResponse(String documentUri) throws IOException {
+    private Response getDocumentStoreResponse(String documentUri, String userId, String userRoles)
+            throws IOException {
 
-        return okHttpClient.newCall(new Request.Builder()
-            .addHeader("user-roles", "caseworker")
+        Request.Builder builder = new Request.Builder()
+            .addHeader("user-id", userId)
+            .addHeader("user-roles", userRoles)
             .addHeader("ServiceAuthorization", authTokenGenerator.generate())
-            .url(documentUri)
-            .build()).execute();
+            .url(documentUri);
+        return okHttpClient.newCall(builder.build()).execute();
     }
 
     private File copyResponseToFile(Response response, String fileType) throws DocumentTaskProcessingException {
