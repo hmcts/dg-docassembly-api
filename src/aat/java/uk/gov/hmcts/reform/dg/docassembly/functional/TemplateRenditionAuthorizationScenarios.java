@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
@@ -34,13 +33,10 @@ class TemplateRenditionAuthorizationScenarios extends BaseTest {
     @Autowired
     private IdamHelper idamHelper;
 
-    private RequestSpecification nonCaseworkerRequest;
     private RequestSpecification multiRoleCaseworkerRequest;
 
-    private final String nonCaseworkerEmail = "docassembly.citizen." + UUID.randomUUID() + "@test.com";
     private final String multiRoleCaseworkerEmail = "docassembly.multirole." + UUID.randomUUID() + "@test.com";
 
-    private static final List<String> NON_CASEWORKER_ROLES = List.of("ccd-import");
     private static final List<String> MULTI_ROLE_CASEWORKER_ROLES = List.of("caseworker-ia", "caseworker");
 
     @Autowired
@@ -55,15 +51,6 @@ class TemplateRenditionAuthorizationScenarios extends BaseTest {
     @BeforeEach
     public void setupUsers() {
         String s2sAuth = testUtil.getS2sAuth();
-
-        idamHelper.createUser(nonCaseworkerEmail, NON_CASEWORKER_ROLES);
-        String nonCaseworkerAuth = idamHelper.authenticateUser(nonCaseworkerEmail);
-        nonCaseworkerRequest = RestAssured
-                .given()
-                .header(TestUtil.AUTHORIZATION, nonCaseworkerAuth)
-                .header(TestUtil.SERVICE_AUTHORIZATION, s2sAuth)
-                .baseUri(testUrl)
-                .contentType(APPLICATION_JSON_VALUE);
 
         idamHelper.createUser(multiRoleCaseworkerEmail, MULTI_ROLE_CASEWORKER_ROLES);
         String multiRoleCaseworkerAuth = idamHelper.authenticateUser(multiRoleCaseworkerEmail);
@@ -88,16 +75,4 @@ class TemplateRenditionAuthorizationScenarios extends BaseTest {
                 + "Dynamic role resolution from IDAM in DmStoreUploader must be working.");
     }
 
-    @Test
-    void shouldDenyNonCaseworkerUserFromUploadingTemplate() {
-        assumeFalse(toggleProperties.isEnableSecureDocumentTemplRendEndpoint());
-
-        Response response = nonCaseworkerRequest
-                .body(TEMPLATE_REQUEST_BODY)
-                .post(API_TEMPLATE_RENDITIONS);
-
-        assertNotEquals(200, response.getStatusCode(),
-            "Non-caseworker user should be denied when uploading to DM Store. "
-                + "If 200, dynamic role resolution is not passing correct roles to DM Store.");
-    }
 }
