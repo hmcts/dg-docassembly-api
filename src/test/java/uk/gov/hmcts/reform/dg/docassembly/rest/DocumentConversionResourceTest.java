@@ -43,12 +43,14 @@ class DocumentConversionResourceTest {
 
     @Test
     void shouldConvertDocument() {
-        when(fileToPDFConverterService.convertFile(docId)).thenReturn(TEST_PDF_FILE);
+        String auth = "Bearer test-token";
+        when(request.getHeader("Authorization")).thenReturn(auth);
+        when(fileToPDFConverterService.convertFile(docId, auth)).thenReturn(TEST_PDF_FILE);
 
         ResponseEntity<?> response = documentConversionResource.convert(request, docId);
         assertEquals(200, response.getStatusCode().value());
 
-        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId);
+        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId, auth);
     }
 
     @Test
@@ -66,26 +68,30 @@ class DocumentConversionResourceTest {
         assertEquals(200, response.getStatusCode().value());
 
         verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId, auth, serviceAuth);
-        verify(fileToPDFConverterService, Mockito.atLeast(0)).convertFile(docId);
+        verify(fileToPDFConverterService, Mockito.atLeast(0)).convertFile(docId, auth);
     }
 
     @Test
     void shouldFailConvertDocumentToPDF() {
-        when(fileToPDFConverterService.convertFile(docId)).thenThrow(DocumentProcessingException.class);
+        String auth = "Bearer test-token";
+        when(request.getHeader("Authorization")).thenReturn(auth);
+        when(fileToPDFConverterService.convertFile(docId, auth)).thenThrow(DocumentProcessingException.class);
 
         ResponseEntity<?> response = documentConversionResource.convert(request, docId);
         assertEquals(400, response.getStatusCode().value());
 
-        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId);
+        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId, auth);
     }
 
     @Test
     void shouldFailConvertOtherThanAcceptedFormatDocumentToPDF() {
-        when(fileToPDFConverterService.convertFile(docId)).thenThrow(FileTypeException.class);
+        String auth = "Bearer test-token";
+        when(request.getHeader("Authorization")).thenReturn(auth);
+        when(fileToPDFConverterService.convertFile(docId, auth)).thenThrow(FileTypeException.class);
 
         ResponseEntity<?> response = documentConversionResource.convert(request, docId);
         assertEquals(400, response.getStatusCode().value());
 
-        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId);
+        verify(fileToPDFConverterService, Mockito.atLeastOnce()).convertFile(docId, auth);
     }
 }

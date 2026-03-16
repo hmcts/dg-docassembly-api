@@ -38,9 +38,9 @@ public class FileToPDFConverterServiceImpl implements FileToPDFConverterService 
     }
 
     @Override
-    public File convertFile(UUID documentId) {
+    public File convertFile(UUID documentId, String userToken) {
         try {
-            File originalFile = dmStoreDownloader.downloadFile(documentId.toString());
+            File originalFile = dmStoreDownloader.downloadFile(documentId.toString(), userToken);
 
             return transformFile(originalFile);
 

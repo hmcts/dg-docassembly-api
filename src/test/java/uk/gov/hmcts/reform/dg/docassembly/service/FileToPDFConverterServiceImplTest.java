@@ -36,6 +36,7 @@ class FileToPDFConverterServiceImplTest {
 
     private static final String AUTH = "abc";
     private static final String SERVICE_AUTH = "xyz";
+    private static final String USER_TOKEN = "Bearer test-token";
 
     private static final UUID docStoreUUID = UUID.randomUUID();
 
@@ -49,10 +50,10 @@ class FileToPDFConverterServiceImplTest {
     @Test
     void convertDocumentSuccessTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
-        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
+        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString(), USER_TOKEN)).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenReturn(mockFile);
 
-        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID);
+        File convertedFile = fileToPDFConverterServiceImpl.convertFile(docStoreUUID, USER_TOKEN);
         assertEquals(convertedFile.getName(), mockFile.getName());
     }
 
@@ -102,30 +103,30 @@ class FileToPDFConverterServiceImplTest {
 
     @Test
     void convertNotProgressAsDmStoreDownloaderException() throws DocumentTaskProcessingException {
-        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString()))
+        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString(), USER_TOKEN))
                 .thenThrow(DocumentTaskProcessingException.class);
 
         assertThrows(DocumentProcessingException.class, () ->
-                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID, USER_TOKEN)
         );
     }
 
     @Test
     void convertNotAllowedFileTypeTest() throws DocumentTaskProcessingException {
         File mockFile = new File("sample.ppsx");
-        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
+        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString(), USER_TOKEN)).thenReturn(mockFile);
         assertThrows(FileTypeException.class, () ->
-                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID, USER_TOKEN)
         );
     }
 
     @Test
     void convertNotAllowedAsIOExceptionIsThrownTest() throws DocumentTaskProcessingException, IOException {
         File mockFile = new File("potential_and_kinetic.ppt");
-        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString())).thenReturn(mockFile);
+        Mockito.when(dmStoreDownloader.downloadFile(docStoreUUID.toString(), USER_TOKEN)).thenReturn(mockFile);
         Mockito.when(docmosisConverter.convertFileToPDF(mockFile)).thenThrow(IOException.class);
         assertThrows(DocumentProcessingException.class, () ->
-                fileToPDFConverterServiceImpl.convertFile(docStoreUUID)
+                fileToPDFConverterServiceImpl.convertFile(docStoreUUID, USER_TOKEN)
         );
     }
 
