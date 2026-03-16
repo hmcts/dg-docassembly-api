@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.dg.docassembly.appinsights.DependencyProfiler;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentUploaderException;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,9 +72,13 @@ public class DmStoreUploader {
                     )
                     .build();
 
+            UserInfo userInfo = idamClient.getUserInfo(createTemplateRenditionDto.getJwt());
+            String userId = userInfo.getUid();
+            String userRoles = String.join(",", userInfo.getRoles());
+
             Request request = new Request.Builder()
-                    .addHeader("user-id", getUserId(createTemplateRenditionDto))
-                    .addHeader("user-roles", "caseworker")
+                    .addHeader("user-id", userId)
+                    .addHeader("user-roles", userRoles)
                     .addHeader("ServiceAuthorization", authTokenGenerator.generate())
                     .url(dmStoreAppBaseUrl + ENDPOINT)
                     .method("POST", requestBody)
@@ -107,8 +112,5 @@ public class DmStoreUploader {
         }
     }
 
-    private String getUserId(CreateTemplateRenditionDto createTemplateRenditionDto) {
-        return idamClient.getUserInfo(createTemplateRenditionDto.getJwt()).getUid();
-    }
 
 }
