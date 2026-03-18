@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.io.File;
 import java.util.Base64;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,6 +63,7 @@ class DmStoreUploaderTest {
 
         UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
         Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(mockedUserInfo.getRoles()).thenReturn(List.of("caseworker-ia", "caseworker"));
         Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(
@@ -94,6 +96,7 @@ class DmStoreUploaderTest {
 
         UserInfo mockedUserInfo = Mockito.mock(UserInfo.class);
         Mockito.when(mockedUserInfo.getUid()).thenReturn("p1");
+        Mockito.when(mockedUserInfo.getRoles()).thenReturn(List.of("caseworker-ia", "caseworker"));
         Mockito.when(idamClient.getUserInfo("x")).thenReturn(mockedUserInfo);
 
         interceptor.addRule(new Rule.Builder()
