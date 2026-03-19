@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: Document Assembly API
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
   cloud:
     compatibility-verifier:
       enabled: false
