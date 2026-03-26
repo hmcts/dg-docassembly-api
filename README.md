@@ -22,12 +22,15 @@ At the moment java version must be set to 17 as 21 is not supported for local se
 For local setup only, there is a need to set the port in main/resources/application.yaml to 8080
 to avoid conflicting with CFTLib
 
+Requires docker desktop running.
+
+You need to be logged in to Azure and have access to the ACR registry to pull the necessary containers for the application to run.
+If you are not logged in, you can do so by running `az login` in your terminal.
+Followed by `az acr login --name hmctsprod` to log in to the ACR registry
+
 ```
-az login
 ./gradlew bootWithCCD
 ```
-
-
 
 ### Running contract or pact tests:
 
