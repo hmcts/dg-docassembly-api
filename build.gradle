@@ -535,7 +535,7 @@ bootWithCCD {
         execOps.exec {
             commandLine 'docker', 'compose', '-f', 'src/cftlib/resources/docker-compose-local.yml', '-p', 'cftlib-additional', 'up', '-d'
         }
-        environment 'TEST_USER_PASSWORD', 'Az!' + UUID.randomUUID().toString().replace('-', '').take(20)
+        environment 'TEST_USER_PASSWORD', 'FB!' + UUID.randomUUID().toString().replace('-', '').take(20)
 
     }
     environment 'DOC_ASSEMBLY_SERVER_PORT', '8081'
