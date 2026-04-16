@@ -1,5 +1,6 @@
 #!groovy
 import uk.gov.hmcts.contino.AppPipelineDsl
+import java.util.UUID
 
 
 properties([
@@ -39,6 +40,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+static String generatePassword() {
+    // add 1 capital and special char for password
+    return 'Az!' + UUID.randomUUID().toString().replace('-', '').take(20)
+}
+
 env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
 env.OPEN_ID_API_BASE_URI = 'https://idam-web-public.aat.platform.hmcts.net/o'
 env.OIDC_ISSUER_BASE_URI = 'https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts'
@@ -50,6 +56,8 @@ env.CCD_DEF_API = 'http://ccd-definition-store-api-aat.service.core-compute-aat.
 env.CCD_DATA_API = 'http://ccd-data-store-api-aat.service.core-compute-aat.internal'
 env.CDAM_URL = 'http://ccd-case-document-am-api-aat.service.core-compute-aat.internal'
 env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
+env.TEST_USER_PASSWORD = generatePassword()
+echo "Generated TEST_USER_PASSWORD: ${env.TEST_USER_PASSWORD}"
 
 def vaultOverrides = [
         'preview' : 'aat',

@@ -27,6 +27,8 @@ public class ExtendedCcdHelper {
 
     private CdamHelper cdamHelper;
 
+    private TestUtil testUtil;
+
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public static final String CREATE_CASE_TEMPLATE = """
@@ -58,14 +60,21 @@ public class ExtendedCcdHelper {
 
     public ExtendedCcdHelper(
             CcdDataHelper ccdDataHelper,
-            CdamHelper cdamHelper) {
+            CdamHelper cdamHelper,
+            TestUtil testUtil) {
         this.ccdDataHelper = ccdDataHelper;
         this.cdamHelper = cdamHelper;
+        this.testUtil = testUtil;
     }
 
     public CaseDetails createCase(String documents) throws JsonProcessingException {
-        return ccdDataHelper.createCase(redactionTestUser, JURISDICTION, getEnvCcdCaseTypeId(), "createCase",
-            objectMapper.readTree(String.format(CREATE_CASE_TEMPLATE, documents)));
+        return ccdDataHelper.createCase(
+                redactionTestUser,
+                testUtil.getTestUserPassword(), JURISDICTION,
+                getEnvCcdCaseTypeId(),
+                "createCase",
+                objectMapper.readTree(String.format(CREATE_CASE_TEMPLATE, documents))
+        );
     }
 
     public String getEnvCcdCaseTypeId() {
@@ -86,7 +95,7 @@ public class ExtendedCcdHelper {
         DocumentUploadRequest uploadRequest = new DocumentUploadRequest(Classification.PUBLIC.toString(), caseTypeId,
             jurisdictionId, Arrays.asList(multipartFile));
 
-        return cdamHelper.uploadDocuments(username, uploadRequest);
+        return cdamHelper.uploadDocuments(username, testUtil.getTestUserPassword(), uploadRequest);
     }
 
     public String createCaseAndUploadDocument(UploadResponse uploadResponse, String docName,

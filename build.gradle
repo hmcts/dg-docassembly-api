@@ -181,7 +181,7 @@ dependencies {
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath
 
-    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.3.1'
+    aatImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.0.0'
 
     cftlibImplementation 'org.springframework.boot:spring-boot-devtools'
 }
@@ -535,6 +535,7 @@ bootWithCCD {
         execOps.exec {
             commandLine 'docker', 'compose', '-f', 'src/cftlib/resources/docker-compose-local.yml', '-p', 'cftlib-additional', 'up', '-d'
         }
+        environment 'TEST_USER_PASSWORD', 'Az!' + UUID.randomUUID().toString().replace('-', '').take(20)
 
     }
     environment 'DOC_ASSEMBLY_SERVER_PORT', '8081'

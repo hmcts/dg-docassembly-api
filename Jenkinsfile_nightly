@@ -1,4 +1,5 @@
 #!groovy
+import java.util.UUID
 
 properties([
     [
@@ -41,6 +42,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+static String generatePassword() {
+    // add 1 capital and special char for password
+    return 'Az!' + UUID.randomUUID().toString().replace('-', '').take(20)
+}
+
 def vaultOverrides = [
         'preview' : 'aat',
         'spreview': 'saat'
@@ -62,6 +68,8 @@ withNightlyPipeline(type , product, component) {
 
     // Check URL
     env.TEST_URL = "http://dg-docassembly-aat.service.core-compute-aat.internal"
+    env.TEST_USER_PASSWORD = generatePassword()
+    echo "--------Generated TEST_USER_PASSWORD---> ${env.TEST_USER_PASSWORD}"
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)

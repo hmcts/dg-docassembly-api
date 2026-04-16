@@ -18,6 +18,9 @@ public class TestUtil {
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
     public static final String AUTHORIZATION = "Authorization";
+
+    private String testUserPassword;
+
     private String idamAuth;
     private String s2sAuth;
     private static final String INVALID_IDAM = "238beab2-b563-4fee-80fa-63f224bc56f6";
@@ -41,7 +44,8 @@ public class TestUtil {
                     @Qualifier("xuiS2sHelper") S2sHelper cdamS2sHelper,
                     @Value("${test.url}") String testUrl,
                     @Value("${document_management.base-url}") String dmApiUrl,
-                    @Value("${document_management.docker_url}") String dmDocumentApiUrl
+                    @Value("${document_management.docker_url}") String dmDocumentApiUrl,
+                    @Value("${test.user.password}") String testUserPassword
     ) {
         this.idamHelper = idamHelper;
         this.s2sHelper = s2sHelper;
@@ -50,15 +54,16 @@ public class TestUtil {
         this.testUrl = testUrl;
         this.dmApiUrl = dmApiUrl;
         this.dmDocumentApiUrl = dmDocumentApiUrl;
+        this.testUserPassword = testUserPassword;
         RestAssured.baseURI = testUrl;
         this.init();
     }
 
     private void init() {
-        idamHelper.createUser("docassemblyTestUser@docassemblyTest.com",
+        idamHelper.createUser("docassemblyTestUser@docassemblyTest.com", testUserPassword,
                 Stream.of("caseworker", "caseworker-publiclaw", "ccd-import").toList());
         RestAssured.useRelaxedHTTPSValidation();
-        idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com");
+        idamAuth = idamHelper.authenticateUser("docassemblyTestUser@docassemblyTest.com", testUserPassword);
         s2sAuth = s2sHelper.getS2sToken();
     }
 
@@ -224,6 +229,10 @@ public class TestUtil {
 
     public Document getDocumentMetadata(String fileId) {
         return dmHelper.getDocumentMetadata(fileId);
+    }
+
+    public String getTestUserPassword() {
+        return testUserPassword;
     }
 
 }
