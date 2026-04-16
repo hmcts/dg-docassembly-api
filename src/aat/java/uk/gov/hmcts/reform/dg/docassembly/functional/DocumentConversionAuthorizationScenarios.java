@@ -42,8 +42,8 @@ class DocumentConversionAuthorizationScenarios extends BaseTest {
 
     @BeforeEach
     public void setupNonCaseworkerUser() {
-        idamHelper.createUser(nonCaseworkerEmail, NON_CASEWORKER_ROLES);
-        String nonCaseworkerAuth = idamHelper.authenticateUser(nonCaseworkerEmail);
+        idamHelper.createUser(nonCaseworkerEmail, testUtil.getTestUserPassword(), NON_CASEWORKER_ROLES);
+        String nonCaseworkerAuth = idamHelper.authenticateUser(nonCaseworkerEmail, testUtil.getTestUserPassword());
         String s2sAuth = testUtil.getS2sAuth();
         
         nonCaseworkerRequest = RestAssured

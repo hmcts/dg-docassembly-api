@@ -1,4 +1,5 @@
 #!groovy
+import java.util.UUID
 
 properties([
     [
@@ -62,6 +63,8 @@ withNightlyPipeline(type , product, component) {
 
     // Check URL
     env.TEST_URL = "http://dg-docassembly-aat.service.core-compute-aat.internal"
+    // random password with 1 capital and special char
+    env.TEST_USER_PASSWORD = 'D!' + UUID.randomUUID().toString().replace('-', '').take(20)
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)

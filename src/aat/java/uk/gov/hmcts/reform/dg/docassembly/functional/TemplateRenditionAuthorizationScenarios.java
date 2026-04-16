@@ -52,8 +52,12 @@ class TemplateRenditionAuthorizationScenarios extends BaseTest {
     public void setupUsers() {
         String s2sAuth = testUtil.getS2sAuth();
 
-        idamHelper.createUser(multiRoleCaseworkerEmail, MULTI_ROLE_CASEWORKER_ROLES);
-        String multiRoleCaseworkerAuth = idamHelper.authenticateUser(multiRoleCaseworkerEmail);
+        idamHelper.createUser(multiRoleCaseworkerEmail, testUtil.getTestUserPassword(), MULTI_ROLE_CASEWORKER_ROLES);
+        String multiRoleCaseworkerAuth =
+                idamHelper.authenticateUser(
+                        multiRoleCaseworkerEmail,
+                        testUtil.getTestUserPassword()
+                );
         multiRoleCaseworkerRequest = RestAssured
                 .given()
                 .header(TestUtil.AUTHORIZATION, multiRoleCaseworkerAuth)

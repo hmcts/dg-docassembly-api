@@ -30,6 +30,8 @@ management:
 
 test:
   url: ${TEST_URL:http://localhost:8080}
+  user:
+    password: ${TEST_USER_PASSWORD}
 
 idam:
   api:
