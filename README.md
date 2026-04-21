@@ -18,7 +18,6 @@ cd dg-docassembly-api/
 #### To run the application:
 
 VPN connection is required
-At the moment java version must be set to 17 as 21 is not supported for local setup by CFTLib
 For local setup only, there is a need to set the port in main/resources/application.yaml to 8080
 to avoid conflicting with CFTLib
 
@@ -43,17 +42,11 @@ You can run contract or pact tests as follows:
 ./gradlew contract
 ```
 
-You can then publish your pact tests locally by first running the pact docker-compose:
+To run the provider pact tests, first comment the broker configuration
+in the BaseProviderTest and uncomment the pact folder configuration,
+then run the below command to execute the provider pact tests locally.
 
-```
-docker-compose -f docker-pactbroker-compose.yml up
-```
-
-and then using it to publish your tests:
-
-```
-./gradlew pactPublish
-```
+```./gradlew providerContractTests```
 
 ### Swagger UI
 To view our REST API go to http://{HOST}/swagger-ui/index.html
