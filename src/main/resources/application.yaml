@@ -92,9 +92,6 @@ idam:
     microservice: dg_docassembly_api
   s2s-authorised:
     services: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,xui_webapp}
-  security:
-    allowed-issuers:
-      - http://localhost:5062/o
 
 template-management-api:
   base-url: ${DOCMOSIS_TEMPLATES_ENDPOINT:https://docmosis.aat.platform.hmcts.net}

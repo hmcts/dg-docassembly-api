@@ -28,7 +28,6 @@ java:
     DOCMOSIS_CONVERT_ENDPOINT: https://docmosis.{{ .Values.global.environment }}.platform.hmcts.net/rs/convert
     DOCMOSIS_RENDER_ENDPOINT: https://docmosis.{{ .Values.global.environment }}.platform.hmcts.net/rs/render
     CDAM_URL: http://ccd-case-document-am-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-    IDAM_SECURITY_ALLOWED_ISSUERS_0: https://forgerock-am.service.core-compute-idam-aat2.internal:8443/openam/oauth2/realms/root/realms/hmcts
     TIMEOUT_SERVER_SHUTDOWN_PHASE: 1m
 
     REFORM_SERVICE_NAME: dg-docassembly
