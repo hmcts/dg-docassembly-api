@@ -101,7 +101,7 @@ public class SecurityConfiguration {
         if (iss instanceof String issuer && allowedIssuerSet.contains(issuer)) {
             return true;
         }
-        log.warn("JWT rejected: issuer not allowed");
+        log.warn("JWT rejected: issuer not allowed. iss={}", iss);
         return false;
     }
 
