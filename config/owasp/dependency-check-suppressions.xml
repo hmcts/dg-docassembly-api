@@ -4,8 +4,4 @@
         <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/applicationinsights\-core@.*$</packageUrl>
         <cve>CVE-2025-21199</cve>
     </suppress>
-    <suppress until="2026-09-15Z">
-        <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-stdlib@.*$</packageUrl>
-        <cve>CVE-2020-29582</cve>
-    </suppress>
 </suppressions>
