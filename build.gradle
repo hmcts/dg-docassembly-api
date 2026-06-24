@@ -144,8 +144,8 @@ dependencies {
     testRuntimeOnly group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
     testRuntimeOnly group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.9'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.34'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.34'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.35'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.35'
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
@@ -160,7 +160,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
-    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.0.Final'
+    testImplementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '9.1.1.Final'
 
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version, withoutPactExtras
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version, withoutPactExtras
