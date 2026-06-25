@@ -37,7 +37,7 @@ application {
 def versions = [
         serenity           : '5.3.10',
         fasterXmlJackson   : '2.22.0',
-        pact_version       : '4.7.1',
+        pact_version       : '4.7.3',
         logging            : '8.0.0',
         junit5             : '6.1.0',
         springSecurity     : '6.5.11'
