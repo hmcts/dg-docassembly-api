@@ -27,14 +27,6 @@ variable "env" {
 variable "subscription" {
 }
 
-variable "open_id_api_base_uri" {
-  default = "idam-api"
-}
-
-variable "oidc_issuer_base_uri" {
-  default = "idam-api"
-}
-
 variable "tenant_id" {}
 
 variable "jenkins_AAD_objectId" {
@@ -57,10 +49,6 @@ variable "java_opts" {
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-variable "idam_api_base_uri" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
-}
-
 variable "s2s_name" {
   default = "rpe-service-auth-provider"
 }
