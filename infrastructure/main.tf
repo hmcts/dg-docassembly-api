@@ -27,7 +27,7 @@ data "azurerm_user_assigned_identity" "jenkins" {
 }
 
 module "local_key_vault" {
-  source                  = "git@github.com:hmcts/cnp-module-key-vault?ref=master"
+  source                  = "git@github.com:hmcts/cnp-module-key-vault?ref=DTSPO-31965/remove-jenkins-ptl-access"
   product                 = local.app_full_name
   env                     = var.env
   tenant_id               = var.tenant_id
@@ -37,6 +37,7 @@ module "local_key_vault" {
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
   common_tags             = var.common_tags
   create_managed_identity = true
+  grant_preview_jenkins_access = var.env == "aat"
 }
 
 provider "vault" {
