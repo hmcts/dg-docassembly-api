@@ -197,7 +197,7 @@ processIntegrationTestResources {
 dependencyManagement {
     dependencies {
 
-        dependency 'org.jetbrains.kotlin:kotlin-stdlib:2.4.0'
+        dependency 'org.jetbrains.kotlin:kotlin-stdlib:2.4.10'
 
         //CVE-2024-26308, CVE-2024-25710
         dependencySet(group: 'org.apache.commons', version: '1.28.0') {
