@@ -35,7 +35,7 @@ application {
 }
 
 def versions = [
-        serenity           : '5.3.10',
+        serenity           : '5.3.11',
         fasterXmlJackson   : '2.22.1',
         pact_version       : '4.7.3',
         logging            : '8.0.0',
