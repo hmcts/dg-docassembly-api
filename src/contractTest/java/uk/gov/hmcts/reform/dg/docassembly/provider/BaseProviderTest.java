@@ -25,7 +25,8 @@ import java.util.Objects;
 //@PactFolder("pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
-    providerBranch = "${pact.provider.branch}"
+    providerBranch = "${pact.provider.branch}",
+    enablePendingPacts = "${pactbroker.enablePending:true}"
 )
 public abstract class BaseProviderTest {
 
