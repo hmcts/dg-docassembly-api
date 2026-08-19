@@ -75,6 +75,7 @@ configurations.configureEach {
     exclude group: 'org.glassfish', module: 'jakarta.el'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
+    exclude group: 'io.github.openfeign', module: 'feign-httpclient'
 }
 
 dependencies {
@@ -92,7 +93,7 @@ dependencies {
 
     implementation group: 'org.json', name: 'json', version: '20250517'
     
-    implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '13.13'
+    implementation group: 'io.github.openfeign', name: 'feign-hc5', version: '13.13'
     implementation group: 'com.google.guava', name: 'guava', version: '33.6.0-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.4.0'
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
