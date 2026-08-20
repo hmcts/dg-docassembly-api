@@ -119,10 +119,6 @@ endpoint-toggles:
   enable-secure-document-conversion-endpoint: ${ENABLE_SECURE_DOCUMENT_CONVERSION_ENDPOINT:false}
   enable-secure-document-templ-rend-endpoint: ${ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT:false}
 
-# Delete when issueOverride variable is no longer used in SecurityConfiguration.class
-oidc:
-  issuer: ${OIDC_ISSUER_BASE_URI:http://localhost:8080/openam/oauth2/hmcts}
-
 docmosis-conversion:
   multipart:
     covered-ext: ${DOCMOSIS_MULTIPART_WHITELIST_EXT:doc,docx,pptx,ppt,rtf,txt,xlsx,xls}
