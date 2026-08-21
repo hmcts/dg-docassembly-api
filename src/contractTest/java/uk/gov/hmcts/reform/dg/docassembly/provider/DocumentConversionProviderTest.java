@@ -5,9 +5,7 @@ import au.com.dius.pact.provider.junitsupport.State;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.reform.dg.docassembly.rest.DocumentConversionResource;
@@ -22,10 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @Provider("doc_assembly_document_conversion_provider")
-@WebMvcTest(value = DocumentConversionResource.class, excludeAutoConfiguration = {
-    SecurityAutoConfiguration.class,
-    OAuth2ClientAutoConfiguration.class
-})
+@WebMvcTest(DocumentConversionResource.class)
 class DocumentConversionProviderTest extends BaseProviderTest {
 
     private DocumentConversionResource documentConversionResource;

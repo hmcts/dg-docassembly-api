@@ -22,6 +22,26 @@
         <cve>CVE-2026-54428</cve>
     </suppress>
     <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents:httpclient:.*$</gav>
+        <cve>CVE-2026-54399</cve>
+        <cve>CVE-2026-54428</cve>
+    </suppress>
+    <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents\.client5:httpclient5:.*$</gav>
+        <cve>CVE-2026-71290</cve>
+        <cve>CVE-2026-64607</cve>
+    </suppress>
+    <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents\.core5:httpcore5:.*$</gav>
+        <cve>CVE-2026-54399</cve>
+        <cve>CVE-2026-54428</cve>
+    </suppress>
+    <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents\.core5:httpcore5-h2:.*$</gav>
+        <cve>CVE-2026-54399</cve>
+        <cve>CVE-2026-54428</cve>
+    </suppress>
+    <suppress until="2026-10-07Z">
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat-embed-(core|websocket)@.*$</packageUrl>
         <cve>CVE-2026-66299</cve>
     </suppress>

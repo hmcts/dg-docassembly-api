@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets
 plugins {
     id 'application'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.5.16'
+    id 'org.springframework.boot' version '4.1.0'
     id 'uk.gov.hmcts.java' version '0.12.70'
     id 'org.owasp.dependencycheck' version '12.2.1'
     id 'com.github.ben-manes.versions' version '0.54.0'
@@ -39,8 +39,7 @@ def versions = [
         fasterXmlJackson   : '2.22.2',
         pact_version       : '4.7.5',
         logging            : '8.0.0',
-        junit5             : '6.1.3',
-        springSecurity     : '6.5.11'
+        junit5             : '6.1.3'
 ]
 sourceSets {
     aat {
@@ -102,12 +101,12 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose'
+    implementation group: 'org.springframework.security', name: 'spring-security-core'
+    implementation group: 'org.springframework.security', name: 'spring-security-config'
+    implementation group: 'org.springframework.security', name: 'spring-security-web'
 
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
@@ -116,20 +115,21 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.5'
     implementation group: 'com.github.hmcts', name: 'ccd-case-document-am-client', version: '1.59.2'
 
-    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '4.0.0'
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
 
     implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.9'
 
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.2'
 
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.3'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.3'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '5.0.2'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '5.0.2'
 
     implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.25.1'
     implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.25.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', withoutStuff
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc-test'
     testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.1.0'
     
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -22,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
@@ -121,24 +118,4 @@ class SecurityConfigurationTest {
         assertTrue(validator.validate(jwt).hasErrors());
     }
 
-    @Test
-    void webSecurityCustomized() {
-        WebSecurityCustomizer customizer = config.webSecurityCustomizer();
-        WebSecurity webSecurity = mock(WebSecurity.class, RETURNS_DEEP_STUBS);
-
-        customizer.customize(webSecurity);
-
-        verify(webSecurity.ignoring()).requestMatchers(
-            "/swagger-ui.html",
-            "/swagger-ui/**",
-            "/swagger-resources/**",
-            "/v3/**",
-            "/health",
-            "/health/liveness",
-            "/health/readiness",
-            "/status/health",
-            "/loggers/**",
-            "/"
-        );
-    }
 }

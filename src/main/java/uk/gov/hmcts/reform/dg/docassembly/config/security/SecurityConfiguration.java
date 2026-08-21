@@ -10,7 +10,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -39,27 +38,10 @@ public class SecurityConfiguration {
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
 
-    @Value("${oidc.issuer}")
-    private String issuerOverride;
-
     private final ServiceAuthFilter serviceAuthFilter;
 
     public SecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
         this.serviceAuthFilter = serviceAuthFilter;
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("/swagger-ui.html",
-                "/swagger-ui/**",
-                "/swagger-resources/**",
-                "/v3/**",
-                "/health",
-                "/health/liveness",
-                "/health/readiness",
-                "/status/health",
-                "/loggers/**",
-                "/");
     }
 
     @Bean
@@ -70,10 +52,21 @@ public class SecurityConfiguration {
             .addFilterBefore(serviceAuthFilter, BearerTokenAuthenticationFilter.class)
             .sessionManagement(sessionManagementConfigurer ->
                 sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                authorizationManagerRequestMatcherRegistry.requestMatchers("/api/**").authenticated())
-            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                authorizationManagerRequestMatcherRegistry.requestMatchers("/error").authenticated())
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers(
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/swagger-resources/**",
+                    "/v3/**",
+                    "/health",
+                    "/health/liveness",
+                    "/health/readiness",
+                    "/status/health",
+                    "/loggers/**",
+                    "/"
+                ).permitAll()
+                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/error").authenticated())
             .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
                     httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
             .oauth2Client(Customizer.withDefaults());
