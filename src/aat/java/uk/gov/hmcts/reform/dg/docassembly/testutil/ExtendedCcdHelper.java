@@ -1,11 +1,9 @@
 package uk.gov.hmcts.reform.dg.docassembly.testutil;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
@@ -29,7 +27,7 @@ public class ExtendedCcdHelper {
 
     private TestUtil testUtil;
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper;
 
     public static final String CREATE_CASE_TEMPLATE = """
             {
@@ -61,13 +59,15 @@ public class ExtendedCcdHelper {
     public ExtendedCcdHelper(
             CcdDataHelper ccdDataHelper,
             CdamHelper cdamHelper,
-            TestUtil testUtil) {
+            TestUtil testUtil,
+            ObjectMapper objectMapper) {
         this.ccdDataHelper = ccdDataHelper;
         this.cdamHelper = cdamHelper;
         this.testUtil = testUtil;
+        this.objectMapper = objectMapper;
     }
 
-    public CaseDetails createCase(String documents) throws JsonProcessingException {
+    public CaseDetails createCase(String documents) {
         return ccdDataHelper.createCase(
                 redactionTestUser,
                 testUtil.getTestUserPassword(), JURISDICTION,
@@ -98,8 +98,11 @@ public class ExtendedCcdHelper {
         return cdamHelper.uploadDocuments(username, testUtil.getTestUserPassword(), uploadRequest);
     }
 
-    public String createCaseAndUploadDocument(UploadResponse uploadResponse, String docName,
-                                              String fileName) throws JsonProcessingException {
+    public String createCaseAndUploadDocument(
+            UploadResponse uploadResponse,
+            String docName,
+            String fileName
+    ) {
         String uploadedUrl = uploadResponse.getDocuments().get(0).links.self.href;
         String docHash = uploadResponse.getDocuments().get(0).hashToken;
 

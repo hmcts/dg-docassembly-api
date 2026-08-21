@@ -75,8 +75,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry.requestMatchers("/error").authenticated())
             .oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer ->
-                    httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()))
-            .oauth2Client(Customizer.withDefaults());
+                    httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
