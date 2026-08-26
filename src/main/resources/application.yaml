@@ -133,6 +133,9 @@ springdoc:
   packagesToScan: uk.gov.hmcts.reform.dg.docassembly.rest
   pathsToMatch: /**
 
+toggle:
+  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
+
 logging:
   level:
     uk.gov.hmcts.reform.authorisation.filters: DEBUG
