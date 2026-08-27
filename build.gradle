@@ -216,6 +216,11 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-el'
         }
+
+        dependencySet(group: 'com.github.hmcts', version: '6.0.0') {
+            entry 'core-case-data-store-client'
+        }
+
     }
 }
 
