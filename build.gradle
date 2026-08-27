@@ -158,7 +158,7 @@ dependencies {
 
     contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring7', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
 
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
