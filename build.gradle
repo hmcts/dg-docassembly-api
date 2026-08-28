@@ -95,12 +95,10 @@ dependencies {
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '13.14'
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.5.0'
-    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-blackbird', version: versions.fasterXmlJackson
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
-    implementation group: 'org.zalando', name: 'problem-spring-web', version: '0.29.1'
     implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
