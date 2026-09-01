@@ -1,8 +1,7 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
 
-    ObjectMapper mapper = new ObjectMapper();
+    JsonMapper mapper = JsonMapper.builder().build();
 
     @Autowired
     public SecureTemplateRenditionResourceTests(
@@ -49,7 +48,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRendition() throws JsonProcessingException {
+    void testTemplateRendition() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
 
@@ -66,7 +65,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToDoc() throws JsonProcessingException {
+    void testTemplateRenditionToDoc() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -81,7 +80,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToDocX() throws JsonProcessingException {
+    void testTemplateRenditionToDocX() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -96,7 +95,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToOutputName() throws JsonProcessingException {
+    void testTemplateRenditionToOutputName() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         createTemplateRenditionDto.setOutputFilename("test-output-name");
@@ -119,7 +118,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn500WhenMandatoryFormPayloadIsMissing() throws JsonProcessingException {
+    void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setFormPayload(null);
@@ -136,7 +135,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenMandatoryTemplateIdIsMissing() throws JsonProcessingException {
+    void shouldReturn400WhenMandatoryTemplateIdIsMissing() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setTemplateId(null);
@@ -153,7 +152,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn401WhenUnAthenticateUserPostRequest() throws JsonProcessingException {
+    void shouldReturn401WhenUnAthenticateUserPostRequest() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
@@ -168,7 +167,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenPostRequestMissingJurisdication() throws JsonProcessingException {
+    void shouldReturn400WhenPostRequestMissingJurisdication() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setJurisdictionId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -184,7 +183,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenPostRequestMissingCaseType() throws JsonProcessingException {
+    void shouldReturn400WhenPostRequestMissingCaseType() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setCaseTypeId(null);
         final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
@@ -199,7 +198,7 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
             .all();
     }
 
-    private CreateTemplateRenditionDto populateRequestBody() throws JsonProcessingException {
+    private CreateTemplateRenditionDto populateRequestBody() {
 
         JsonNode newNode = mapper.readTree("{\"a\": \"1\"}");
 

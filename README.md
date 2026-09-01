@@ -42,11 +42,11 @@ You can run contract or pact tests as follows:
 ./gradlew contract
 ```
 
-To run the provider pact tests, first comment the broker configuration
-in the BaseProviderTest and uncomment the pact folder configuration,
-then run the below command to execute the provider pact tests locally.
+To run the provider pact tests locally against committed pacts:
 
 ```./gradlew providerContractTests```
+
+When `PACT_BROKER_FULL_URL` is set (CI), broker verification is handled by the pipeline against https://pact-broker.platform.hmcts.net.
 
 ### Swagger UI
 To view our REST API go to http://{HOST}/swagger-ui/index.html

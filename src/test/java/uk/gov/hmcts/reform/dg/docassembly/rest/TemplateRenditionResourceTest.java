@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,7 +32,7 @@ class TemplateRenditionResourceTest {
     public static final String AUTH = "xxx";
     public static final String SERVICE_AUTH = "yyy";
 
-    ObjectMapper mapper = new ObjectMapper();
+    JsonMapper mapper = JsonMapper.builder().build();
 
     @BeforeEach
     void setup() {

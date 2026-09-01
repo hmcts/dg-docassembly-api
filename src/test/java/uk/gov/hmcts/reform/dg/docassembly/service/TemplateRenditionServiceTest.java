@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mock.ClasspathResources;
 import okhttp3.mock.MockInterceptor;
@@ -170,7 +170,7 @@ class TemplateRenditionServiceTest {
     }
 
     private CreateTemplateRenditionDto createTemplateRenditionDto() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = JsonMapper.builder().build();
 
         CreateTemplateRenditionDto createTemplateDto = new CreateTemplateRenditionDto();
 
