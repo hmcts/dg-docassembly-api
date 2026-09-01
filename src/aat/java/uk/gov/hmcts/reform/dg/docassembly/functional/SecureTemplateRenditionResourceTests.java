@@ -1,10 +1,11 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
@@ -25,7 +26,9 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
 
-    JsonMapper mapper = JsonMapper.builder().build();
+    JsonMapper mapper = JsonMapper.builder()
+            .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .build();
 
     @Autowired
     public SecureTemplateRenditionResourceTests(
@@ -52,10 +55,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
 
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -68,10 +69,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     void testTemplateRenditionToDoc() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
 
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
@@ -83,10 +82,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     void testTemplateRenditionToDocX() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS).then()
                 .assertThat()
                 .statusCode(200)
@@ -99,11 +96,9 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         createTemplateRenditionDto.setOutputFilename("test-output-name");
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         CreateTemplateRenditionDto response =
                 cdamRequest
-                        .body(jsonObject.toString())
+                        .body(toRequestBody(createTemplateRenditionDto))
                         .post(API_TEMPLATE_RENDITIONS)
                         .then()
                         .statusCode(200)
@@ -122,10 +117,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setFormPayload(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -139,10 +132,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setOutputType(null);
         createTemplateRenditionDto.setTemplateId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -154,10 +145,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     @Test
     void shouldReturn401WhenUnAthenticateUserPostRequest() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         unAuthenticatedRequest
-                .body(jsonObject.toString())
+                .body(toRequestBody(createTemplateRenditionDto))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -170,10 +159,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     void shouldReturn400WhenPostRequestMissingJurisdication() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setJurisdictionId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
         cdamRequest
-            .body(jsonObject.toString())
+            .body(toRequestBody(createTemplateRenditionDto))
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -186,10 +173,9 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     void shouldReturn400WhenPostRequestMissingCaseType() {
         CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         createTemplateRenditionDto.setCaseTypeId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
 
         cdamRequest
-            .body(jsonObject.toString())
+            .body(toRequestBody(createTemplateRenditionDto))
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -211,5 +197,13 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
         createTemplateRenditionDto.setCaseTypeId(extendedCcdHelper.getEnvCcdCaseTypeId());
 
         return createTemplateRenditionDto;
+    }
+
+    private String toRequestBody(CreateTemplateRenditionDto createTemplateRenditionDto) {
+        try {
+            return mapper.writeValueAsString(createTemplateRenditionDto);
+        } catch (JacksonException e) {
+            throw new IllegalStateException("Failed to serialise template rendition request", e);
+        }
     }
 }
