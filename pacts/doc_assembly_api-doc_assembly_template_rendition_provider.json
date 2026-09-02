@@ -1,0 +1,215 @@
+{
+  "consumer": {
+    "name": "doc_assembly_api"
+  },
+  "interactions": [
+    {
+      "description": "A request to create a template rendition",
+      "key": "e7cb7db8",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a template can be rendered successfully"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "caseTypeId": "FinancialRemedyContested",
+            "errors": [
+
+            ],
+            "formPayload": {
+
+            },
+            "hashToken": "Abcde12345",
+            "jurisdictionId": "DIVORCE",
+            "outputType": "PDF",
+            "secureDocStoreEnabled": true,
+            "templateId": "FL-FRM-GOR-ENG-12345"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Authorization": [
+            "Bearer someAuthorizationToken"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "ServiceAuthorization": [
+            "Bearer someServiceAuthorizationToken"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.caseTypeId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.hashToken": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.jurisdictionId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.outputType": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "(PDF|DOC|DOCX)"
+                }
+              ]
+            },
+            "$.secureDocStoreEnabled": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.templateId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "POST",
+        "path": "/api/template-renditions"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "caseTypeId": "FinancialRemedyContested",
+            "errors": [
+
+            ],
+            "formPayload": {
+
+            },
+            "hashToken": "Abcde12345",
+            "jurisdictionId": "DIVORCE",
+            "outputType": "PDF",
+            "renditionOutputLocation": "http://dm-store:8080/documents/d9a74b1e-188e-4a6c-9f82-3e28e0b2e8b0",
+            "secureDocStoreEnabled": true,
+            "templateId": "FL-FRM-GOR-ENG-12345"
+          },
+          "contentType": "application/json; charset=UTF-8",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=UTF-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.caseTypeId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.hashToken": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.jurisdictionId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.outputType": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "(PDF|DOC|DOCX)"
+                }
+              ]
+            },
+            "$.renditionOutputLocation": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.secureDocStoreEnabled": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.templateId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.7.5"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "doc_assembly_template_rendition_provider"
+  }
+}
