@@ -15,7 +15,11 @@ import java.util.Objects;
 @Builder
 public class ByteArrayMultipartFile implements MultipartFile {
     private final byte[] content;
+    /**
+     * Multipart form field name (CDAM expects {@code files}).
+     */
     private final String name;
+    private final String originalFilename;
     private final MediaType contentType;
 
     @Override
@@ -25,7 +29,7 @@ public class ByteArrayMultipartFile implements MultipartFile {
 
     @Override
     public String getOriginalFilename() {
-        return getName();
+        return originalFilename != null ? originalFilename : name;
     }
 
     @Override
@@ -69,13 +73,14 @@ public class ByteArrayMultipartFile implements MultipartFile {
         ByteArrayMultipartFile that = (ByteArrayMultipartFile) o;
         return Arrays.equals(content, that.content)
                 && Objects.equals(name, that.name)
+                && Objects.equals(originalFilename, that.originalFilename)
                 && Objects.equals(contentType, that.contentType);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(name, contentType);
+        int result = Objects.hash(name, originalFilename, contentType);
         result = 31 * result + Arrays.hashCode(content);
         return result;
     }

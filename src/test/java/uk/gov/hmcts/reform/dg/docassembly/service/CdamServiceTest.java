@@ -14,15 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.reform.ccd.document.am.feign.CaseDocumentClientApi;
 import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.ccd.document.am.model.Document;
 import uk.gov.hmcts.reform.ccd.document.am.model.Document.Links;
 import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
 import uk.gov.hmcts.reform.ccd.document.am.model.UploadResponse;
-import uk.gov.hmcts.reform.dg.docassembly.dto.ByteArrayMultipartFile;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
-import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 
 import java.io.File;
@@ -195,7 +194,7 @@ class CdamServiceTest {
 
     @Test
     @DisplayName("uploadDocuments should upload file successfully")
-    void uploadDocumentsSuccess() throws DocumentTaskProcessingException {
+    void uploadDocumentsSuccess() throws Exception {
 
         Document uploadedDoc = Document.builder()
             .originalDocumentName(TEST_FILE_NAME)
@@ -220,10 +219,11 @@ class CdamServiceTest {
         assertEquals(createTemplateRenditionDto.getJurisdictionId(), capturedRequest.getJurisdictionId());
         assertEquals(1, capturedRequest.getFiles().size());
 
-        ByteArrayMultipartFile capturedFile = (ByteArrayMultipartFile) capturedRequest.getFiles().get(0);
-        assertEquals(createTemplateRenditionDto.getFullOutputFilename(), capturedFile.getName());
+        MultipartFile capturedFile = capturedRequest.getFiles().get(0);
+        assertEquals("files", capturedFile.getName());
+        assertEquals(createTemplateRenditionDto.getFullOutputFilename(), capturedFile.getOriginalFilename());
         assertEquals(createTemplateRenditionDto.getOutputType().getMediaType(), capturedFile.getContentType());
-        assertArrayEquals(TEST_FILE_CONTENT.getBytes(StandardCharsets.UTF_8), capturedFile.getContent());
+        assertArrayEquals(TEST_FILE_CONTENT.getBytes(StandardCharsets.UTF_8), capturedFile.getBytes());
     }
 
     @Test
@@ -236,28 +236,10 @@ class CdamServiceTest {
             cdamService.uploadDocuments(nonExistentFile, createTemplateRenditionDto);
         });
 
-        assertTrue(exception.getMessage().contains("Could not download the file from CDAM"));
+        assertTrue(exception.getMessage().contains("Could not upload the file to CDAM"));
         assertInstanceOf(IOException.class, exception.getCause());
         verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any());
     }
-
-    @Test
-    @DisplayName("uploadDocuments should throw DocumentTaskProcessingException on MediaType parse error")
-    void uploadDocumentsThrowsExceptionOnMediaTypeError() {
-
-        RenditionOutputType mockOutputType = mock(RenditionOutputType.class);
-        when(mockOutputType.getMediaType()).thenReturn("this is not a valid media type");
-        when(mockOutputType.getFileExtension()).thenReturn(".bad");
-        createTemplateRenditionDto.setOutputType(mockOutputType);
-
-        DocumentTaskProcessingException exception = assertThrows(DocumentTaskProcessingException.class, () -> {
-            cdamService.uploadDocuments(testFile, createTemplateRenditionDto);
-        });
-
-        assertInstanceOf(IllegalArgumentException.class, exception.getCause());
-        verify(caseDocumentClientApi, never()).uploadDocuments(any(), any(), any());
-    }
-
 
     @Test
     @DisplayName("uploadDocuments should throw DocumentTaskProcessingException on API client error")

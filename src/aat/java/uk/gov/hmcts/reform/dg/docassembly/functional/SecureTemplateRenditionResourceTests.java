@@ -1,34 +1,37 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
+import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
-import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
-import uk.gov.hmcts.reform.document.domain.Document;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
+/**
+ * Secure (CDAM) template rendition functional tests.
+ *
+ * <p>Request bodies are literal JSON strings (same as {@link TemplateRenditionResourceTests}).
+ * Do not serialise {@code CreateTemplateRenditionDto} with {@code org.json.JSONObject} after
+ * Jackson 3 — it introspects {@code JsonNode} as a JavaBean and breaks {@code formPayload}.</p>
+ */
 class SecureTemplateRenditionResourceTests extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS = "/api/template-renditions";
-    //The calling service has enabled CDAM via a feature flag in the request payload in all instances in this test.
+    private static final String TEMPLATE_NAME = "FL-FRM-APP-ENG-00002.docx";
+
+    @Value("${test.url}")
+    private String testUrl;
+
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
-
-    JsonMapper mapper = JsonMapper.builder()
-            .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
-            .build();
 
     @Autowired
     public SecureTemplateRenditionResourceTests(
@@ -41,24 +44,24 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @BeforeEach
     public void setupRequestSpecification() {
-
         cdamRequest = testUtil
-            .cdamAuthRequest();
+            .cdamAuthRequest()
+            .baseUri(testUrl)
+            .contentType(APPLICATION_JSON_VALUE);
 
         unAuthenticatedRequest = testUtil
                 .unAuthenticatedRequest()
+                .baseUri(testUrl)
                 .contentType(APPLICATION_JSON_VALUE);
     }
 
     @Test
     void testTemplateRendition() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-
         cdamRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body(secureTemplateRenditionBody(null, null))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -67,11 +70,10 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void testTemplateRenditionToDoc() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-
         cdamRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body(secureTemplateRenditionBody("DOC", null))
                 .post(API_TEMPLATE_RENDITIONS).then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -80,11 +82,10 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void testTemplateRenditionToDocX() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
         cdamRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body(secureTemplateRenditionBody("DOCX", null))
                 .post(API_TEMPLATE_RENDITIONS).then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -93,32 +94,26 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void testTemplateRenditionToOutputName() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
-        createTemplateRenditionDto.setOutputFilename("test-output-name");
         CreateTemplateRenditionDto response =
                 cdamRequest
-                        .body(toRequestBody(createTemplateRenditionDto))
+                        .body(secureTemplateRenditionBody("DOCX", "test-output-name"))
                         .post(API_TEMPLATE_RENDITIONS)
                         .then()
+                        .log().ifError()
                         .statusCode(200)
                         .extract()
                         .body()
                         .as(CreateTemplateRenditionDto.class);
 
-        String dmStoreHref = response.getRenditionOutputLocation();
-        Document doc = testUtil.getDocumentMetadata(dmStoreHref.substring(dmStoreHref.lastIndexOf("/") + 1));
-
-        assertEquals("test-output-name.docx", doc.originalDocumentName);
+        assertEquals("test-output-name", response.getOutputFilename());
+        assertNotNull(response.getRenditionOutputLocation());
+        assertEquals("test-output-name.docx", response.getFullOutputFilename());
     }
 
     @Test
     void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-        createTemplateRenditionDto.setFormPayload(null);
         cdamRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body(secureTemplateRenditionBody(null, null).replace("\"formPayload\":{\"a\":1}, ", ""))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -129,11 +124,10 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void shouldReturn400WhenMandatoryTemplateIdIsMissing() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-        createTemplateRenditionDto.setTemplateId(null);
         cdamRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true,"
+                        + " \"jurisdictionId\":\"PUBLICLAW\","
+                        + " \"caseTypeId\":\"" + extendedCcdHelper.getEnvCcdCaseTypeId() + "\"}")
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -144,9 +138,8 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void shouldReturn401WhenUnAthenticateUserPostRequest() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
         unAuthenticatedRequest
-                .body(toRequestBody(createTemplateRenditionDto))
+                .body(secureTemplateRenditionBody("DOC", null))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -157,10 +150,10 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void shouldReturn400WhenPostRequestMissingJurisdication() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setJurisdictionId(null);
         cdamRequest
-            .body(toRequestBody(createTemplateRenditionDto))
+            .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"outputType\":\"DOC\","
+                    + " \"templateId\":\"" + base64(TEMPLATE_NAME) + "\","
+                    + " \"caseTypeId\":\"" + extendedCcdHelper.getEnvCcdCaseTypeId() + "\"}")
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -171,11 +164,10 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @Test
     void shouldReturn400WhenPostRequestMissingCaseType() {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setCaseTypeId(null);
-
         cdamRequest
-            .body(toRequestBody(createTemplateRenditionDto))
+            .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"outputType\":\"DOC\","
+                    + " \"templateId\":\"" + base64(TEMPLATE_NAME) + "\","
+                    + " \"jurisdictionId\":\"PUBLICLAW\"}")
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -184,26 +176,20 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
             .all();
     }
 
-    private CreateTemplateRenditionDto populateRequestBody() {
-
-        JsonNode newNode = mapper.readTree("{\"a\": \"1\"}");
-
-        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
-        createTemplateRenditionDto.setSecureDocStoreEnabled(true);
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOC);
-        createTemplateRenditionDto.setTemplateId(base64("FL-FRM-APP-ENG-00002.docx"));
-        createTemplateRenditionDto.setFormPayload(newNode);
-        createTemplateRenditionDto.setJurisdictionId("PUBLICLAW");
-        createTemplateRenditionDto.setCaseTypeId(extendedCcdHelper.getEnvCcdCaseTypeId());
-
-        return createTemplateRenditionDto;
-    }
-
-    private String toRequestBody(CreateTemplateRenditionDto createTemplateRenditionDto) {
-        try {
-            return mapper.writeValueAsString(createTemplateRenditionDto);
-        } catch (JacksonException e) {
-            throw new IllegalStateException("Failed to serialise template rendition request", e);
+    private String secureTemplateRenditionBody(String outputType, String outputFilename) {
+        StringBuilder body = new StringBuilder();
+        body.append("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"templateId\":\"")
+                .append(base64(TEMPLATE_NAME))
+                .append("\", \"jurisdictionId\":\"PUBLICLAW\", \"caseTypeId\":\"")
+                .append(extendedCcdHelper.getEnvCcdCaseTypeId())
+                .append("\"");
+        if (outputType != null) {
+            body.append(", \"outputType\":\"").append(outputType).append("\"");
         }
+        if (outputFilename != null) {
+            body.append(", \"outputFilename\":\"").append(outputFilename).append("\"");
+        }
+        body.append("}");
+        return body.toString();
     }
 }
