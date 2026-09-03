@@ -101,12 +101,11 @@ public class CdamService {
         );
 
         try {
-            // MultipartFile.getName() is the form field name. CDAM expects "files".
-            ByteArrayMultipartFile multipartFile = ByteArrayMultipartFile.builder()
-                .name("files")
-                .originalFilename(createTemplateRenditionDto.getFullOutputFilename())
-                .content(FileUtils.readFileToByteArray(file))
-                .contentType(MediaType.valueOf(createTemplateRenditionDto.getOutputType().getMediaType()))
+            ByteArrayMultipartFile multipartFile =
+                ByteArrayMultipartFile.builder()
+                    .content(FileUtils.readFileToByteArray(file))
+                    .name(createTemplateRenditionDto.getFullOutputFilename())
+                    .contentType(MediaType.valueOf(createTemplateRenditionDto.getOutputType().getMediaType()))
                 .build();
 
             DocumentUploadRequest documentUploadRequest = new DocumentUploadRequest(Classification.PUBLIC.toString(),
@@ -130,12 +129,8 @@ public class CdamService {
                     createTemplateRenditionDto.getTemplateId()
             );
         } catch (IOException e) {
-            logger.error("CDAM upload I/O failure for templateId {}",
-                createTemplateRenditionDto.getTemplateId(), e);
-            throw new DocumentTaskProcessingException("Could not upload the file to CDAM", e);
+            throw new DocumentTaskProcessingException("Could not download the file from CDAM", e);
         } catch (Exception e) {
-            logger.error("CDAM upload failure for templateId {}: {}",
-                createTemplateRenditionDto.getTemplateId(), e.getMessage(), e);
             throw new DocumentTaskProcessingException(e.getMessage(), e);
         }
     }
