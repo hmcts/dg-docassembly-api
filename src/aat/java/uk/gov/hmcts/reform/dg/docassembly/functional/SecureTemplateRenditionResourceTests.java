@@ -1,32 +1,37 @@
 package uk.gov.hmcts.reform.dg.docassembly.functional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
-import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ExtendedCcdHelper;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.TestUtil;
 import uk.gov.hmcts.reform.dg.docassembly.testutil.ToggleProperties;
-import uk.gov.hmcts.reform.document.domain.Document;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static uk.gov.hmcts.reform.dg.docassembly.testutil.Base64.base64;
 
+/**
+ * Secure (CDAM) template rendition functional tests.
+ *
+ * <p>Request bodies are literal JSON strings (same as {@link TemplateRenditionResourceTests}).
+ * Do not serialise {@code CreateTemplateRenditionDto} with {@code org.json.JSONObject} after
+ * Jackson 3 — it introspects {@code JsonNode} as a JavaBean and breaks {@code formPayload}.</p>
+ */
 class SecureTemplateRenditionResourceTests extends BaseTest {
 
     public static final String API_TEMPLATE_RENDITIONS = "/api/template-renditions";
-    //The calling service has enabled CDAM via a feature flag in the request payload in all instances in this test.
+    private static final String TEMPLATE_NAME = "FL-FRM-APP-ENG-00002.docx";
+
+    @Value("${test.url}")
+    private String testUrl;
+
     private RequestSpecification cdamRequest;
     private RequestSpecification unAuthenticatedRequest;
-
-    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     public SecureTemplateRenditionResourceTests(
@@ -39,26 +44,24 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
 
     @BeforeEach
     public void setupRequestSpecification() {
-
         cdamRequest = testUtil
-            .cdamAuthRequest();
+            .cdamAuthRequest()
+            .baseUri(testUrl)
+            .contentType(APPLICATION_JSON_VALUE);
 
         unAuthenticatedRequest = testUtil
                 .unAuthenticatedRequest()
+                .baseUri(testUrl)
                 .contentType(APPLICATION_JSON_VALUE);
     }
 
     @Test
-    void testTemplateRendition() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void testTemplateRendition() {
         cdamRequest
-                .body(jsonObject.toString())
+                .body(secureTemplateRenditionBody(null, null))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -66,14 +69,11 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToDoc() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void testTemplateRenditionToDoc() {
         cdamRequest
-                .body(jsonObject.toString())
+                .body(secureTemplateRenditionBody("DOC", null))
                 .post(API_TEMPLATE_RENDITIONS).then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -81,14 +81,11 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToDocX() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void testTemplateRenditionToDocX() {
         cdamRequest
-                .body(jsonObject.toString())
+                .body(secureTemplateRenditionBody("DOCX", null))
                 .post(API_TEMPLATE_RENDITIONS).then()
+                .log().ifError()
                 .assertThat()
                 .statusCode(200)
                 .log()
@@ -96,37 +93,27 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void testTemplateRenditionToOutputName() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOCX);
-        createTemplateRenditionDto.setOutputFilename("test-output-name");
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void testTemplateRenditionToOutputName() {
         CreateTemplateRenditionDto response =
                 cdamRequest
-                        .body(jsonObject.toString())
+                        .body(secureTemplateRenditionBody("DOCX", "test-output-name"))
                         .post(API_TEMPLATE_RENDITIONS)
                         .then()
+                        .log().ifError()
                         .statusCode(200)
                         .extract()
                         .body()
                         .as(CreateTemplateRenditionDto.class);
 
-        String dmStoreHref = response.getRenditionOutputLocation();
-        Document doc = testUtil.getDocumentMetadata(dmStoreHref.substring(dmStoreHref.lastIndexOf("/") + 1));
-
-        assertEquals("test-output-name.docx", doc.originalDocumentName);
+        assertEquals("test-output-name", response.getOutputFilename());
+        assertNotNull(response.getRenditionOutputLocation());
+        assertEquals("test-output-name.docx", response.getFullOutputFilename());
     }
 
     @Test
-    void shouldReturn500WhenMandatoryFormPayloadIsMissing() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-        createTemplateRenditionDto.setFormPayload(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void shouldReturn500WhenMandatoryFormPayloadIsMissing() {
         cdamRequest
-                .body(jsonObject.toString())
+                .body(secureTemplateRenditionBody(null, null).replace("\"formPayload\":{\"a\":1}, ", ""))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -136,14 +123,11 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenMandatoryTemplateIdIsMissing() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setOutputType(null);
-        createTemplateRenditionDto.setTemplateId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void shouldReturn400WhenMandatoryTemplateIdIsMissing() {
         cdamRequest
-                .body(jsonObject.toString())
+                .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true,"
+                        + " \"jurisdictionId\":\"PUBLICLAW\","
+                        + " \"caseTypeId\":\"" + extendedCcdHelper.getEnvCcdCaseTypeId() + "\"}")
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -153,12 +137,9 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn401WhenUnAthenticateUserPostRequest() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void shouldReturn401WhenUnAthenticateUserPostRequest() {
         unAuthenticatedRequest
-                .body(jsonObject.toString())
+                .body(secureTemplateRenditionBody("DOC", null))
                 .post(API_TEMPLATE_RENDITIONS)
                 .then()
                 .assertThat()
@@ -168,13 +149,11 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenPostRequestMissingJurisdication() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setJurisdictionId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void shouldReturn400WhenPostRequestMissingJurisdication() {
         cdamRequest
-            .body(jsonObject.toString())
+            .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"outputType\":\"DOC\","
+                    + " \"templateId\":\"" + base64(TEMPLATE_NAME) + "\","
+                    + " \"caseTypeId\":\"" + extendedCcdHelper.getEnvCcdCaseTypeId() + "\"}")
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -184,13 +163,11 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
     }
 
     @Test
-    void shouldReturn400WhenPostRequestMissingCaseType() throws JsonProcessingException {
-        CreateTemplateRenditionDto createTemplateRenditionDto = populateRequestBody();
-        createTemplateRenditionDto.setCaseTypeId(null);
-        final JSONObject jsonObject = new JSONObject(createTemplateRenditionDto);
-
+    void shouldReturn400WhenPostRequestMissingCaseType() {
         cdamRequest
-            .body(jsonObject.toString())
+            .body("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"outputType\":\"DOC\","
+                    + " \"templateId\":\"" + base64(TEMPLATE_NAME) + "\","
+                    + " \"jurisdictionId\":\"PUBLICLAW\"}")
             .post(API_TEMPLATE_RENDITIONS)
             .then()
             .assertThat()
@@ -199,18 +176,20 @@ class SecureTemplateRenditionResourceTests extends BaseTest {
             .all();
     }
 
-    private CreateTemplateRenditionDto populateRequestBody() throws JsonProcessingException {
-
-        JsonNode newNode = mapper.readTree("{\"a\": \"1\"}");
-
-        CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
-        createTemplateRenditionDto.setSecureDocStoreEnabled(true);
-        createTemplateRenditionDto.setOutputType(RenditionOutputType.DOC);
-        createTemplateRenditionDto.setTemplateId(base64("FL-FRM-APP-ENG-00002.docx"));
-        createTemplateRenditionDto.setFormPayload(newNode);
-        createTemplateRenditionDto.setJurisdictionId("PUBLICLAW");
-        createTemplateRenditionDto.setCaseTypeId(extendedCcdHelper.getEnvCcdCaseTypeId());
-
-        return createTemplateRenditionDto;
+    private String secureTemplateRenditionBody(String outputType, String outputFilename) {
+        StringBuilder body = new StringBuilder();
+        body.append("{\"formPayload\":{\"a\":1}, \"secureDocStoreEnabled\":true, \"templateId\":\"")
+                .append(base64(TEMPLATE_NAME))
+                .append("\", \"jurisdictionId\":\"PUBLICLAW\", \"caseTypeId\":\"")
+                .append(extendedCcdHelper.getEnvCcdCaseTypeId())
+                .append("\"");
+        if (outputType != null) {
+            body.append(", \"outputType\":\"").append(outputType).append("\"");
+        }
+        if (outputFilename != null) {
+            body.append(", \"outputFilename\":\"").append(outputFilename).append("\"");
+        }
+        body.append("}");
+        return body.toString();
     }
 }

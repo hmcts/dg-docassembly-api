@@ -1,12 +1,12 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mock.MockInterceptor;
 import okhttp3.mock.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
@@ -31,7 +31,7 @@ class DmStoreUploaderTest {
 
     DmStoreUploader dmStoreUploader;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    JsonMapper objectMapper = JsonMapper.builder().build();
 
     @BeforeEach
     void setup() {

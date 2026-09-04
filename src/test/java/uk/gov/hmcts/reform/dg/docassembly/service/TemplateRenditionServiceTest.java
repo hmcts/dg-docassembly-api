@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mock.ClasspathResources;
 import okhttp3.mock.MockInterceptor;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
@@ -170,7 +170,7 @@ class TemplateRenditionServiceTest {
     }
 
     private CreateTemplateRenditionDto createTemplateRenditionDto() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = JsonMapper.builder().build();
 
         CreateTemplateRenditionDto createTemplateDto = new CreateTemplateRenditionDto();
 
