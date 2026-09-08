@@ -100,7 +100,6 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-health'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     implementation group: 'pl.touk', name: 'throwing-function', version: '1.3'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security-oauth2-resource-server'
