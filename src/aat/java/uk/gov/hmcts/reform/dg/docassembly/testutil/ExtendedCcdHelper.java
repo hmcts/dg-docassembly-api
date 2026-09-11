@@ -1,11 +1,9 @@
 package uk.gov.hmcts.reform.dg.docassembly.testutil;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.ccd.document.am.model.Classification;
 import uk.gov.hmcts.reform.ccd.document.am.model.DocumentUploadRequest;
@@ -29,7 +27,7 @@ public class ExtendedCcdHelper {
 
     private TestUtil testUtil;
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final JsonMapper objectMapper = JsonMapper.builder().build();
 
     public static final String CREATE_CASE_TEMPLATE = """
             {
@@ -67,7 +65,7 @@ public class ExtendedCcdHelper {
         this.testUtil = testUtil;
     }
 
-    public CaseDetails createCase(String documents) throws JsonProcessingException {
+    public CaseDetails createCase(String documents) {
         return ccdDataHelper.createCase(
                 redactionTestUser,
                 testUtil.getTestUserPassword(), JURISDICTION,
@@ -99,7 +97,7 @@ public class ExtendedCcdHelper {
     }
 
     public String createCaseAndUploadDocument(UploadResponse uploadResponse, String docName,
-                                              String fileName) throws JsonProcessingException {
+                                              String fileName) {
         String uploadedUrl = uploadResponse.getDocuments().get(0).links.self.href;
         String docHash = uploadResponse.getDocuments().get(0).hashToken;
 

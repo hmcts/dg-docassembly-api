@@ -48,6 +48,8 @@ then run the below command to execute the provider pact tests locally.
 
 ```./gradlew providerContractTests```
 
+When `PACT_BROKER_FULL_URL` is set (CI), provider verification uses the broker at https://pact-broker.platform.hmcts.net.
+
 ### Swagger UI
 To view our REST API go to http://{HOST}/swagger-ui/index.html
 On local machine with server up and running, link to swagger is as below

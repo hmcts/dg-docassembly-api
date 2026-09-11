@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.dg.docassembly.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocmosisTimeoutException;
 
@@ -31,7 +30,7 @@ class DocmosisApiClientTest {
     private final String docmosisUrl = "http://docmosis-url";
 
     private final String docmosisAccessKey = "docmosis-access-key";
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final JsonMapper mapper = JsonMapper.builder().build();
 
     private DocmosisApiClient docmosisApiClient;
 
@@ -82,7 +81,7 @@ class DocmosisApiClientTest {
         verify(httpClient, times(1)).newCall(any());
     }
 
-    private CreateTemplateRenditionDto getCreateTemplateRenditionDto() throws JsonProcessingException {
+    private CreateTemplateRenditionDto getCreateTemplateRenditionDto() {
         CreateTemplateRenditionDto createTemplateRenditionDto = new CreateTemplateRenditionDto();
         createTemplateRenditionDto.setRenditionOutputLocation("x");
         createTemplateRenditionDto.setFormPayload(mapper.readTree("{\"outputType\":\"PDF\", \"templateId\":\"1\"}"));
