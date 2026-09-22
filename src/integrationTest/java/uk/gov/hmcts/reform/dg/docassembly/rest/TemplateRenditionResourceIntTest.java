@@ -1,20 +1,18 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -52,9 +50,6 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     @MockitoBean
     private TemplateRenditionService templateRenditionService;
 
-    @Captor
-    private ArgumentCaptor<CreateTemplateRenditionDto> dtoCaptor;
-
     private CreateTemplateRenditionDto requestDto;
     private CreateTemplateRenditionDto serviceResultDto;
     private static final String DUMMY_AUTH_TOKEN = "Bearer fake-jwt-token";
@@ -81,15 +76,18 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
         requestDto.setCaseTypeId("TEST_CASE_TYPE");
         requestDto.setJurisdictionId("TEST_JURISDICTION");
         requestDto.setSecureDocStoreEnabled(false);
+        requestDto.setFormPayload(objectMapper.readTree("{\"a\":1,\"nested\":{\"b\":\"x\"}}"));
         requestDto.setErrors(new ArrayList<>());
 
         serviceResultDto = new CreateTemplateRenditionDto();
-        serviceResultDto.setTemplateId(String.valueOf(UUID.randomUUID()));
+        serviceResultDto.setTemplateId(requestDto.getTemplateId());
         serviceResultDto.setOutputFilename("test-document");
         serviceResultDto.setOutputType(RenditionOutputType.PDF);
         serviceResultDto.setCaseTypeId("TEST_CASE_TYPE");
         serviceResultDto.setJurisdictionId("TEST_JURISDICTION");
         serviceResultDto.setSecureDocStoreEnabled(false);
+        serviceResultDto.setFormPayload(requestDto.getFormPayload());
+        serviceResultDto.setRenditionOutputLocation("http://dm-store/documents/abc");
         serviceResultDto.setErrors(new ArrayList<>());
 
         reset(templateRenditionService);
@@ -121,12 +119,22 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.jwt", is(nullValue())))
                 .andExpect(jsonPath("$.serviceAuth", is(nullValue())))
+                .andExpect(jsonPath("$.formPayload.a", is(1)))
+                .andExpect(jsonPath("$.formPayload.nested.b", is("x")))
+                .andExpect(jsonPath("$.outputType", is("PDF")))
+                .andExpect(jsonPath("$.outputFilename", is("test-document")))
+                .andExpect(jsonPath("$.renditionOutputLocation", is("http://dm-store/documents/abc")))
+                .andExpect(jsonPath("$.fullOutputFilename").doesNotExist())
                 .andExpect(jsonPath(ERROR_PATH, is(empty())));
 
+            ArgumentCaptor<CreateTemplateRenditionDto> dtoCaptor =
+                ArgumentCaptor.forClass(CreateTemplateRenditionDto.class);
             verify(templateRenditionService).renderTemplate(dtoCaptor.capture());
             CreateTemplateRenditionDto capturedDto = dtoCaptor.getValue();
             assertEquals(DUMMY_AUTH_TOKEN, capturedDto.getJwt());
             assertEquals(DUMMY_SERVICE_AUTH_TOKEN, capturedDto.getServiceAuth());
+            assertEquals(1, capturedDto.getFormPayload().get("a").asInt());
+            assertEquals("x", capturedDto.getFormPayload().get("nested").get("b").asString());
         }
 
     }
@@ -248,7 +256,7 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
     }
 
 
-    private String asJsonString(final Object obj) throws JsonProcessingException {
+    private String asJsonString(final Object obj) {
         return objectMapper.writeValueAsString(obj);
     }
 

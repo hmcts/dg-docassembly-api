@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.dg.docassembly.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,6 +10,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.service.TemplateRenditionService;
@@ -174,7 +173,7 @@ class TemplateRenditionErrorResponseIntTest extends RestTestBase {
             .content(toJson(dto)));
     }
 
-    private String toJson(Object obj) throws JsonProcessingException {
+    private String toJson(Object obj) {
         return objectMapper.writeValueAsString(obj);
     }
 }

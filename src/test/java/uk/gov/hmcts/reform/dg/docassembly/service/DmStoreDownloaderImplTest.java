@@ -2,8 +2,6 @@ package uk.gov.hmcts.reform.dg.docassembly.service;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,6 +17,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
 import uk.gov.hmcts.reform.dg.docassembly.service.impl.DmStoreDownloaderImpl;
@@ -60,7 +60,7 @@ class DmStoreDownloaderImplTest {
     @Mock
     private Call mockCall;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper objectMapper = JsonMapper.builder().build();
 
     private DmStoreDownloaderImpl dmStoreDownloader;
 
@@ -185,7 +185,7 @@ class DmStoreDownloaderImplTest {
         );
 
         assertThat(exception.getMessage()).contains("Could not access the binary:");
-        assertThat(exception.getCause()).isInstanceOf(JsonProcessingException.class);
+        assertThat(exception.getCause()).isInstanceOf(JacksonException.class);
         verify(metadataResponse, times(1)).close();
     }
 
