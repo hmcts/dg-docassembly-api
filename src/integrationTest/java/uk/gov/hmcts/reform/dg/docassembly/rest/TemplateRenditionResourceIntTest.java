@@ -76,15 +76,18 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
         requestDto.setCaseTypeId("TEST_CASE_TYPE");
         requestDto.setJurisdictionId("TEST_JURISDICTION");
         requestDto.setSecureDocStoreEnabled(false);
+        requestDto.setFormPayload(objectMapper.readTree("{\"a\":1,\"nested\":{\"b\":\"x\"}}"));
         requestDto.setErrors(new ArrayList<>());
 
         serviceResultDto = new CreateTemplateRenditionDto();
-        serviceResultDto.setTemplateId(String.valueOf(UUID.randomUUID()));
+        serviceResultDto.setTemplateId(requestDto.getTemplateId());
         serviceResultDto.setOutputFilename("test-document");
         serviceResultDto.setOutputType(RenditionOutputType.PDF);
         serviceResultDto.setCaseTypeId("TEST_CASE_TYPE");
         serviceResultDto.setJurisdictionId("TEST_JURISDICTION");
         serviceResultDto.setSecureDocStoreEnabled(false);
+        serviceResultDto.setFormPayload(requestDto.getFormPayload());
+        serviceResultDto.setRenditionOutputLocation("http://dm-store/documents/abc");
         serviceResultDto.setErrors(new ArrayList<>());
 
         reset(templateRenditionService);
@@ -116,6 +119,12 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.jwt", is(nullValue())))
                 .andExpect(jsonPath("$.serviceAuth", is(nullValue())))
+                .andExpect(jsonPath("$.formPayload.a", is(1)))
+                .andExpect(jsonPath("$.formPayload.nested.b", is("x")))
+                .andExpect(jsonPath("$.outputType", is("PDF")))
+                .andExpect(jsonPath("$.outputFilename", is("test-document")))
+                .andExpect(jsonPath("$.renditionOutputLocation", is("http://dm-store/documents/abc")))
+                .andExpect(jsonPath("$.fullOutputFilename").doesNotExist())
                 .andExpect(jsonPath(ERROR_PATH, is(empty())));
 
             ArgumentCaptor<CreateTemplateRenditionDto> dtoCaptor =
@@ -124,6 +133,8 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
             CreateTemplateRenditionDto capturedDto = dtoCaptor.getValue();
             assertEquals(DUMMY_AUTH_TOKEN, capturedDto.getJwt());
             assertEquals(DUMMY_SERVICE_AUTH_TOKEN, capturedDto.getServiceAuth());
+            assertEquals(1, capturedDto.getFormPayload().get("a").asInt());
+            assertEquals("x", capturedDto.getFormPayload().get("nested").get("b").asString());
         }
 
     }
