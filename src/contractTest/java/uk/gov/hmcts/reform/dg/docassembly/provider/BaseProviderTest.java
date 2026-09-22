@@ -25,8 +25,9 @@ import tools.jackson.databind.json.JsonMapper;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:9292}",
     providerBranch = "${pact.provider.branch}",
-    enablePendingPacts = "${pactbroker.enablePending:true}"
-)
+    enablePendingPacts = "${pactbroker.enablePending:true}",
+    includeWipPactsSince = "${pactbroker.includeWipPactsSince:}"
+    )
 public abstract class BaseProviderTest {
 
     protected MockMvc mockMvc;
