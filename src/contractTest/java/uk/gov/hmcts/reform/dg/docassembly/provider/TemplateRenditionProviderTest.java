@@ -2,15 +2,14 @@ package uk.gov.hmcts.reform.dg.docassembly.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.reform.dg.docassembly.dto.CreateTemplateRenditionDto;
 import uk.gov.hmcts.reform.dg.docassembly.dto.RenditionOutputType;
 import uk.gov.hmcts.reform.dg.docassembly.exception.DocumentTaskProcessingException;
@@ -38,7 +37,7 @@ public class TemplateRenditionProviderTest extends BaseProviderTest {
     @Autowired
     public TemplateRenditionProviderTest(
             MockMvc mockMvc,
-            ObjectMapper objectMapper,
+            JsonMapper objectMapper,
             TemplateRenditionResource templateRenditionResource) {
         super(mockMvc, objectMapper);
         this.templateRenditionResource = templateRenditionResource;
@@ -57,7 +56,7 @@ public class TemplateRenditionProviderTest extends BaseProviderTest {
             .thenReturn(mockResponseDto);
     }
 
-    private CreateTemplateRenditionDto createMockResponseDto() throws JsonProcessingException {
+    private CreateTemplateRenditionDto createMockResponseDto() {
         CreateTemplateRenditionDto dto = new CreateTemplateRenditionDto();
         dto.setTemplateId("FL-FRM-GOR-ENG-12345");
         dto.setSecureDocStoreEnabled(true);
@@ -68,7 +67,7 @@ public class TemplateRenditionProviderTest extends BaseProviderTest {
         dto.setErrors(new ArrayList<>());
         dto.setRenditionOutputLocation("http://dm-store:8080/documents/d9a74b1e-188e-4a6c-9f82-3e28e0b2e8b0");
 
-        ObjectMapper localObjectMapper = new ObjectMapper();
+        JsonMapper localObjectMapper = JsonMapper.builder().build();
         JsonNode formPayload = localObjectMapper.readTree(
                 "{\"formKey1\":\"formValue1\"}"
         );
