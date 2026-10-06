@@ -125,7 +125,16 @@ class TemplateRenditionResourceIntTest extends RestTestBase {
                 .andExpect(jsonPath("$.outputFilename", is("test-document")))
                 .andExpect(jsonPath("$.renditionOutputLocation", is("http://dm-store/documents/abc")))
                 .andExpect(jsonPath("$.fullOutputFilename").doesNotExist())
-                .andExpect(jsonPath(ERROR_PATH, is(empty())));
+                .andExpect(jsonPath(ERROR_PATH, is(empty())))
+                .andExpect(result -> {
+                    String body = result.getResponse().getContentAsString();
+                    org.assertj.core.api.Assertions.assertThat(body)
+                        .doesNotContain("\"fullOutputFilename\"")
+                        .doesNotContain(DUMMY_AUTH_TOKEN)
+                        .doesNotContain(DUMMY_SERVICE_AUTH_TOKEN)
+                        .contains("\"formPayload\"")
+                        .contains("\"outputType\":\"PDF\"");
+                });
 
             ArgumentCaptor<CreateTemplateRenditionDto> dtoCaptor =
                 ArgumentCaptor.forClass(CreateTemplateRenditionDto.class);
