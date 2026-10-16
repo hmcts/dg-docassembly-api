@@ -127,7 +127,7 @@ dependencies {
     implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.25.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc-test', withoutStuff
-    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.1.0'
+    testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.2.0'
     
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit5
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit5
