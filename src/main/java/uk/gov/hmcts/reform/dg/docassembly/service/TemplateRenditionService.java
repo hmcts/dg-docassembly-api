@@ -46,14 +46,16 @@ public class TemplateRenditionService {
             response = this.docmosisApiClient.render(createTemplateRenditionDto);
 
             if (!response.isSuccessful()) {
-                String errorMessage = String.format("Could not render a template %s. HTTP response: %d %s",
-                    createTemplateRenditionDto.getTemplateId(), response.code(), response.body().string());
+                int statusCode = response.code();
 
-                TemplateRenditionException exceptionToThrow = new TemplateRenditionException(errorMessage);
+                log.atError()
+                    .setMessage("Failed to render template ID: {}. HTTP response: {}")
+                    .addArgument(createTemplateRenditionDto.getTemplateId())
+                    .addArgument(statusCode)
+                    .log();
 
-                log.error(errorMessage, exceptionToThrow);
-
-                throw exceptionToThrow;
+                throw new TemplateRenditionException(
+                    "Docmosis rendering failed with status " + statusCode);
             }
 
             File file = createFile(createTemplateRenditionDto.getOutputType(), response);

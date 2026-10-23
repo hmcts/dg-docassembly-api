@@ -69,13 +69,6 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
 
             if (response.isSuccessful()) {
                 JsonNode documentMetaData = objectMapper.readTree(response.body().byteStream());
-
-                if (log.isDebugEnabled()) {
-                    String docBinary = objectMapper
-                            .writerWithDefaultPrettyPrinter()
-                            .writeValueAsString(documentMetaData);
-                    log.debug("Accessing binary of the DM document: {}", docBinary);
-                }
                 String documentBinaryUrl = new StringBuffer()
                                                 .append(dmStoreAppBaseUrl)
                                                     .append(DM_STORE_DOWNLOAD_ENDPOINT)
@@ -85,9 +78,6 @@ public class DmStoreDownloaderImpl implements DmStoreDownloader {
                 String originalDocumentName = documentMetaData.get("originalDocumentName").asText();
                 String fileType = FilenameUtils.getExtension(originalDocumentName);
 
-                if (log.isDebugEnabled()) {
-                    log.info("Accessing documentBinaryUrl: {}", documentBinaryUrl);
-                }
                 Response binaryResponse = getDocumentStoreResponse(documentBinaryUrl, userId, userRoles);
 
                 return copyResponseToFile(binaryResponse, fileType);
