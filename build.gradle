@@ -124,7 +124,7 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign'
 
     implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.25.1'
-    implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.25.1'
+    implementation group: 'org.aspectj', name: 'aspectjrt', version: '1.9.26'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc-test', withoutStuff
     testImplementation group: 'com.github.gmazzo.okhttp.mock', name: 'mock-client', version: '2.2.0'
