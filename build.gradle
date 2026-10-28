@@ -15,7 +15,7 @@ plugins {
     id 'checkstyle'
     id 'au.com.dius.pact' version '4.7.5'
     id 'info.solidsoft.pitest' version '1.19.0'
-    id 'com.github.hmcts.rse-cft-lib' version '0.19.2449'
+    id 'com.github.hmcts.rse-cft-lib' version '0.19.2464'
     id "io.freefair.lombok" version "9.8.2"
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.4.1'
 }
