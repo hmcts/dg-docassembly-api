@@ -97,7 +97,7 @@ dependencies {
     implementation group: 'io.github.openfeign', name: 'feign-httpclient', version: '13.17'
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.2-jre'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.5.1'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.1'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.2.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
