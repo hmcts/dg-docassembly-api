@@ -49,5 +49,3 @@ java:
     ENABLE_SECURE_DOCUMENT_TEMPL_REND_ENDPOINT: false
 xui-webapp:
   enabled: false
-idam-pr:
-  enabled: false
