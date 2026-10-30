@@ -1,7 +1,7 @@
 name: dg-docassembly
 apiVersion: v2
 home: https://github.com/hmcts/dg-docassembly-api
-version: 2.2.2
+version: 2.2.3
 description: HMCTS Document Assembly API
 maintainers:
   - name: HMCTS EM Team
@@ -13,7 +13,3 @@ dependencies:
     version: ~1.0.0
     repository: 'oci://hmctsprod.azurecr.io/helm'
     condition: xui-webapp.enabled
-  - name: idam-pr
-    version: ~2.3.0
-    repository: 'oci://hmctsprod.azurecr.io/helm'
-    condition: idam-pr.enabled
