@@ -1,0 +1,10 @@
+# Exclude everything by default, then explicitly allow only what the Dockerfile needs.
+**
+
+# Allow the artefacts actually COPYed in the Dockerfile
+!lib/
+!lib/**
+!build/
+!build/libs/
+!build/libs/*.jar
+
